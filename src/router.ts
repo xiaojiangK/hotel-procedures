@@ -9,15 +9,15 @@ export default new Router({
       path: '/',
       name: 'home',
       meta: {
-        title: '首页'
+        title: 'Home'
       },
-      component: () => import('@/pages/Home.vue')
+      component: () => import('@/pages/index.vue')
     },
     {
       path: '/login',
       name: 'login',
       meta: {
-        title: '登录页'
+        title: 'Login'
       },
       component: () => import('@/pages/Login.vue')
     }

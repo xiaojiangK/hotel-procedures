@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>vue-typescript</title>
+    <title>hotel-procedures</title>
   </head>
   <body>
     <noscript>
@@ -13,5 +13,21 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script>
+      // 移动端适配,动态计算屏幕的宽度,从而得到网页的fontSize大小
+      ;(function (doc, win, undefined) {
+           var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in win ? 'orientationchange' : 'resize',
+          recalc = function () {
+             var clientWidth = docEl.clientWidth;
+             if (clientWidth === undefined) {return;}
+             if (clientWidth >= 750){clientWidth=750};
+             docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+          };
+           if (doc.addEventListener === undefined) return;
+           win.addEventListener(resizeEvt, recalc, false);
+           doc.addEventListener('DOMContentLoaded', recalc, false);
+      })(document, window);
+    </script>
   </body>
 </html>
