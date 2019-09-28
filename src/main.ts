@@ -1,15 +1,12 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
-import store from './store';
 import axios from 'axios';
 import vueAxios from 'vue-axios';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
-import iView from 'iview';
-import 'iview/dist/styles/iview.css';
+import 'vant/lib/index.less';
 
-Vue.use(iView);
 Vue.use(vueAxios, axios);
 
 axios.interceptors.response.use(
@@ -45,6 +42,5 @@ Vue.config.productionTip = false;
 
 new Vue({
   router,
-  store,
   render: (h) => h(App),
 }).$mount('#app');
