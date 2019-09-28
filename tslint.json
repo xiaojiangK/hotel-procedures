@@ -1,0 +1,57 @@
+{
+  "defaultSeverity": "warning",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "linterOptions": {
+    "exclude": [
+      "node_modules/**"
+    ]
+  },
+  "rules": {
+    "interface-name": false,
+    "arrow-parens": false,
+    "whitespace": false,
+    "member-access": false,
+    "ordered-imports": false,
+    "indent": [true, "spaces", 2],
+    "quotemark": [true, "single"],
+    "semicolon":[false, "never"],
+    "typedef-whitespace": false,
+    "unified-signatures": true,
+    "max-classes-per-file": false,
+    "newline-before-return": false,
+    "arrow-return-shorthand": [false],
+    "object-literal-sort-keys": false,
+    "interface-over-type-literal": false,
+    "comment-format": [true, "check-space"],
+    "member-ordering": [true, { "order": "fields-first" }],
+    "max-line-length": [true, { "limit": 120, "ignore-pattern": "//" }],
+    "trailing-comma": [true, {
+    "multiline": {
+      "objects": "ignore",
+      "arrays": "never",
+      "functions": "never",
+      "typeLiterals": "ignore"
+      },
+      "esSpecCompliant": true
+    }],
+    "no-any": false,
+    "no-empty": false,
+    "no-console": false,
+    "no-var-keyword": false,
+    "no-null-keyword": false,
+    "no-var-requires": false,
+    "no-empty-interface": false,
+    "no-require-imports": false,
+    "no-submodule-imports": false,
+    "no-trailing-whitespace": true,
+    "no-consecutive-blank-lines": false,
+    "no-multiple-empty-lines": [1, {"max": 2}],
+    "no-invalid-this": [true, "check-function-in-method"],
+    "no-this-assignment": [true, { "allow-destructuring": true }],
+    "no-inferrable-types": [true, "ignore-params", "ignore-properties"],
+    "only-arrow-functions": [true, "allow-declarations", "allow-named-functions"],
+    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"]
+  }
+}
