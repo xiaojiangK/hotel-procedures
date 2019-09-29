@@ -1,26 +1,26 @@
 <template>
   <div class="wrap">
-    <Header></Header>
+    <Header white="true" title="Log in"></Header>
     <div class="hotel">
       <img src="@/assets/logo.png" alt="">
       <p>Hotel name</p>
     </div>
-    <div class="form">
+    <div class="login-form">
       <ul>
         <li>
           <img src="@/assets/icon-user.png" alt="">
-          <input type="text" v-model="username" placeholder="Account" />
+          <input type="text" v-model="username" autocomplete="off" placeholder="Account" />
         </li>
         <li>
           <img src="@/assets/icon-pass.png" alt="">
-          <input type="text" v-model="password" placeholder="Password" />
+          <input type="password" v-model="password" autocomplete="off" placeholder="Password" />
         </li>
         <li>
-          <button>Log in</button>
+          <button @click="login">Log in</button>
           <div class="other">
-            <span>Retrieve password</span>
+            <router-link to="/Retrieve">Retrieve password ?</router-link>
             <span> | </span>
-            <span>sign up right away</span>
+            <router-link to="/Register">sign up right away</router-link>
           </div>
         </li>
       </ul>
@@ -30,9 +30,10 @@
 </template>
 
 <script lang="ts">
-import services from '../services';
+import { Toast } from 'vant';
+import services from '@/services';
 import Header from '@/components/header.vue'
-import { getStorage } from '../utils/util';
+import { setStorage, getStorage } from '@/utils/util';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
@@ -44,17 +45,35 @@ export default class Login extends Vue {
   username:string = '';
   password:string = '';
 
+  async login() {
+    const username = this.username;
+    const password = this.password;
+    if(!username) {
+      Toast.fail('Account no empty')
+      return
+    } else if (!password) {
+      Toast.fail('Password no empty')
+      return
+    }
+    try {
+      const res = await services.api.login({ username, password })
+      Toast.success('Login success')
+      setStorage('token', res)
+      this.$router.push('/')
+    } catch(e) {
+      Toast.fail(e.message)
+    }
+  }
   created() {
     if (getStorage('Admin-Token')) {
-      // this.$router.push('/')
+      this.$router.push('/')
     }
   }
 }
 </script>
 <style lang="scss" scoped>
   .wrap{
-    width: 100%;
-    height: 100%;
+    height: 13.34rem;
     background: url('../assets/login-bg.png') top left no-repeat;
     background-size: cover;
     .hotel{
@@ -72,75 +91,12 @@ export default class Login extends Vue {
         font-weight: bold;
       }
     }
-    .form{
-      padding: 0 .6rem;
-      li{
-        height: .6rem;
-        position: relative;
-        margin: 0 0 .55rem;
-        img{
-          left: 0;
-          top: 50%;
-          width: .38rem;
-          position: absolute;
-          transform: translateY(-50%);
-        }
-        input{
-          width: 100%;
-          outline: none;
-          border: none;
-          height: .6rem;
-          color: #fff;
-          background: none;
-          padding: 0 0 0 .6rem;
-          box-sizing: border-box;
-          border-bottom: .01rem solid #fff;
-        }
-        input::-webkit-input-placeholder{ 
-          color:#fff;
-        }
-        input:-o-placeholder{ 
-          color:#fff;
-        }
-        input::-moz-placeholder{ 
-          color:#fff;
-        }
-        input:-ms-input-placeholder{ 
-          color:#fff;
-        }
-        input:input-placeholder{ 
-          color:#fff;
-        }
-        button{
-          width: 100%;
-          outline: none;
-          border: none;
-          color: #fff;
-          height: .98rem;
-          cursor: pointer;
-          font-size: .36rem;
-          margin: 0 0 .3rem;
-          text-align: center;
-          line-height: .98rem;
-          border-radius: .1rem;
-          background: #EE6E35;
-        }
-        .other{
-          color: #fff;
-          text-align: center;
-          span:nth-of-type(2){
-            margin: 0 .2rem;
-          }
-        }
-      }
-    }
     .support{
-      left: 0;
+      top: 2.2rem;
       width: 100%;
-      bottom: .6rem;
       color: #fff;
       text-align: center;
-      position: absolute;
+      position: relative;
       &:after, &:before{
         top: 50%;
         content: '';

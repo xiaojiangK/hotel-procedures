@@ -7,19 +7,43 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'Index',
       meta: {
-        title: 'Home'
+        title: 'Index'
       },
-      component: () => import('@/pages/index.vue')
+      component: () => import('@/pages/Index.vue')
     },
     {
-      path: '/login',
-      name: 'login',
+      path: '/Login',
+      name: 'Login',
       meta: {
         title: 'Login'
       },
       component: () => import('@/pages/Login.vue')
+    },
+    {
+      path: '/Register',
+      name: 'Register',
+      meta: {
+        title: 'Register'
+      },
+      component: () => import('@/pages/Register.vue')
+    },
+    {
+      path: '/Retrieve',
+      name: 'Retrieve',
+      meta: {
+        title: 'Retrieve'
+      },
+      component: () => import('@/pages/Retrieve.vue')
+    },
+    {
+      path: '/Member',
+      name: 'Member',
+      meta: {
+        title: 'Member'
+      },
+      component: () => import('@/pages/Member.vue')
     }
   ]
 });

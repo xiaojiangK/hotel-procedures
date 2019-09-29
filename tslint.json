@@ -9,6 +9,7 @@
     ]
   },
   "rules": {
+    "triple-equals": false,
     "interface-name": false,
     "arrow-parens": false,
     "whitespace": false,

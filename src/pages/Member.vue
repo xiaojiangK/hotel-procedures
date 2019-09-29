@@ -1,21 +1,24 @@
 <template>
   <div class="wrap">
-    <Header title="Index"></Header>
-    首页
+    <Header white="true" title="Member center"></Header>
+    会员中心
+    <Footer></Footer>
   </div>
 </template>
 
 <script lang="ts">
 import services from '@/services';
 import Header from '@/components/header.vue';
+import Footer from '@/components/footer.vue';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
   components: {
-    Header
+    Header,
+    Footer
   }
 })
-export default class Index extends Vue {
+export default class Member extends Vue {
   created() {}
 }
 </script>
