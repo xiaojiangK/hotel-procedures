@@ -16,7 +16,7 @@
           <input type="password" v-model="password" autocomplete="off" placeholder="Password" />
         </li>
         <li>
-          <button @click="login">Log in</button>
+          <button @click="login" class="formBtn">Log in</button>
           <div class="other">
             <router-link to="/Retrieve">Retrieve password ?</router-link>
             <span> | </span>
@@ -49,10 +49,10 @@ export default class Login extends Vue {
     const username = this.username;
     const password = this.password;
     if(!username) {
-      Toast.fail('Account no empty')
+      Toast.fail('Account is empty')
       return
     } else if (!password) {
-      Toast.fail('Password no empty')
+      Toast.fail('Password is empty')
       return
     }
     try {

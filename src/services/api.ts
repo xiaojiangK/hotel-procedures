@@ -16,3 +16,7 @@ export async function retrieve(data:object) {
 export async function getCode(phone:string) {
   return axios.post(`${config.baseURL}api/user/code`, { phone });
 }
+
+export async function changeInfo(name:string) {
+  return axios.post(`${config.baseURL}api/change/info`, { name });
+}

@@ -19,7 +19,7 @@
           <img src="@/assets/icon-eye.png" v-show="!canSee" class="right" @click="viewPass" alt="">
         </li>
         <li>
-          <button @click="register">Sign in</button>
+          <button @click="register" class="formBtn">Sign in</button>
         </li>
       </ul>
     </div>
@@ -65,13 +65,13 @@ export default class Register extends Vue {
     const username = this.username
     const password = this.password
     if(!username) {
-      Toast.fail('Phone no empty')
+      Toast.fail('Phone is empty')
       return
     } else if (!code) {
-      Toast.fail('Code no empty')
+      Toast.fail('Code is empty')
       return
     } else if (!password) {
-      Toast.fail('Password no empty')
+      Toast.fail('Password is empty')
       return
     }
     try {

@@ -44,6 +44,14 @@ export default new Router({
         title: 'Member'
       },
       component: () => import('@/pages/Member.vue')
+    },
+    {
+      path: '/EditUser',
+      name: 'EditUser',
+      meta: {
+        title: 'EditUser'
+      },
+      component: () => import('@/pages/EditUser.vue')
     }
   ]
 });

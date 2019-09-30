@@ -1,6 +1,6 @@
 <template>
-  <div class="header">
-    <div class="back" @click="goBack">
+  <div class="header" :style="'background: ' + [white ? 'transparent' : '#fff']">
+    <div class="back" v-if="isBack != 0" @click="goBack">
       <img src="@/assets/icon-back.png" v-if="white" alt="">
       <img src="@/assets/icon-back2.png" v-else alt="">
     </div>
@@ -15,6 +15,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 export default class Header extends Vue {
   @Prop() title!:string;
   @Prop() white!:boolean;
+  @Prop() isBack!:number;
   goBack() {
     this.$router.back()
   }

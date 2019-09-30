@@ -1,9 +1,9 @@
 <template>
   <div class="footer">
     <ul>
-      <li v-for="(item, index) in tabBar" :key="index" :class="[item.active ? 'active' : '']">
-        <router-link :to="item.url">
-          <img :src="[item.active ? item.icon2 : item.icon]" alt="">
+      <li v-for="(item, index) in tabBar" :key="index" :class="[item.name == name ? 'active' : '']">
+        <router-link :to="item.path">
+          <img :src="[item.name == name ? item.activeicon : item.icon]" :alt="item.title"/>
           <p>{{item.title}}</p>
         </router-link>
       </li>
@@ -13,33 +13,34 @@
 
 <script lang="ts">
 const home = require('@/assets/icon-home.png');
-const home2 = require('@/assets/icon-home.png');
-const booking = require('@/assets/icon-home.png');
-const booking2 = require('@/assets/icon-home.png');
-const member = require('@/assets/icon-home.png');
-const member2 = require('@/assets/icon-home.png');
-import { Component, Vue } from 'vue-property-decorator';
+const home2 = require('@/assets/icon-home2.png');
+const booking = require('@/assets/icon-booking.png');
+const booking2 = require('@/assets/icon-booking2.png');
+const member = require('@/assets/icon-member.png');
+const member2 = require('@/assets/icon-member2.png');
+import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class Footer extends Vue {
+  @Prop() name!:string;
   tabBar:any[] = [{
     title: 'Home',
-    active: false,
+    name: 'Index',
     icon: home,
-    icon2: home2,
-    url: '/'
+    activeicon: home2,
+    path: '/'
   },{
     title: 'Booking',
-    active: false,
+    name: 'Booking',
     icon: booking,
-    icon2: booking2,
-    url: '/Booking'
+    activeicon: booking2,
+    path: '/Booking'
   },{
     title: 'Member',
-    active: true,
+    name: 'Member',
     icon: member,
-    icon2: member2,
-    url: '/Member'
+    activeicon: member2,
+    path: '/Member'
   }]
 }
 </script>

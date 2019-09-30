@@ -13,19 +13,21 @@
   max-width: 750px;
   margin: 0 auto;
   height: 100%;
-  p{
-    margin: 0;
-  }
+}
+ul,li,ol,li,p,a{
+  margin: 0;
 }
 body,html{
   width: 100%;
   height: 100%;
+  color: #333;
+  overflow-x: hidden;
   background: #f2f2f2;
 }
 .wrap{
-  padding: 1rem 0 0;
   position: relative;
   box-sizing: border-box;
+  padding: 1rem 0 1.16rem;
   .login-form{
     padding: 0 .6rem;
     li{
@@ -72,20 +74,6 @@ body,html{
       input:input-placeholder{ 
         color:#fff;
       }
-      button{
-        width: 100%;
-        outline: none;
-        border: none;
-        color: #fff;
-        height: .98rem;
-        cursor: pointer;
-        font-size: .36rem;
-        margin: 0 0 .3rem;
-        text-align: center;
-        line-height: .98rem;
-        border-radius: .1rem;
-        background: #EE6E35;
-      }
       .other{
         color: #fff;
         text-align: center;
@@ -97,6 +85,20 @@ body,html{
         }
       }
     }
+  }
+  .formBtn{
+    width: 100%;
+    outline: none;
+    border: none;
+    color: #fff;
+    height: .98rem;
+    cursor: pointer;
+    font-size: .36rem;
+    margin: 0 0 .3rem;
+    text-align: center;
+    line-height: .98rem;
+    border-radius: .1rem;
+    background: #EE6E35;
   }
 }
 </style>
