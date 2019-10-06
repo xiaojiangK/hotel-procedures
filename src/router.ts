@@ -38,6 +38,14 @@ export default new Router({
       component: () => import('@/pages/Retrieve.vue')
     },
     {
+      path: '/EditUser',
+      name: 'EditUser',
+      meta: {
+        title: 'EditUser'
+      },
+      component: () => import('@/pages/EditUser.vue')
+    },
+    {
       path: '/Member',
       name: 'Member',
       meta: {
@@ -46,12 +54,12 @@ export default new Router({
       component: () => import('@/pages/Member.vue')
     },
     {
-      path: '/EditUser',
-      name: 'EditUser',
+      path: '/Booking',
+      name: 'Booking',
       meta: {
-        title: 'EditUser'
+        title: 'Booking'
       },
-      component: () => import('@/pages/EditUser.vue')
+      component: () => import('@/pages/Booking.vue')
     }
   ]
 });

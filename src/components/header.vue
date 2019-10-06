@@ -27,7 +27,7 @@ export default class Header extends Vue {
     left: 50%;
     width: 100%;
     height: 1rem;
-    z-index: 9999;
+    z-index: $headerIndex;
     position: fixed;
     padding: .3rem 0;
     max-width: 750px;

@@ -98,7 +98,7 @@
                 <span>Free trial for deluxe double room and above</span>
               </div>
               <div class="right">
-                <div class="price">$68</div>
+                <div class="price">৳ 68.00</div>
                 <router-link to="/Facilities" class="buy">Buy</router-link>
               </div>
             </div>
@@ -124,7 +124,7 @@
                   <div class="info">
                     <div class="title">Extra xylitol sugar-free gum mixed flavor 70 pieces 98g single bottle</div>
                     <div class="price">
-                      <div class="left">$10.40</div>
+                      <div class="left">৳ 10.40</div>
                       <div class="right">
                         <img src="@/assets/icon-shop.png" alt="">
                       </div>
@@ -140,7 +140,7 @@
                   <div class="info">
                     <div class="title">Extra xylitol sugar-free gum mixed flavor 70 pieces 98g single bottle</div>
                     <div class="price">
-                      <div class="left">$10.40</div>
+                      <div class="left">৳ 10.40</div>
                       <div class="right">
                         <img src="@/assets/icon-shop.png" alt="">
                       </div>
@@ -196,7 +196,7 @@ Vue.use(Swipe, SwipeItem)
     Header,
     Footer,
     [Swipe.name]: Swipe,
-    [SwipeItem.name]: SwipeItem,
+    [SwipeItem.name]: SwipeItem
   }
 })
 export default class Index extends Vue {
@@ -234,13 +234,13 @@ export default class Index extends Vue {
       border-top-right-radius: .3rem;
       .title{
         text-align: center;
-        padding: .3rem 0 .35rem;
+        padding: .3rem 0 .4rem;
         img{
           width: .3rem;
           vertical-align: middle
         }
         span{
-          font-size: .4rem;
+          font-size: .36rem;
           margin: 0 .12rem;
           font-weight: bold;
           vertical-align: middle
@@ -254,11 +254,12 @@ export default class Index extends Vue {
           float: left;
           text-align: center;
           img{
-            width: .95rem;
+            width: .84rem;
             margin: 0 0 .12rem;
           }
           p{
             color: #666;
+            font-size: .26rem
           }
         }
       }
@@ -279,7 +280,7 @@ export default class Index extends Vue {
         padding: .4rem 0;
         .title{
           img{
-            width: .45rem;
+            width: .44rem;
             vertical-align: middle;
           }
           .next{
@@ -288,7 +289,7 @@ export default class Index extends Vue {
           }
           span{
             font-weight: bold;
-            font-size: .3rem;
+            font-size: .36rem;
             margin: 0 0 0 .15rem;
             vertical-align: middle;
           }
@@ -308,17 +309,18 @@ export default class Index extends Vue {
           float: left;
           p{
             font-weight: bold;
-            font-size: .3rem;
+            font-size: .36rem;
             margin: 0 0 .15rem;
           }
           span{
-            color: #666;
+            color: #929292;
+            font-size: .26rem;
           }
         }
         .right{
           width: 20%;
           float: right;
-          margin: .12rem 0 0;
+          margin: .08rem 0 0;
           .price{
             color: #ff6342;
             font-size: .36rem;
@@ -368,6 +370,7 @@ export default class Index extends Vue {
           vertical-align: middle;
           .title{
             color: #333;
+            font-size: .3rem;
             margin: 0 0 .3rem;
             line-height: .4rem;
           }
@@ -404,7 +407,15 @@ export default class Index extends Vue {
           margin: 0
         }
         .left{
-          width: 72%
+          width: 72%;
+          p{
+            font-size: .28rem;
+            margin: 0 0 .1rem
+          }
+          span{
+            color: #666;
+            font-size: .22rem;
+          }
         }
         .right{
           width: 28%
