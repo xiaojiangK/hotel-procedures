@@ -52,6 +52,7 @@ export default class Footer extends Vue {
     position: fixed;
     max-width: 750px;
     background:#fff;
+    z-index: $fixedIndex;
     padding: .2rem 0 .06rem;
     transform: translateX(-50%);
     ul{

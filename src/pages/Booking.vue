@@ -22,15 +22,6 @@
       <van-tabs v-model="active" color="#FF6342" title-active-color="#FF6342" :swipeable="true" :animated="true">
         <van-tab title="Booking">
           <div class="room">
-            <van-datetime-picker
-              v-model="current"
-              type="date"
-              :max-date="maxDate"
-              :min-date="new Date()"
-              confirm-button-text="confirm"
-              cancel-button-text="cancel"
-              @change="changeDate"
-            />
             <div class="select">
               <div class="item" @click="selectDate(0)">
                 <span class="date">{{date.start}}</span>
@@ -41,14 +32,14 @@
                 <span class="week">{{week.end}}</span>
               </div>
               <div class="item right">
-                <span>total of {{total}} night</span>
+                <span>total {{total}} night</span>
                 <img src="@/assets/icon-right-red.png" alt="">
               </div>
             </div>
             <div class="list">
               <ul>
                 <li>
-                  <div class="picture">
+                  <div class="picture" @click="openDetail">
                     <img src="@/assets/good.png" alt="">
                     <div class="tag">details</div>
                   </div>
@@ -58,14 +49,14 @@
                       <p class="info">no breakfast Single bed no window</p>
                       <p class="price"><span>৳</span> 148.00</p>
                     </div>
-                    <div class="right">
+                    <div class="right" @click="booking">
                       <div class="title">Booking</div>
                       <div class="sub">Only eight</div>
                     </div>
                   </div>
                 </li>
                 <li>
-                  <div class="picture">
+                  <div class="picture" @click="openDetail">
                     <img src="@/assets/good.png" alt="">
                     <div class="tag">details</div>
                   </div>
@@ -75,14 +66,14 @@
                       <p class="info">no breakfast Single bed no window</p>
                       <p class="price"><span>৳</span> 148.00</p>
                     </div>
-                    <div class="right">
+                    <div class="right" @click="booking">
                       <div class="title">Booking</div>
                       <div class="sub">Pay cash</div>
                     </div>
                   </div>
                 </li>
                 <li>
-                  <div class="picture">
+                  <div class="picture" @click="openDetail">
                     <img src="@/assets/good.png" alt="">
                     <div class="tag">details</div>
                   </div>
@@ -100,56 +91,146 @@
                 </li>
               </ul>
             </div>
-            <div class="details">
-              <div class="head">
-                <span>Standard twin room</span>
-                <img src="@/assets/icon-close.png" alt="">
+          </div>
+        </van-tab>
+        <van-tab title="Facility">
+          <div class="facility">
+            <div class="hotel">
+              <p class="title">Empark Grand Hotel</p>  
+              <span>five-star</span>
+            </div>
+            <div class="serve">
+              <p class="title">Available services</p>
+              <ul>
+                <li v-for="(i, index) in serve" :key="index">
+                  <img v-if="i.id == '101006'" src="@/assets/icon_parking.png" />
+                  <img v-if="i.id == '101007'" src="@/assets/icon_card.png" />
+                  <img v-if="i.id == '101038'" src="@/assets/icon_clock.png" />
+                  <img v-if="i.id == '101039'" src="@/assets/icon_cup.png" />
+                  <img v-if="i.id == '101040'" src="@/assets/icon_eating.png" />
+                  <img v-if="i.id == '101041'" src="@/assets/icon_reception.png" />
+                  <img v-if="i.id == '101042'" src="@/assets/icon_pic.png" />
+                  <img v-if="i.id == '101044'" src="@/assets/icon_socks.png" />
+                  <img v-if="i.id == '101045'" src="@/assets/icon_bag.png" />
+                  <img v-if="i.id == '101047'" src="@/assets/icon_foreign.png" />
+                  <img v-if="i.id == '101048'" src="@/assets/icon_bag.png" />
+                  <img v-if="i.id == '101049'" src="@/assets/icon_care.png" />
+                  <img v-if="i.id == '101050'" src="@/assets/icon_airport.png" />
+                  <img v-if="i.id == '101051'" src="@/assets/icon_bicycle.png" />
+                  <img v-if="i.id == '101052'" src="@/assets/icon_multilingual.png" />
+                  <img v-if="i.id == '101053'" src="@/assets/icon_umbrella.png" />
+                  <img v-if="i.id == '101101'" src="@/assets/icon_car.png" />
+                  <img v-if="i.id == '101102'" src="@/assets/icon_car.png" />
+                  <img v-if="i.id == '101103'" src="@/assets/icon_airport.png" />
+                  <img v-if="i.id == '101104'" src="@/assets/icon_railway.png" />
+                  <img v-if="i.id == '101106'" src="@/assets/icon_baby.png" />
+                  <img v-if="i.id == '101128'" src="@/assets/icon_wifi.png" />
+                  <img v-if="i.id == '101135'" src="@/assets/icon_pets.png" />
+                  <img v-if="i.id == '101170'" src="@/assets/icon_car.png" />
+                  <img v-if="i.id == '101197'" src="@/assets/icon_folding.png" />
+                  <img v-if="i.id == '201111'" src="@/assets/icon_others.png" />
+                  <img v-if="i.id == '201112'" src="@/assets/icon_gym.png" />
+                  <img v-if="i.id == '201113'" src="@/assets/icon_meetingroom.png" />
+                  <img v-if="i.id == '201114'" src="@/assets/icon_restaurant.png" />
+                  <p>{{i.title}}</p>
+                </li>
+              </ul>
+            </div>
+            <div class="synopsis">
+              <p class="title">Hotel introduction</p>
+              <div class="attr">
+                <div class="item">Decorate time: 2017 year</div>
+                <div class="item">Opening time: 2012 year</div>
+                <div class="item">Floor height: 4 layer</div>
+                <div class="item">Total rooms: 80 rooms</div>
               </div>
-              <div class="content">
-                <div class="swiper">
-                  <van-swipe :autoplay="3000" :show-indicators="false">
-                    <van-swipe-item>
-                      <img src="@/assets/banner.png" alt="">
-                    </van-swipe-item>
-                    <van-swipe-item>
-                      <img src="@/assets/banner.png" alt="">
-                    </van-swipe-item>
-                    <van-swipe-item>
-                      <img src="@/assets/banner.png" alt="">
-                    </van-swipe-item>
-                  </van-swipe>
-                  <div class="number">1/4</div>
-                </div>
-                <div class="list">
-                  <ul>
-                    <li>surf the Internet <span>WIFI</span></li>
-                    <li>bathroom <span>independent</span></li>
-                    <li>window <span>have</span></li>
-                    <li>can live <span>2 people</span></li>
-                    <li>area <span>25㎡</span></li>
-                    <li>storey <span>layer 2</span></li>
-                    <li>bed type <span>Single bed 1.0×2.0 m 2 sheets</span></li>
-                    <li>breakfast <span>No breakfast</span></li>
-                  </ul>
-                </div>
-                <div class="policy">
-                  <p class="title">Hotel Policy</p>
-                  <ul>
-                    <li>· Check-in time: after 14:00 departure time: before 12:00</li>
-                    <li>· non-cancelable after confirmation of the order. If you do not check in, the hotel will deduct the full room fee</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="foot">
-                <div class="item">৳ 148.00</div>
-                <div class="item">Booking</div>
-              </div>
+              <div class="desc">Beijing century jin yuan hotel is located in the beautiful KunYu river between, Beijing west 4th ring road and west ring, not only to xiangshan, the Summer Palace and the zoo around, badachu and other tourist attractions, is adjacent to zhongguancun district, only with jin yuan era shopping center across the street, hotel total construction area of 186800 square meters, construction area of 42000 square meters underground are among those of leisure, shopping and entertainment facilities, entertainment facilities all of unparalleled; Room broadband Internet access, satellite TV, international and domestic direct telephone, independent shower room, etc. Chinese food, western food, coffee shop, Japanese food, bar, tea house will make you linger. It has 18 conference rooms of various sizes, and modern conference service facilities such as digital conference system, multi-language simultaneous interpretation system, video tracking, etc. The grand ballroom can accommodate 1000 people and the international conference hall can accommodate 200 people. It is an ideal place for holding various international conferences. It is also a good choice for your business trip. The underground swimming pool and gym will be closed due to the decoration of the city that never stays up. The specific opening time will be further notified.</div>
+            </div>
+            <div class="policy">
+              <p class="title">Hotel Policy</p>
+              <ul>
+                <li>· check-in time: after 14:00; check-out time: before 12:00</li>
+                <li>· non-cancelable after confirmation of the order. If you do not check in, the hotel will deduct the full room fee</li>
+                <li>· direct consumption, bring all check-in, the person's valid id card for check-in, check-in must be in accordance with one person one - card</li>
+                <li>· Deposit is required for accommodation, the amount of which is subject to the front desk</li>
+              </ul>
             </div>
           </div>
         </van-tab>
-        <van-tab title="Facilities">Facilities details</van-tab>
-        <van-tab title="Evaluation">Guest evaluation</van-tab>
+        <van-tab title="Evaluation">
+          <div class="evaluation">
+            Guest evaluation
+          </div>
+        </van-tab>
       </van-tabs>
+
+      <van-popup
+        v-model="visible"
+        round
+        position="bottom"
+        :style="{ height: '40%' }">
+        <van-datetime-picker
+          type="date"
+          v-model="current"
+          :max-date="maxDate"
+          :min-date="minDate"
+          confirm-button-text="confirm"
+          cancel-button-text="cancel"
+          @confirm="confirmDate"
+          @cancel="visible = false"
+        />
+      </van-popup>
+
+      <van-popup
+        v-model="show"
+        position="bottom"
+        :style="{ height: '72%' }">
+        <div class="details">
+          <div class="head">
+            Standard twin room
+            <img src="@/assets/icon-close.png" @click="openDetail" alt="">
+          </div>
+          <div class="swiper">
+            <van-swipe :autoplay="3000" :show-indicators="false">
+              <van-swipe-item>
+                <img src="@/assets/banner.png" alt="">
+              </van-swipe-item>
+              <van-swipe-item>
+                <img src="@/assets/banner.png" alt="">
+              </van-swipe-item>
+              <van-swipe-item>
+                <img src="@/assets/banner.png" alt="">
+              </van-swipe-item>
+            </van-swipe>
+            <div class="number">1 / 4</div>
+          </div>
+          <div class="content">
+            <div class="list">
+              <ul>
+                <li><span>Internet:</span> WIFI</li>
+                <li><span>Bathroom:</span> independent</li>
+                <li><span>Window:</span> have</li>
+                <li><span>Live:</span> 2 people</li>
+                <li><span>Area:</span> 25㎡</li>
+                <li><span>Storey:</span> layer 2</li>
+                <li><span>BedType:</span>1.0×2.0 m 2 sheets</li>
+                <li><span>Breakfast:</span> No breakfast</li>
+              </ul>
+            </div>
+            <div class="policy">
+              <p class="title">Hotel Policy</p>
+              <ul>
+                <li>· Check-in time: after 14:00 departure time: before 12:00</li>
+                <li>· non-cancelable after confirmation of the order. If you do not check in, the hotel will deduct the full room fee</li>
+              </ul>
+            </div>
+          </div>
+          <div class="foot full">
+            <div class="item">৳ 148.00</div>
+            <div class="item" @click="booking">Booking</div>
+          </div>
+        </div>
+      </van-popup>
     </div>    
     <Footer name="Booking"></Footer>
   </div>
@@ -159,7 +240,7 @@
 import services from '@/services';
 import Header from '@/components/header.vue';
 import Footer from '@/components/footer.vue';
-import { Swipe, SwipeItem, Tab, Tabs, DatetimePicker } from 'vant';
+import { Swipe, SwipeItem, Tab, Tabs, DatetimePicker, Popup, Toast } from 'vant';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
@@ -168,13 +249,14 @@ import { Component, Vue } from 'vue-property-decorator';
     Footer,
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,
+    [Popup.name]: Popup,
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
     [DatetimePicker.name]: DatetimePicker
   }
 })
 export default class Booking extends Vue {
-  active:number = 0;
+  active:number = 1;
   index:number = -1;
   week:object = {
     start: '',
@@ -184,14 +266,76 @@ export default class Booking extends Vue {
     start: '',
     end: ''
   };
+  startNow:any;     // 开始日期
+  endNow:any;       // 结束日期
   total:number = 0;
+  show:boolean = false;
+  visible:boolean = false;
   current:any = new Date();
-  maxDate:string = new Date(Date.now() + (24*60*60*1000) * (365 / 12 * 5));
+  minDate:any = new Date();
+  maxDate:any = new Date(Date.now() + (24*60*60*1000) * (365 / 12 * 5));
+
+  serve:any[] = [{
+    id: '101006',
+    title: 'Wireless Internet'
+  },{
+    id: '101007',
+    title: 'Wireless Internet'
+  },{
+    id: '101038',
+    title: 'Wireless Internet'
+  },{
+    id: '101039',
+    title: 'Wireless Internet'
+  },{
+    id: '101040',
+    title: 'Wireless Internet'
+  },{
+    id: '101041',
+    title: 'Wireless Internet'
+  },{
+    id: '101042',
+    title: 'Wireless Internet'
+  },{
+    id: '101043',
+    title: 'Wireless Internet'
+  },{
+    id: '101044',
+    title: 'Wireless Internet'
+  },{
+    id: '101045',
+    title: 'Wireless Internet'
+  },{
+    id: '101046',
+    title: 'Wireless Internet'
+  },{
+    id: '101047',
+    title: 'Wireless Internet'
+  },{
+    id: '101048',
+    title: 'Wireless Internet'
+  },{
+    id: '101049',
+    title: 'Wireless Internet'
+  },{
+    id: '101050',
+    title: 'Wireless Internet'
+  },{
+    id: '101051',
+    title: 'Wireless Internet'
+  },{
+    id: '101052',
+    title: 'Wireless Internet'
+  },{
+    id: '101053',
+    title: 'Wireless Internet'
+  }]
 
   selectDate(e:number) {
-    this.index = e;
+    this.index = e
+    this.visible = true
   }
-  format(type, n) {
+  format(type:string, n:number, d:number = 0) {
     if (type == 'week') {
       if (n == 0) {
         return 'Sunday'
@@ -210,63 +354,221 @@ export default class Booking extends Vue {
       }
     } else {
       if (n == 1) {
-        return 'January'
+        return `January ${d}`
       } else if (n == 2) {
-        return 'February'
+        return `February ${d}`
       } else if (n == 3) {
-        return 'March'
+        return `March ${d}`
       } else if (n == 4) {
-        return 'April'
+        return `April ${d}`
       } else if (n == 5) {
-        return 'May'
+        return `May ${d}`
       } else if (n == 6) {
-        return 'June'
+        return `June ${d}`
       } else if (n == 7) {
-        return 'July'
+        return `July ${d}`
       } else if (n == 8) {
-        return 'August'
+        return `August ${d}`
       } else if (n == 9) {
-        return 'September'
+        return `September ${d}`
       } else if (n == 10) {
-        return 'October'
+        return `October ${d}`
       } else if (n == 11) {
-        return 'November'
+        return `November ${d}`
       } else if (n == 12) {
-        return 'December'
+        return `December ${d}`
       }
     }
   }
-  changeDate(e) {
-    const v = e.getValues()
-    const t = `${v[0]}-${v[1]}-${v[2]}`
+  confirmDate(e:any) {
+    const t = new Date(e)
+    const y = t.getFullYear()
+    const m = t.getMonth() + 1
+    const d = t.getDate()
+    const w = t.getDay()
     if (this.index == 0) {
-      this.date.start = this.format('date', v[1]) + v[2];
-      this.week.start = this.format('week', new Date(t).getDay())
+      this.startNow = new Date(`${y}-${m}-${d}`)
+      if (this.startNow >= this.endNow) {
+        Toast({
+          message: 'Start date greater than end date'
+        })
+        return
+      }
+      this.date = {
+        ...this.date,
+        start: this.format('date', m, d)
+      }
+      this.week = {
+        ...this.week,
+        start: this.format('week', w)
+      }
     } else if (this.index == 1) {
-      this.date.end = this.format('date', v[1]) + v[2];
-      this.week.end = this.format('week', new Date(t).getDay())
+      this.endNow = new Date(`${y}-${m}-${d}`)
+      if (this.endNow <= this.startNow) {
+        Toast({
+          message: 'End date less than start date'
+        })
+        return
+      }
+      this.date = {
+        ...this.date,
+        end: this.format('date', m, d)
+      }
+      this.week = {
+        ...this.week,
+        end: this.format('week', w)
+      }
     }
+    this.visible = false
+    this.total = Number.parseInt(`${(this.endNow - this.startNow) / (24*60*60*1000)}`, 10)
+  }
+  booking() {
+    this.$router.push('/BookingOrder')
+  }
+  openDetail() {
+    this.show = !this.show;
   }
   created() {
-    // this.date.start = this.format('date', v[1]) + v[2];
-    // this.week.start = this.format('week', new Date(t).getDay())
-    // this.date.end = this.format('date', v[1]) + v[2];
-    // this.week.end = this.format('week', new Date(t).getDay())
+    const t = new Date()
+    const t2 = new Date(Date.now() + 24*60*60*1000)
+    const y = t.getFullYear()
+    const m = t.getMonth() + 1
+    const d = t.getDate()
+    const w = t.getDay()
+    const w2 = t2.getDay()
+    this.date = {
+      start: this.format('date', m, d),
+      end: this.format('date', m, d + 1)
+    }
+    this.week = {
+      start: this.format('week', w),
+      end: this.format('week', w2)
+    }
+    this.total = 1
+    this.startNow = new Date(`${y}-${m}-${d}`)
+    this.endNow = new Date(`${y}-${m}-${d + 1}`)
   }
 }
 </script>
 <style lang="scss" scoped>
-  .swiper{
-    height: 3.5rem;
-    position: relative;
-    .van-swipe{
-      width: 100%;
-      height: 100%
+  .main{
+    .swiper{
+      height: 3.5rem;
+      position: relative;
+      .van-swipe{
+        width: 100%;
+        height: 100%
+      }
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover
+      }
+      .number{
+        left: .2rem;
+        bottom: .2rem;
+        color: #fff;
+        font-size: .2rem;
+        position: absolute;
+        border-radius: .22rem;
+        padding: .1rem .14rem;
+        background:rgba(70,70,70,.6);
+        img{
+          width: .26rem;
+          height: .26rem;
+          margin: 0 .08rem 0 0;
+          vertical-align: middle
+        }
+        span{
+          vertical-align: middle
+        } 
+      }
     }
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover
+    .van-popup{
+      z-index: $fixedIndex + 1 !important;
+    }
+    .details{
+      background: #fff;
+      .head{
+        width: 100%;
+        height: .92rem;
+        font-size: .3rem;
+        line-height: .92rem;
+        text-align: center;
+        position: relative;
+        background: #fff;
+        img{
+          top: .3rem;
+          right: .3rem;
+          width: .32rem;
+          position: absolute;
+        }
+      }
+      .swiper{
+        height: 2.86rem;
+        .number{
+          left: auto;
+          right: .24rem;
+          bottom: .24rem
+        }
+      }
+      .content{
+        padding: 0 .28rem
+      }
+      .foot{
+        overflow: hidden;
+        .item{
+          width: 50%;
+          float: left;
+          height: .96rem;
+          text-align: center;
+          line-height: .96rem;
+          &:first-child{
+            color: #FF6342;
+            font-size: .4rem;
+            background: #FAFAFA;
+          }
+          &:last-child{
+            color: #fff;
+            font-size: .34rem;
+            background: #FF6342;
+          }
+        }
+        &.full{
+          .item:last-child{
+            pointer-events: none;
+            background: #DEDEDE;
+          }
+        }
+      }
+      .list{
+        overflow: hidden;
+        margin: 0 0 .28rem;
+        padding: 0 0 .44rem;
+        border-bottom: .01rem solid #E0E0E0;
+        li{
+          width: 50%;
+          float: left;
+          height: .3rem;
+          font-size: .26rem;
+          margin: .28rem 0 0;
+          span{
+            color: #999;
+          }
+        }
+      }
+      .policy{
+        .title{
+          font-size: .3rem;
+          font-weight: bold;
+          margin: 0 0 .28rem;
+        }
+        li{
+          color:#666;
+          font-size: .24rem;
+          margin: 0 0 .16rem;
+        }
+      }
     }
   }
   .room{
@@ -275,11 +577,12 @@ export default class Booking extends Vue {
       padding: .4rem .24rem;
       .item{
         float: left;
-        width: 33.33%;
+        width: 37%;
         line-height: .4rem;
+        white-space: nowrap
       }
       .date{
-        font-size: .32rem;
+        font-size: .26rem;
         margin: 0 .04rem 0 0
       }
       .week{
@@ -287,6 +590,7 @@ export default class Booking extends Vue {
         font-size: .24rem
       }
       .right{
+        width: 26%;
         color: #FF6342;
         font-size: .24rem;
         text-align: right;
@@ -389,12 +693,11 @@ export default class Booking extends Vue {
         }
       }
     }
-    .details{
-      left: 0;
-      bottom: 0;
-      display: none;
-      position: fixed;
-      z-index: $modelIndex;
-    }
+  }
+  .facility{
+
+  }
+  .evaluation{
+
   }
 </style>

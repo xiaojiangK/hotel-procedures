@@ -45,8 +45,10 @@
       <div class="menu">
         <ul>
           <li>
-            <img src="@/assets/icon-tel.png" alt="">
-            <span>Hotel customer phone</span>
+            <a href="tel:13800138000">
+              <img src="@/assets/icon-tel.png" alt="">
+              <span>Hotel customer phone</span>
+            </a>
           </li>
           <li>
             <img src="@/assets/icon-code.png" alt="">
@@ -242,6 +244,10 @@ export default class Member extends Vue {
       font-size: .32rem;
       background: #fff;
       line-height: .98rem;
+      a{
+        color: #333;
+        display: block;
+      }
       img{
         width: .32rem;
         margin: 0 .3rem 0 0;
