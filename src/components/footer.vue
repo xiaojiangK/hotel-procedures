@@ -55,6 +55,7 @@ export default class Footer extends Vue {
     z-index: $fixedIndex;
     padding: .2rem 0 .06rem;
     transform: translateX(-50%);
+    border-top: .01rem solid #D5D5D5;
     ul{
       overflow: hidden;
       li{

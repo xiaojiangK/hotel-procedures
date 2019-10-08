@@ -32,13 +32,13 @@
               </div>
               <div class="status">submitted</div>
             </div>
-            <div class="content" :class="[item.img.length > 1 ? 'more':'']" @click="goDetail({id: 1, status: 0})">
+            <div :class="['content', item.img.length > 1 ? 'more':'']" @click="goDetail({id: 1, status: 0})">
               <div class="picture" v-for="(j, index) in item.img" :key="index">
                 <img src="@/assets/good.png" alt="">
               </div>
               <div class="desc" v-if="item.img.length == 1">Extra xylitol sugar-free gum mixed flavor 70 pieces 98g single bottle</div>
             </div>
-            <div class="foot"><span>Total amount paid for 1 piece of goods: </span>৳ 10.40</div>
+            <div class="foot"><span>Total amount paid for 1 piece of goods: </span>৳10.40</div>
           </div>
         </div>
       </div>
@@ -71,8 +71,8 @@
 
 <script lang="ts">
 import services from '@/services';
-import Header from '@/components/header.vue';
-import Footer from '@/components/footer.vue';
+import Header from '@/components/Header.vue';
+import Footer from '@/components/Footer.vue';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({

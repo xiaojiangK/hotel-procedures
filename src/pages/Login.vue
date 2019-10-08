@@ -32,7 +32,7 @@
 <script lang="ts">
 import { Toast } from 'vant';
 import services from '@/services';
-import Header from '@/components/header.vue'
+import Header from '@/components/Header.vue'
 import { setStorage, getStorage } from '@/utils/util';
 import { Component, Vue } from 'vue-property-decorator';
 

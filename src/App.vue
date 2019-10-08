@@ -14,6 +14,9 @@
   margin: 0 auto;
   height: 100%;
 }
+ul,li{
+  list-style: none;
+}
 ul,li,ol,li,p,a{
   margin: 0;
 }
@@ -22,7 +25,7 @@ body,html{
   height: 100%;
   color: #333;
   overflow-x: hidden;
-  background: #f2f2f2;
+  background: #fff;
 }
 .wrap{
   position: relative;

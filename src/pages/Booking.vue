@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap" ref="wrap">
     <Header isBack="0" title="Hotel booking"></Header>
     <div class="main">
       <div class="swiper">
@@ -19,7 +19,7 @@
           <span>61 sheets</span>
         </div>
       </div>
-      <van-tabs v-model="active" color="#FF6342" title-active-color="#FF6342" :swipeable="true" :animated="true">
+      <van-tabs v-model="active" color="#FF6342" title-active-color="#FF6342" swipeable animated>
         <van-tab title="Booking">
           <div class="room">
             <div class="select">
@@ -47,7 +47,7 @@
                     <div class="left">
                       <p class="title">Ordinary single room</p>
                       <p class="info">no breakfast Single bed no window</p>
-                      <p class="price"><span>৳</span> 148.00</p>
+                      <p class="price"><span>৳</span>148.00</p>
                     </div>
                     <div class="right" @click="booking">
                       <div class="title">Booking</div>
@@ -64,11 +64,11 @@
                     <div class="left">
                       <p class="title">Ordinary single room</p>
                       <p class="info">no breakfast Single bed no window</p>
-                      <p class="price"><span>৳</span> 148.00</p>
+                      <p class="price"><span>৳</span>148.00</p>
                     </div>
                     <div class="right" @click="booking">
                       <div class="title">Booking</div>
-                      <div class="sub">Pay cash</div>
+                      <div class="sub">Pay store</div>
                     </div>
                   </div>
                 </li>
@@ -81,7 +81,7 @@
                     <div class="left">
                       <p class="title">Ordinary single room</p>
                       <p class="info">no breakfast Single bed no window</p>
-                      <p class="price"><span>৳</span> 799.00</p>
+                      <p class="price"><span>৳</span>799.00</p>
                     </div>
                     <div class="right full">
                       <div class="title">Full house</div>
@@ -97,7 +97,7 @@
           <div class="facility">
             <div class="hotel">
               <p class="title">Empark Grand Hotel</p>  
-              <span>five-star</span>
+              <p class="sub">five-star</p>
             </div>
             <div class="serve">
               <p class="title">Available services</p>
@@ -158,8 +158,20 @@
           </div>
         </van-tab>
         <van-tab title="Evaluation">
-          <div class="evaluation">
-            Guest evaluation
+          <div class="evaluation" v-if="comment.length">
+            <div class="tabs">
+              <div :class="['item', commentIdx == 0 ? 'active' : '']" @click="chooseComment(0)">Total (2624)</div>
+              <div :class="['item', commentIdx == 1 ? 'active' : '']" @click="chooseComment(1)">Pictures (2624)</div>
+            </div>
+            <div class="comment">
+              <ul>
+                <Comment v-for="(item, index) in comment" :key="index" :item="item"></Comment>
+              </ul>
+            </div>
+          </div>
+          <div class="empty" v-else>
+            <img src="@/assets/empty.png" alt="">
+            <p>暂无评价</p>
           </div>
         </van-tab>
       </van-tabs>
@@ -226,7 +238,7 @@
             </div>
           </div>
           <div class="foot full">
-            <div class="item">৳ 148.00</div>
+            <div class="item">৳148.00</div>
             <div class="item" @click="booking">Booking</div>
           </div>
         </div>
@@ -238,8 +250,9 @@
 
 <script lang="ts">
 import services from '@/services';
-import Header from '@/components/header.vue';
-import Footer from '@/components/footer.vue';
+import Header from '@/components/Header.vue';
+import Footer from '@/components/Footer.vue';
+import Comment from '@/components/Comment.vue';
 import { Swipe, SwipeItem, Tab, Tabs, DatetimePicker, Popup, Toast } from 'vant';
 import { Component, Vue } from 'vue-property-decorator';
 
@@ -247,6 +260,7 @@ import { Component, Vue } from 'vue-property-decorator';
   components: {
     Header,
     Footer,
+    Comment,
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,
     [Popup.name]: Popup,
@@ -256,7 +270,7 @@ import { Component, Vue } from 'vue-property-decorator';
   }
 })
 export default class Booking extends Vue {
-  active:number = 1;
+  active:number = 0;
   index:number = -1;
   week:object = {
     start: '',
@@ -270,66 +284,129 @@ export default class Booking extends Vue {
   endNow:any;       // 结束日期
   total:number = 0;
   show:boolean = false;
+  commentIdx:number = 0;
   visible:boolean = false;
   current:any = new Date();
   minDate:any = new Date();
   maxDate:any = new Date(Date.now() + (24*60*60*1000) * (365 / 12 * 5));
 
-  serve:any[] = [{
-    id: '101006',
-    title: 'Wireless Internet'
-  },{
-    id: '101007',
-    title: 'Wireless Internet'
-  },{
-    id: '101038',
-    title: 'Wireless Internet'
-  },{
-    id: '101039',
-    title: 'Wireless Internet'
-  },{
-    id: '101040',
-    title: 'Wireless Internet'
-  },{
-    id: '101041',
-    title: 'Wireless Internet'
-  },{
-    id: '101042',
-    title: 'Wireless Internet'
-  },{
-    id: '101043',
-    title: 'Wireless Internet'
-  },{
-    id: '101044',
-    title: 'Wireless Internet'
-  },{
-    id: '101045',
-    title: 'Wireless Internet'
-  },{
-    id: '101046',
-    title: 'Wireless Internet'
-  },{
-    id: '101047',
-    title: 'Wireless Internet'
-  },{
-    id: '101048',
-    title: 'Wireless Internet'
-  },{
-    id: '101049',
-    title: 'Wireless Internet'
-  },{
-    id: '101050',
-    title: 'Wireless Internet'
-  },{
-    id: '101051',
-    title: 'Wireless Internet'
-  },{
-    id: '101052',
-    title: 'Wireless Internet'
-  },{
-    id: '101053',
-    title: 'Wireless Internet'
-  }]
+  // test
+  serve:any[] = [
+    {
+      id: '101006',
+      title: 'Wireless Internet'
+    },{
+      id: '101007',
+      title: 'Wireless Internet'
+    },{
+      id: '101038',
+      title: 'Wireless Internet'
+    },{
+      id: '101039',
+      title: 'Wireless Internet'
+    },{
+      id: '101040',
+      title: 'Wireless Internet'
+    },{
+      id: '101041',
+      title: 'Wireless Internet'
+    },{
+      id: '101042',
+      title: 'Wireless Internet'
+    },{
+      id: '101044',
+      title: 'Wireless Internet'
+    },{
+      id: '101044',
+      title: 'Wireless Internet'
+    },{
+      id: '101045',
+      title: 'Wireless Internet'
+    },{
+      id: '101045',
+      title: 'Wireless Internet'
+    },{
+      id: '101047',
+      title: 'Wireless Internet'
+    },{
+      id: '101048',
+      title: 'Wireless Internet'
+    },{
+      id: '101049',
+      title: 'Wireless Internet'
+    },{
+      id: '101050',
+      title: 'Wireless Internet'
+    },{
+      id: '101051',
+      title: 'Wireless Internet'
+    },{
+      id: '101052',
+      title: 'Wireless Internet'
+    },{
+      id: '101053',
+      title: 'Wireless Internet'
+    }
+  ]
+  comment:any[] = [
+    {
+      logo: 'https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT',
+      name: 'xtp231200153',
+      room: 'Economy big bed room',
+      content: 'The hotel is clean and tidy, the service is warm and considerate, the important thing is here.Its convenient and convenient to have a parking space. Originally, there was no window.Households room, after coming, the shop said that the room was not tense.Its a window replacement for us, temporarily',
+      img: ['https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT','https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT','https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT','https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT'],
+      arrival_time: '2019-02',
+      time: '2019-02-15'
+    },
+    {
+      logo: 'https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT',
+      name: 'xtp231200153',
+      room: 'Economy big bed room',
+      content: 'The hotel is clean and tidy, the service is warm and considerate, the important thing is here.Its convenient and convenient to have a parking space. Originally, there was no window.Households room, after coming, the shop said that the room was not tense.Its a window replacement for us, temporarily',
+      img: ['https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT','https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT','https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT'],
+      arrival_time: '2019-02',
+      time: '2019-02-15'
+    },
+    {
+      logo: 'https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT',
+      name: 'xtp231200153',
+      room: 'Economy big bed room',
+      content: 'The hotel is clean and tidy, the service is warm and considerate, the important thing is here.Its convenient and convenient to have a parking space. Originally, there was no window.Households room, after coming, the shop said that the room was not tense.Its a window replacement for us, temporarily',
+      img: ['https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT','https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT'],
+      arrival_time: '2019-02',
+      time: '2019-02-15'
+    },
+    {
+      logo: 'https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT',
+      name: 'xtp231200153',
+      room: 'Economy big bed room',
+      content: 'The hotel is clean and tidy, the service is warm and considerate, the important thing is here.Its convenient and convenient to have a parking space. Originally, there was no window.Households room, after coming, the shop said that the room was not tense.Its a window replacement for us, temporarily',
+      img: ['https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT'],
+      arrival_time: '2019-02',
+      time: '2019-02-15'
+    },
+    {
+      logo: 'https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT',
+      name: 'xtp231200153',
+      room: 'Economy big bed room',
+      content: 'The hotel is clean and tidy, the service is warm and considerate, the important thing is here.Its convenient and convenient to have a parking space. Originally, there was no window.Households room, after coming, the shop said that the room was not tense.Its a window replacement for us, temporarily',
+      img: [],
+      arrival_time: '2019-02',
+      time: '2019-02-15'
+    },
+    {
+      logo: 'https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT',
+      name: 'xtp231200153',
+      room: 'Economy big bed room',
+      content: 'The hotel is clean and tidy, the service is warm and considerate, the important thing is here.Its convenient and convenient to have a parking space. Originally, there was no window.Households room, after coming, the shop said that the room was not tense.Its a window replacement for us, temporarily',
+      img: [],
+      arrival_time: '2019-02',
+      time: '2019-02-15',
+      speaker: 'hotel reply',
+      reply: 'Location is not easy to find, the facade is too small. Front desk smallMy brother and his little sister are very patient and very patient',
+      reply_time: '2019-02-15'
+    }
+  ]
 
   selectDate(e:number) {
     this.index = e
@@ -428,6 +505,24 @@ export default class Booking extends Vue {
   openDetail() {
     this.show = !this.show;
   }
+  chooseComment(e:number) {
+    this.commentIdx = e;
+    // api
+  }
+  handleScroll(e:any) {
+    if (this.active == 2) {
+      const client = document.documentElement.clientHeight || document.body.clientHeight
+      const current = (this.$refs.wrap as any).offsetHeight
+      const scrollTop = e.target.scrollTop
+      if (scrollTop >= current - client) {
+        console.log(scrollTop)
+        // api
+      }
+    }
+  }
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll, true)
+  }
   created() {
     const t = new Date()
     const t2 = new Date(Date.now() + 24*60*60*1000)
@@ -447,6 +542,7 @@ export default class Booking extends Vue {
     this.total = 1
     this.startNow = new Date(`${y}-${m}-${d}`)
     this.endNow = new Date(`${y}-${m}-${d + 1}`)
+    window.addEventListener('scroll', this.handleScroll, true)
   }
 }
 </script>
@@ -483,9 +579,6 @@ export default class Booking extends Vue {
           vertical-align: middle
         } 
       }
-    }
-    .van-popup{
-      z-index: $fixedIndex + 1 !important;
     }
     .details{
       background: #fff;
@@ -568,6 +661,18 @@ export default class Booking extends Vue {
           font-size: .24rem;
           margin: 0 0 .16rem;
         }
+      }
+    }
+    .empty{
+      padding: 1.4rem 0;
+      text-align: center;
+      img{
+        width: 2.6rem;
+        margin: 0 0 .6rem
+      }
+      p{
+        color: #999;
+        font-size: .36rem
       }
     }
   }
@@ -695,9 +800,88 @@ export default class Booking extends Vue {
     }
   }
   .facility{
-
+    padding: 0 .28rem .6rem;
+    .title{
+      margin: .28rem 0 .28rem;
+    }
+    .hotel{
+      padding: 0 0 .34rem;
+      border-bottom: .01rem solid #E0E0E0;
+      .title{
+        margin: .28rem 0 .2rem;
+      }
+      .sub{
+        color: #999;
+        font-size: .24rem
+      }
+    }
+    .serve{
+      padding: 0 0 .14rem;
+      border-bottom: .01rem solid #E0E0E0;
+      ul{
+        overflow: hidden;
+        li{
+          width: 20%;
+          float: left;
+          margin: 0 0 .26rem;
+          text-align: center;
+          img{
+            width: .4rem;
+            display: block;
+            margin: 0 auto .18rem;
+          }
+          p{
+            color: #999;
+            height: .56rem;
+            font-size: .2rem
+          }
+        }
+      }
+    }
+    .synopsis{
+      padding: 0 0 .4rem;
+      border-bottom: .01rem solid #E0E0E0;
+      .attr{
+        overflow: hidden;
+        .item{
+          width: 50%;
+          float: left;
+          margin: 0 0 .2rem;
+        }
+      }
+      .desc{
+        color: #666;
+        text-indent: 2em;
+        font-size: .24rem;
+        line-height: .36rem
+      }
+    }
+    .policy{
+      li{
+        color: #666;
+        font-size: .24rem;
+        margin: 0 0 .16rem
+      }
+    }
   }
   .evaluation{
-
+    .tabs{
+      overflow: hidden;
+      padding: .28rem .22rem;
+      .item{
+        font-size: .26rem;
+        color: #B5B5B5;
+        transition: .3s all;
+        margin: 0 .26rem 0 0;
+        display: inline-block;
+        padding: .18rem .24rem;
+        border-radius: .32rem;
+        border: .01rem solid #E0E0E0;
+        &.active{
+          color: #FF6342;
+          border: .01rem solid #FF6342
+        }
+      }
+    }
   }
 </style>

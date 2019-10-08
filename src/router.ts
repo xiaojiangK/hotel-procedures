@@ -11,7 +11,7 @@ export default new Router({
       meta: {
         title: 'Index'
       },
-      component: () => import('@/pages/Index.vue')
+      component: (resolve) => require(['@/pages/Index.vue'], resolve)
     },
     {
       path: '/Login',
@@ -19,7 +19,7 @@ export default new Router({
       meta: {
         title: 'Login'
       },
-      component: () => import('@/pages/Login.vue')
+      component: (resolve) => require(['@/pages/Login.vue'], resolve)
     },
     {
       path: '/Register',
@@ -27,7 +27,7 @@ export default new Router({
       meta: {
         title: 'Register'
       },
-      component: () => import('@/pages/Register.vue')
+      component: (resolve) => require(['@/pages/Register.vue'], resolve)
     },
     {
       path: '/Retrieve',
@@ -35,7 +35,7 @@ export default new Router({
       meta: {
         title: 'Retrieve'
       },
-      component: () => import('@/pages/Retrieve.vue')
+      component: (resolve) => require(['@/pages/Retrieve.vue'], resolve)
     },
     {
       path: '/EditUser',
@@ -43,7 +43,7 @@ export default new Router({
       meta: {
         title: 'EditUser'
       },
-      component: () => import('@/pages/EditUser.vue')
+      component: (resolve) => require(['@/pages/EditUser.vue'], resolve)
     },
     {
       path: '/Member',
@@ -51,7 +51,7 @@ export default new Router({
       meta: {
         title: 'Member'
       },
-      component: () => import('@/pages/Member.vue')
+      component: (resolve) => require(['@/pages/Member.vue'], resolve)
     },
     {
       path: '/Booking',
@@ -59,7 +59,39 @@ export default new Router({
       meta: {
         title: 'Booking'
       },
-      component: () => import('@/pages/Booking.vue')
+      component: (resolve) => require(['@/pages/Booking.vue'], resolve)
+    },
+    {
+      path: '/Breakfast',
+      name: 'Breakfast',
+      meta: {
+        title: 'Breakfast'
+      },
+      component: (resolve) => require(['@/pages/Breakfast.vue'], resolve)
+    },
+    {
+      path: '/HotelFacility',
+      name: 'HotelFacility',
+      meta: {
+        title: 'HotelFacility'
+      },
+      component: (resolve) => require(['@/pages/HotelFacility.vue'], resolve)
+    },
+    {
+      path: '/HotelStore',
+      name: 'HotelStore',
+      meta: {
+        title: 'HotelStore'
+      },
+      component: (resolve) => require(['@/pages/HotelStore.vue'], resolve)
+    },
+    {
+      path: '/HotelAround',
+      name: 'HotelAround',
+      meta: {
+        title: 'HotelAround'
+      },
+      component: (resolve) => require(['@/pages/HotelAround.vue'], resolve)
     }
   ]
 });

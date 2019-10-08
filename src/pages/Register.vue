@@ -30,7 +30,7 @@
 import { Toast } from 'vant';
 import services from '@/services';
 import { setStorage } from '@/utils/util';
-import Header from '@/components/header.vue';
+import Header from '@/components/Header.vue';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({

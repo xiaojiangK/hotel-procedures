@@ -27,7 +27,7 @@
 <script lang="ts">
 import { Toast } from 'vant';
 import services from '@/services';
-import Header from '@/components/header.vue';
+import Header from '@/components/Header.vue';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
@@ -62,6 +62,10 @@ export default class EditUser extends Vue {
 }
 </script>
 <style lang="scss" scoped>
+  .wrap{
+    height: 100%;
+    background: #f3f3f3
+  }
   .main{
     margin: .2rem 0 0;
     .item{

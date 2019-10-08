@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap index">
     <Header :isBack="0" title="Hotel Name"></Header>
     <div class="main">
       <div class="swiper">
@@ -34,19 +34,19 @@
               </router-link>
             </li>
             <li>
-              <router-link to="/Store">
+              <router-link to="/HotelStore">
                 <img src="@/assets/icon-super.png" alt="">
                 <p>Hotel store</p>
               </router-link>
             </li>
             <li>
-              <router-link to="/Facilities">
+              <router-link to="/HotelFacility">
                 <img src="@/assets/icon-facility.png" alt="">
                 <p>Hotel facilities</p>
               </router-link>
             </li>
             <li>
-              <router-link to="/Around">
+              <router-link to="/HotelAround">
                 <img src="@/assets/icon-periphery.png" alt="">
                 <p>Hotel around</p>
               </router-link>
@@ -55,126 +55,10 @@
         </div>
       </div>
       <div class="module">
-        <div class="item location">
-          <div class="head">
-            <div class="title">
-              <img src="@/assets/icon-location.png" alt="">
-              <span>Hotel location</span>
-            </div>
-          </div>
-          <div class="content">
-            <div class="map"></div>
-            <div class="foot">
-              <div class="left">
-                <p>Hotel name</p>
-                <span>Hotel location</span>
-              </div>
-              <div class="right">
-                <a href="tel:13800138000">
-                  <img src="@/assets/icon-call.png" alt="">
-                </a>
-                <img src="@/assets/icon-navigation.png" alt="">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="item facilities">
-          <div class="head">
-            <div class="title">
-              <img src="@/assets/icon-facility-sm.png" alt="">
-              <span>Hotel facilities</span>
-              <router-link to="/Facilities">
-                <img src="@/assets/icon-next.png" class="next" alt="">
-              </router-link>
-            </div>
-          </div>
-          <div class="content">
-            <div class="picture">
-              <img src="@/assets/banner.png" alt="">
-            </div>
-            <div class="foot">
-              <div class="left">
-                <p>Swimming pool in nanhai</p>
-                <span>Free trial for deluxe double room and above</span>
-              </div>
-              <div class="right">
-                <div class="price">৳ 68.00</div>
-                <router-link to="/Facilities" class="buy">Buy</router-link>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="item goods">
-          <div class="head">
-            <div class="title">
-              <img src="@/assets/icon-super-sm.png" alt="">
-              <span>Hotel store</span>
-              <router-link to="/Store">
-                <img src="@/assets/icon-next.png" class="next" alt="">
-              </router-link>
-            </div>
-          </div>
-          <div class="content">
-            <ul>
-              <li>
-                <router-link to="/Store">
-                  <div class="img">
-                    <img src="@/assets/banner.png" alt="">
-                  </div>
-                  <div class="info">
-                    <div class="title">Extra xylitol sugar-free gum mixed flavor 70 pieces 98g single bottle</div>
-                    <div class="price">
-                      <div class="left">৳ 10.40</div>
-                      <div class="right">
-                        <img src="@/assets/icon-shop.png" alt="">
-                      </div>
-                    </div>
-                  </div>
-                </router-link>
-              </li>
-              <li>
-                <router-link to="/Store">
-                  <div class="img">
-                    <img src="@/assets/banner.png" alt="">
-                  </div>
-                  <div class="info">
-                    <div class="title">Extra xylitol sugar-free gum mixed flavor 70 pieces 98g single bottle</div>
-                    <div class="price">
-                      <div class="left">৳ 10.40</div>
-                      <div class="right">
-                        <img src="@/assets/icon-shop.png" alt="">
-                      </div>
-                    </div>
-                  </div>
-                </router-link>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="item">
-          <div class="head">
-            <div class="title">
-              <img src="@/assets/icon-periphery-sm.png" alt="">
-              <span>Hotel around</span>
-            </div>
-          </div>
-          <div class="content">
-            <div class="picture">
-              <img src="@/assets/banner.png" alt="">
-            </div>
-            <div class="foot">
-              <div class="left">
-                <p>Liuxiang food city baiqi family</p>
-                <span>Hotel around</span>
-              </div>
-              <div class="right">
-                <a href="tel:13800138000">
-                  <img src="@/assets/icon-call.png" alt="">
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <HotelLocation></HotelLocation>
+        <HotelFacility></HotelFacility>
+        <HotelStore></HotelStore>
+        <HotelAround></HotelAround>
       </div>
       <div class="footer">Wonderful trip, starting with hotel life...</div>
     </div>
@@ -185,8 +69,12 @@
 <script lang="ts">
 import services from '@/services';
 import { Swipe, SwipeItem } from 'vant';
-import Header from '@/components/header.vue';
-import Footer from '@/components/footer.vue';
+import Header from '@/components/Header.vue';
+import Footer from '@/components/Footer.vue';
+import HotelStore from '@/components/HotelStore.vue';
+import HotelAround from '@/components/HotelAround.vue';
+import HotelLocation from '@/components/HotelLocation.vue';
+import HotelFacility from '@/components/HotelFacility.vue';
 import { Component, Vue } from 'vue-property-decorator';
 
 Vue.use(Swipe, SwipeItem)
@@ -195,6 +83,10 @@ Vue.use(Swipe, SwipeItem)
   components: {
     Header,
     Footer,
+    HotelStore,
+    HotelAround,
+    HotelFacility,
+    HotelLocation,
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem
   }
@@ -203,8 +95,9 @@ export default class Index extends Vue {
   created() {}
 }
 </script>
-<style lang="scss" scoped>
-  .main{
+<style lang="scss">
+  .index{
+    background: #EFEFEF;
     .swiper{
       height: 3.8rem;
       position: relative;
