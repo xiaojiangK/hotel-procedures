@@ -253,7 +253,7 @@ import services from '@/services';
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
 import Comment from '@/components/Comment.vue';
-import { Swipe, SwipeItem, Tab, Tabs, DatetimePicker, Popup, Toast } from 'vant';
+import { Swipe, SwipeItem, Tab, Tabs, DatetimePicker, Popup } from 'vant';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
@@ -466,9 +466,7 @@ export default class Booking extends Vue {
     if (this.index == 0) {
       this.startNow = new Date(`${y}-${m}-${d}`)
       if (this.startNow >= this.endNow) {
-        Toast({
-          message: 'Start date greater than end date'
-        })
+        this.$toast.fail('Start date greater than end date')
         return
       }
       this.date = {
@@ -482,9 +480,7 @@ export default class Booking extends Vue {
     } else if (this.index == 1) {
       this.endNow = new Date(`${y}-${m}-${d}`)
       if (this.endNow <= this.startNow) {
-        Toast({
-          message: 'End date less than start date'
-        })
+        this.$toast.fail('End date less than start date')
         return
       }
       this.date = {
@@ -547,6 +543,9 @@ export default class Booking extends Vue {
 }
 </script>
 <style lang="scss" scoped>
+  .wrap{
+    padding: 1rem 0 1.16rem;
+  }
   .main{
     .swiper{
       height: 3.5rem;

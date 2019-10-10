@@ -25,6 +25,16 @@
           <span>Hotel service</span>
           <img src="@/assets/icon-title-r.png" alt="">
         </div>
+        <!-- wifi -->
+        <div class="wifi-box">
+          <img class="wifi-lf" src="@/assets/wifi-blue.png" />
+          <div class="wifi-nav" hover-class="none" @click="wifiNext">
+            <div class="wifi-title" >Welcome use Hotel WIFI</div>
+            <div class="btnToDetail" >WiFi Password,Click here</div>
+          </div>
+          <button class="wifi-btn" @click="wifiNext">Connect</button>
+        </div>
+        <!-- end wifi -->
         <div class="list">
           <ul>
             <li>
@@ -42,7 +52,7 @@
             <li>
               <router-link to="/HotelFacility">
                 <img src="@/assets/icon-facility.png" alt="">
-                <p>Hotel facilities</p>
+                <p>Hotel facility</p>
               </router-link>
             </li>
             <li>
@@ -92,12 +102,16 @@ Vue.use(Swipe, SwipeItem)
   }
 })
 export default class Index extends Vue {
+  wifiNext() {
+    this.$router.push('/WifiList')
+  }
   created() {}
 }
 </script>
 <style lang="scss">
   .index{
     background: #EFEFEF;
+    padding: 1rem 0 1.16rem;
     .swiper{
       height: 3.8rem;
       position: relative;
@@ -154,6 +168,50 @@ export default class Index extends Vue {
             color: #666;
             font-size: .26rem
           }
+        }
+      }
+      /**wifi模块**/
+      .wifi-box {
+        width: 6.7rem;
+        height: .98rem;
+        background: #F0F9FE;
+        border-radius: .08rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        margin: 0 auto .4rem auto;
+        .wifi-lf {
+          width: .48rem;
+          margin: 0 0 0 .38rem;
+        }
+        .wifi-nav {
+          width: 3.42rem;
+          height: auto;
+          margin: 0 0 0 .28rem;
+        }
+        .wifi-btn {
+          width: 1.56rem;
+          height: .48rem;
+          outline: none;
+          border: none;
+          color: white;
+          font-size: .24rem;
+          line-height: .48rem;
+          background:rgba(74,144,227,1);
+          border-radius: .24rem;
+        }
+        .wifi-btn::after {
+          border: none;
+        }
+        .wifi-title {
+          font-size: .28rem;
+          font-weight: bold;
+          color: #494A4A;
+        }
+        .btnToDetail {
+          font-size: .22rem;
+          color: #4A90E3;
         }
       }
     }
@@ -238,7 +296,7 @@ export default class Index extends Vue {
         }
       }
     }
-    .facilities{
+    .facility{
       .foot{
         .right{
           margin: 0;

@@ -1,76 +1,169 @@
 <template>
   <div class="wrap">
-    <Header white="true" isBack="0" title="Member center"></Header>
-    <div class="user">
-      <div class="left">
-        <img src="@/assets/avatar.png" alt="">
-        <div class="name">
-          <p>user name</p>
-          <span>Log in quickly using WeChat</span>
-        </div>
-      </div>
-      <router-link to="/EditUser" class="right">
-        <img src="@/assets/icon-edit.png" alt="">
-      </router-link>
-    </div>
-    <div class="main">
-      <div class="order">
-        <div class="head">
-          <div class="title">My order</div>
-          <router-link to="/OrderList" class="more">
-            <span>more</span>
-            <img src="@/assets/icon-next.png" alt="">
-          </router-link>
-        </div>
-        <div class="content">
-          <div class="noLogin" v-if="goods.length == 0">Log in and view the order</div>
-          <div class="goods" v-else v-for="(item, index) in goods" :key="index">
-            <div class="head">
-              <div class="title">
-                <img src="@/assets/icon-super-sm.png" alt="">
-                <span>Hotel store</span>
+    <van-pull-refresh v-model="loading" @refresh="onRefresh">
+      <Header white="true" isBack="0" title="Member center"></Header>
+      <div class="user">
+        <div class="left">
+          <img :src="[userInfo.img ? userInfo.img : '@/assets/avatar.png']" class="avater" alt="">
+          <div class="name">
+            <p>{{userInfo.name ? userInfo.name : 'User name'}}</p>
+            <div class="tags">
+              <div class="item" v-if="userInfo.tel">
+                <img src="@/assets/vip-icon.png" alt="">
+                <span>VIP Member</span>
               </div>
-              <div class="status">submitted</div>
-            </div>
-            <div :class="['content', item.img.length > 1 ? 'more':'']" @click="goDetail({id: 1, status: 0})">
-              <div class="picture" v-for="(j, index) in item.img" :key="index">
-                <img src="@/assets/good.png" alt="">
+              <div class="item" v-if="userInfo.issale == '0' && (userInfo.isclient == '1' || userInfo.isclient == '0')">
+                <img src="@/assets/company-icon.png" alt="">
+                <span>{{userInfo.company_name}}</span>
               </div>
-              <div class="desc" v-if="item.img.length == 1">Extra xylitol sugar-free gum mixed flavor 70 pieces 98g single bottle</div>
             </div>
-            <div class="foot"><span>Total amount paid for 1 piece of goods: </span>৳10.40</div>
           </div>
         </div>
+        <router-link to="/EditUser" class="right">
+          <img src="@/assets/icon-edit.png" alt="">
+        </router-link>
       </div>
-      <div class="menu">
-        <ul>
-          <li>
-            <a href="tel:13800138000">
-              <img src="@/assets/icon-tel.png" alt="">
-              <span>Hotel customer phone</span>
-            </a>
-          </li>
-          <li>
-            <img src="@/assets/icon-code.png" alt="">
-            <span>Sweep the code verification</span>
-          </li>
-          <li>
-            <img src="@/assets/icon-lock.png" alt="">
-            <span>Retrieve password</span>
-          </li>
-          <li>
-            <img src="@/assets/icon-out.png" alt="">
-            <span>Log out</span>
-          </li>
-        </ul>
+      <div class="main">
+        <div class="order">
+          <div class="head">
+            <router-link to="/OrderList">
+              <div class="title">My order</div>
+              <div class="more">
+                <span>more</span>
+                <img src="@/assets/icon-next.png" alt="">
+              </div>
+            </router-link>
+          </div>
+          <div class="content">
+            <div v-for="(i, index) in orderList" :key="index">
+              <div class='item' v-if="index == 0">
+                <div class='order-header'>
+                  <div class='order-title' v-if="i.flag == '0'">
+                    <img src='@/assets/icon-order.png'/>
+                    <span>{{i.room_type}}</span>
+                  </div>
+                  <div class='order-title' v-if="i.flag == '1'">
+                    <img src='@/assets/index-super-sm.png'/>
+                    <span>Hotel store</span>
+                  </div>
+                  <div class='order-title' v-if="i.flag == '2'">
+                    <img src='@/assets/icon-hotel.png'/>
+                    <span>Hotel facility</span>
+                  </div>
+                  <div class='order-title' v-if="i.flag == '3'">
+                    <img src='@/assets/icon-breakfast.png'/>
+                    <span>Breakfast coupon</span>
+                  </div>
+                  <div class="order-status" v-if="i.flag == '0'">
+                    <span v-if="i.status == '1'">non paid</span>
+                    <span v-if="i.status == '2'">have paid</span>
+                    <span v-if="i.status == '10'">no lived</span>
+                    <span v-if="i.status == '3'">canceled</span>
+                    <span v-if="i.status == '4'">completed</span>
+                    <span v-if="i.status == '5'">lived</span>
+                    <span v-if="i.status == '7'">refund</span>
+                    <span v-if="i.status == '12'">no confirm</span>
+                  </div>
+                  <div class="order-status" v-if="i.flag == '1'">
+                    <span v-if="i.status == '1'">non paid</span>
+                    <span v-if="i.status == '2'">no shipped</span>
+                    <span v-if="i.status == '3'">canceled</span>
+                    <span v-if="i.status == '4'">completed</span>
+                    <span v-if="i.status == '7'">refund</span>
+                  </div>
+                  <div class="order-status" v-if="i.flag == '2'">
+                    <span v-if="i.status == '1'">non paid</span>
+                    <span v-if="i.status == '2'">unused</span>
+                    <span v-if="i.status == '3'">canceled</span>
+                    <span v-if="i.status == '4'">used</span>
+                    <span v-if="i.status == '7'">refund</span>
+                  </div>
+                  <div class="order-status" v-if="i.flag == '3'">
+                    <span v-if="i.status == '1'">non paid</span>
+                    <span v-if="i.status == '2'">unused</span>
+                    <span v-if="i.status == '3'">canceled</span>
+                    <span v-if="i.status == '4'">used</span>
+                    <span v-if="i.status == '7'">refund</span>
+                  </div>
+                </div>  
+                  
+                <div class='order-content' v-if="i.flag == '0'" @click="goDetail(i)">
+                  <img class='order-img' :src='i.room_logo'/>
+                  <div>
+                    <div><span v-if="i.size">{{i.size}}</span>  {{i.windows == '1' ? '有' : '无'}}窗  {{i.breakfast == '0' ? '不' : ''}}含早</div>
+                    <div class="sub">{{i.arrival_time}} 至 {{i.departure_time}} {{i.days}}晚/{{i.num}}间</div>
+                  </div>
+                </div>
+                <div class='order-content' v-else @click="goDetail(i)">
+                  <div v-for="(j, index) in i.goods_info" :key="index">
+                    <img class='order-img' :src='j.img'/>
+                    <div v-if="i.goods_info.length == 1">
+                      <div>{{j.name}}</div>
+                      <div class="sub" v-if="j.goods_subheading">{{j.goods_subheading}}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class='order-statistics'>
+                  <div class='statistics-right'>
+                    <div>共{{i.totalNum}}件商品</div>
+                    <div class='statistics-price'>
+                      <span v-if="i.status == 12">到店实付</span>
+                      <span v-if="i.status != 12">实付金额</span>
+                      ：<span class='price-font'>￥{{i.total_cost ? i.total_cost : i.price}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="order-no" v-if="orderList.length == 0">No orders</div>
+          </div>
+        </div>
+        <div class="menu">
+          <ul>
+            <li>
+              <a href="tel:13800138000">
+                <img src="@/assets/icon-tel.png" alt="">
+                <span>Hotel customer phone</span>
+              </a>
+            </li>
+            <li v-if="isVerify == 200">
+              <img src="@/assets/icon-code.png" alt="">
+              <span>scan code consumption</span>
+            </li>
+            <li>
+              <router-link :to="'/Retrieve?id=' + [userInfo.id]">
+                <img src="@/assets/icon-lock.png" alt="">
+                <span>Retrieve password</span>
+              </router-link>
+            </li>
+            <li v-if="userInfo.issale == '0' && userInfo.isclient == '1'">
+              <router-link :to="'/InvitedMembers' + [userInfo.id]">
+                <img src="@/assets/icon-lock.png" alt="">
+                <span>Invite company members</span>
+              </router-link>
+            </li>
+            <li v-if="userInfo.issale == '1'">
+              <router-link :to="'/achievement' + [userInfo.id]">
+                <img src="@/assets/icon-lock.png" alt="">
+                <span>Performance data</span>
+              </router-link>
+            </li>
+            <li @click="logout">
+              <img src="@/assets/icon-out.png" alt="">
+              <span>Log out</span>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-    <Footer name="Member"></Footer>
+      <Footer name="Member"></Footer>
+    </van-pull-refresh>
   </div>
 </template>
 
 <script lang="ts">
+import { PullRefresh } from 'vant';
 import services from '@/services';
+import { formatDate, removeStorage } from '@/utils/util';
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
 import { Component, Vue } from 'vue-property-decorator';
@@ -78,14 +171,192 @@ import { Component, Vue } from 'vue-property-decorator';
 @Component({
   components: {
     Header,
-    Footer
+    Footer,
+    [PullRefresh.name]: PullRefresh
   }
 })
 export default class Member extends Vue {
-  goods: any[] = [{
-    img: [1,2,3,4,5,6]
-  }];
+  orderList: any[] = [];
+  loading:boolean = false;
+  isVerify:number = 0;
+  userInfo:object = {
+    add_member: '0',
+    balance: '0.00',
+    bind_tel_at: '2019-09-17 16:38:10',
+    commission: '0.00',
+    company_id: '1',
+    created_at: '2019-07-13 10:09:33',
+    discount: null,
+    dj_money: '0.00',
+    id: '4913',
+    img: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqk7zaqpGsU3icq8sGG42QkT0XedHsQqBJPm0gibGQEXlN3A5JfAcXicnhf5rJJzWfuLqxoHFYt6zV0A/132',
+    join_time: '1562983773',
+    level_id: '0',
+    level_name: null,
+    name: '꧁꫞꯭陌꯭小꯭江꯭꫞꧂',
+    number: '',
+    openid: 'oGEXb4ntomSDY3K8o8KoSSUsBE6M',
+    sale_id: '1',
+    score: '0',
+    tel: '13288474512',
+    type: '1',
+    uniacid: '4',
+    unionid: 'opzxIv67nO5k87E-ZwzNFWowOOb8',
+    zs_name: '',
+  }
 
+  onRefresh() {
+    this.getOrder()
+    this.loading = false
+    this.$toast.success('Refresh Success')
+  }
+  getOrder() {
+    try {
+      const list = [
+        {
+          id: '805',
+          seller_id: '1',
+          room_id: '289',
+          user_id: '4913',
+          coupons_id: null,
+          order_no: '201908261135336712',
+          seller_name: '圣美精品酒店2',
+          seller_address: '山西省太原市迎泽区柳巷南路86号',
+          coordinates: '37.864933,112.567528',
+          arrival_time: '1566748800',
+          departure_time: '1566835200',
+          dd_time: '14:00',
+          price: '1.00',
+          num: '2',
+          days: '1',
+          goods_info: [{
+            goods_addtime: '1569288703',
+            goods_attribute: '1',
+            goods_classify: '42',
+            goods_details: '',
+            goods_id: '125',
+            goods_img: 'https://static.hotel.showboom.cn/images/4/2019/06/JMRL7CQ6l56e268Z3u7olr8i626Re6.jpg',
+            goods_is_open: '1',
+            goods_name: '芙蓉王',
+            goods_price: '3000',
+            goods_sort: '1',
+            goods_specifications: '20支',
+            goods_stock: '100',
+            goods_subheading: '香烟',
+            goods_unit: '盒',
+            goods_volume: '0',
+            goodsorder_id: '771',
+            id: '803',
+            img: 'https://static.hotel.showboom.cn/images/4/2019/06/JMRL7CQ6l56e268Z3u7olr8i626Re6.jpg?x-oss-process=image/resize,m_mfit,h_300,w_400',
+            name: '芙蓉王',
+            number: '2',
+            price: '30.00',
+            seller_id: '1',
+            spec_id: '803',
+            total_price: '60.00',
+            type: '1',
+            uniacid: '4'
+          },{
+            goods_addtime: '1569288703',
+            goods_attribute: '1',
+            goods_classify: '42',
+            goods_details: '',
+            goods_id: '125',
+            goods_img: 'https://static.hotel.showboom.cn/images/4/2019/06/JMRL7CQ6l56e268Z3u7olr8i626Re6.jpg',
+            goods_is_open: '1',
+            goods_name: '芙蓉王',
+            goods_price: '3000',
+            goods_sort: '1',
+            goods_specifications: '20支',
+            goods_stock: '100',
+            goods_subheading: '香烟',
+            goods_unit: '盒',
+            goods_volume: '0',
+            goodsorder_id: '771',
+            id: '803',
+            img: 'https://static.hotel.showboom.cn/images/4/2019/06/JMRL7CQ6l56e268Z3u7olr8i626Re6.jpg?x-oss-process=image/resize,m_mfit,h_300,w_400',
+            name: '芙蓉王',
+            number: '2',
+            price: '30.00',
+            seller_id: '1',
+            spec_id: '803',
+            total_price: '60.00',
+            type: '1',
+            uniacid: '4'
+          }],
+          room_type: '标准大床房',
+          room_logo: 'https://static.hotel.showboom.cn/images/4/2019/06/Zw088xeJASJESbHcXw9E0AXXeC6xe3.jpg',
+          bed_type: null,
+          name: 'admin',
+          tel: '13231231231',
+          status: '1',
+          out_trade_no: '14330091021566790533',
+          dis_cost: '0.95',
+          yj_cost: null,
+          yhq_cost: null,
+          yyzk_cost: null,
+          total_cost: '0.95',
+          is_delete: '0',
+          time: '1566790533',
+          uniacid: '4',
+          ytyj_cost: null,
+          hb_cost: null,
+          hb_id: null,
+          from_id: null,
+          classify: '1',
+          type: '0',
+          code: null,
+          jj_time: '0',
+          voice: '1',
+          qr_fromid: '',
+          pay_time: '1566790533',
+          sale_id: '0',
+          company_id: '0',
+          is_commission: '2',
+          vip_coupon: '0.95',
+          size: '1.8*2.0',
+          breakfast: '1',
+          windows: '1',
+          create_time: '1576790533',
+          flag: '1'
+        }
+      ]
+      const orderList = list.map(item => {
+        // 大于下单时间半个小时，则取消订单
+        if (item.status == '1') {
+          if (Date.now() - (item.create_time as any) * 1000 > (60 * 30 * 1000)) {
+            item.status = '3'
+            try {
+              // services.api.cancelOrder(item.flag, item.order_id)
+            } catch(e) {
+              this.$toast.fail(e.message)
+            }
+          }
+        }
+        let totalNum:any = 0;
+        if ((item as any).goods_info) {
+          for (const i of (item as any).goods_info) {
+            totalNum += Number.parseInt(i.number, 10)
+          }
+        } else {
+          totalNum = item.num;
+        }
+        return {
+          ...item,
+          totalNum,
+          arrival_time: formatDate((item.arrival_time as any) * 1000),
+          departure_time: formatDate((item.departure_time as any) * 1000)
+        }
+      })
+      this.orderList = orderList
+    } catch(e) {
+      this.$toast(e.message)
+    }
+  }
+  logout() {
+    removeStorage('token')
+    this.$router.push('/Login')
+  }
   goDetail(e:any) {
     if (e.status == 0) {
       this.$router.push(`/hotelOrder?id=${e.id}`)
@@ -95,12 +366,15 @@ export default class Member extends Vue {
       this.$router.push(`/serviceOrder?id=${e.id}`)
     }
   }
-  created() {}
+  created() {
+    this.getOrder()
+  }
 }
 </script>
 <style lang="scss" scoped>
   .wrap{
     background: #ff8234;
+    padding: 1rem 0 1.16rem
   }
   .main{
     min-height: 8.68rem;
@@ -115,9 +389,8 @@ export default class Member extends Vue {
       display: flex;
       align-items: center;
       justify-content: center;
-      img{
+      .avater{
         width: 1.2rem;
-        height: 1.2rem;
         display: table-cell;
         background: #fff;
         border-radius: 50%;
@@ -130,6 +403,35 @@ export default class Member extends Vue {
         p{
           font-size: .36rem;
           margin: 0 0 .1rem
+        }
+      }
+    }
+    .tags{
+      width: 4.7rem;
+      overflow: hidden;
+      .item{
+        max-width: 2.9rem;
+        max-height: .44rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 0 .1rem 0 0;
+        display: inline-block;
+        padding: .06rem .2rem;
+        border-radius: .5rem;
+        font-size: .24rem;
+        text-align: center;
+        background-color: #ce5621;
+        &:last-child{
+          border: none
+        }
+        img{
+          width: .3rem;
+          margin: 0 .06rem 0 0;
+          vertical-align: middle
+        }
+        span{
+          vertical-align: middle
         }
       }
     }
@@ -155,6 +457,7 @@ export default class Member extends Vue {
       border-bottom: .01rem dashed #e1e1e1;
       .title{
         float: left;
+        color: #333;
         font-size: .3rem;
         font-weight: bold;
       }
@@ -174,64 +477,73 @@ export default class Member extends Vue {
     }
     .content{
       overflow: hidden;
-      .noLogin{
+      .order-no{
         color: #666;
         text-align: center;
         padding: .8rem 0;
       }
     }
-    .goods{
-      .head{
-        overflow: hidden;
-        padding: .24rem .22rem .24rem .28rem;
-        .title{
-          float: left;
-          color: #000
-        }
-        .status{
-          float: right;
-          color: #666;
-          font-size: .26rem
-        }
-        img{
-          width: .32rem;
-          margin: 0 .15rem 0 0;
-          vertical-align: middle
-        }
-        span{
-          vertical-align: middle
-        }
-      }
-      .content{
-        overflow-x: auto;
-        background: #FAFAFA;
-        padding: .2rem .8rem .2rem .3rem;
-        .picture{
-          width: 1.48rem;
-          min-width: 1.48rem;
-          display: table-cell;
-          vertical-align: middle;
+    .item{
+      .order-header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .2rem;
+        .order-title{
+          display: flex;
+          align-items: center;
+          font-size: .28rem;
+          font-weight: bold;
           img{
-            width: 100%;
+            width: .32rem;
+            margin: 0 .14rem 0 0;
+            border-radius: .5rem;
+            vertical-align: middle
+          }
+          span{
+            vertical-align: middle
           }
         }
-        .desc{
+        .order-status{
+          font-size: .28rem;
+          color: #666;
+        }
+      }
+      .order-content{
+        display: flex;
+        padding: .28rem;
+        overflow: hidden;
+        align-items: center;
+        font-size: .28rem;
+        overflow-x: auto;
+        background-color: #fafafa;
+        -webkit-overflow-scrolling: touch;
+        .order-content .sub{
           font-size: .26rem;
-          display: table-cell;
-          padding: 0 0 0 .25rem;
-          vertical-align: middle;
+          color: #666;
+        }
+        .order-img{
+          width: 1.26rem;
+          min-width: 1.26rem;
+          margin: 0 .36rem 0 0; 
         }
       }
-      .more{
-        .picture{
-          padding: 0 .2rem 0 0;
+      .order-statistics{
+        display: flex;
+        justify-content: flex-end;
+        padding: .2rem;
+        font-size: .3rem;
+        color: #666;
+        .statistics-right{
+          display: flex;
+          justify-content: space-around;
         }
-      }
-      .foot{
-        text-align: right;
-        padding: .25rem .3rem;
-        span{
-          color: #666
+        .statistics-price{
+          margin: 0 0 0.1rem;
+        }
+        .price-font{
+          color: #333;
+          font-weight: bold;
         }
       }
     }

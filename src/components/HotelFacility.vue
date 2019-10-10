@@ -1,9 +1,9 @@
 <template>
-  <div class="item facilities">
+  <div class="item facility">
     <div class="head">
       <div class="title">
         <img src="@/assets/icon-facility-sm.png" alt="">
-        <span>Hotel facilities</span>
+        <span>Hotel facility</span>
         <router-link to="/HotelFacility">
           <img src="@/assets/icon-next.png" class="next" alt="">
         </router-link>

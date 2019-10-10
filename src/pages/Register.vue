@@ -27,7 +27,6 @@
 </template>
 
 <script lang="ts">
-import { Toast } from 'vant';
 import services from '@/services';
 import { setStorage } from '@/utils/util';
 import Header from '@/components/Header.vue';
@@ -47,14 +46,14 @@ export default class Register extends Vue {
   async getCode() {
     const username = this.username
     if(!username) {
-      Toast.fail('Account no empty')
+      this.$toast.fail('Account no empty')
       return
     }
     try {
       await services.api.getCode(username)
-      Toast.success('Send success')
+      this.$toast.success('Send success')
     } catch(e) {
-      Toast.fail(e.message)
+      this.$toast.fail(e.message)
     }
   }
   viewPass() {
@@ -65,22 +64,22 @@ export default class Register extends Vue {
     const username = this.username
     const password = this.password
     if(!username) {
-      Toast.fail('Phone is empty')
+      this.$toast.fail('Phone is empty')
       return
     } else if (!code) {
-      Toast.fail('Code is empty')
+      this.$toast.fail('Code is empty')
       return
     } else if (!password) {
-      Toast.fail('Password is empty')
+      this.$toast.fail('Password is empty')
       return
     }
     try {
       const res = await services.api.register({ code, username, password })
-      Toast.success('Register success')
+      this.$toast.success('Register success')
       setStorage('token', res)
       this.$router.push('/')
     } catch(e) {
-      Toast.fail(e.message)
+      this.$toast.fail(e.message)
     }
   }
 }

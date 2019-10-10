@@ -92,6 +92,30 @@ export default new Router({
         title: 'HotelAround'
       },
       component: (resolve) => require(['@/pages/HotelAround.vue'], resolve)
+    },
+    {
+      path: '/WifiList',
+      name: 'WifiList',
+      meta: {
+        title: 'WifiList'
+      },
+      component: (resolve) => require(['@/pages/WifiList.vue'], resolve)
+    },
+    {
+      path: '/WifiHelp',
+      name: 'WifiHelp',
+      meta: {
+        title: 'WifiHelp'
+      },
+      component: (resolve) => require(['@/pages/WifiHelp.vue'], resolve)
+    },
+    {
+      path: '/OrderList',
+      name: 'OrderList',
+      meta: {
+        title: 'OrderList'
+      },
+      component: (resolve) => require(['@/pages/OrderList.vue'], resolve)
     }
   ]
 });

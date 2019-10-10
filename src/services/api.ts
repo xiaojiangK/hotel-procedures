@@ -20,3 +20,7 @@ export async function getCode(phone:string) {
 export async function changeInfo(name:string) {
   return axios.post(`${config.baseURL}api/change/info`, { name });
 }
+
+export async function cancelOrder(flag:string, id:string) {
+  return axios.post(`${config.baseURL}api/CancelOrder`, { flag, order_id: id });
+}

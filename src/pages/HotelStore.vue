@@ -102,7 +102,6 @@
 </template>
 
 <script lang="ts">
-import { Toast } from 'vant';
 import services from '@/services';
 import { Sidebar, SidebarItem } from 'vant';
 import Header from '@/components/Header.vue';
@@ -342,7 +341,7 @@ export default class HotelStore extends Vue {
         }
       })
       if (newData.length == 0) {
-        Toast('No more data')
+        this.$toast('No more data')
         return
       }
       this.goods = [
@@ -351,7 +350,7 @@ export default class HotelStore extends Vue {
       ]
       this.loadingShop()
     } catch(e) {
-      Toast.fail(e.message)
+      this.$toast.fail(e.message)
     }
   }
   // 获取分类
@@ -406,7 +405,7 @@ export default class HotelStore extends Vue {
         name: 'All'
       }, ...classify]
     } catch(e) {
-      Toast.fail(e.message)
+      this.$toast.fail(e.message)
     }
   }
   // 关闭商品详情
@@ -484,10 +483,7 @@ export default class HotelStore extends Vue {
       if (item.goods_id == goods.goods_id) {
         if (type == 'add') {
           item.num ++
-          Toast({
-            duration: 1000,
-            message: 'goods add success'
-          })
+          this.$toast.success('goods add success')
         } else {
           if (item.num > 0) {
             item.num --
@@ -513,7 +509,7 @@ export default class HotelStore extends Vue {
   }
   goPay() {
     if(this.totalCount <= 0) {
-      Toast.fail('No merchandise selected')
+      this.$toast.fail('No merchandise selected')
     } else {
       this.$router.push('/marketPay')
     }

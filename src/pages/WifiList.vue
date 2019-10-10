@@ -1,0 +1,86 @@
+<template>
+  <div class="wrap">
+    <Header title="Hotel Name"></Header>
+    <div class="main">
+      <ul>
+        <li v-for="(item, index) in list"  :key="index">
+          <div class='list-item' @click='connectWifi(item)'>
+            <div class='wifiName'>{{item.wifi_name}}</div>
+            <img class='wifi-img' src='@/assets/icon_wifi.png'/>
+          </div>  
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import services from '@/services';
+import Header from '@/components/Header.vue';
+import { Component, Vue } from 'vue-property-decorator';
+
+@Component({
+  components: {
+    Header
+  }
+})
+export default class WifiList extends Vue {
+  list:any[] = [
+    {
+      authentication: '1',
+      wifi_name: 'smjp8501',
+      wifi_pwd: 'smjp8501'
+    },
+    {
+      authentication: '2',
+      wifi_name: 'smjp8502',
+      wifi_pwd: 'smjp8502'
+    },
+    {
+      authentication: '1',
+      wifi_name: 'smjp8503',
+      wifi_pwd: 'smjp8503'
+    },
+    {
+      authentication: '2',
+      wifi_name: 'smjp8504',
+      wifi_pwd: 'smjp8504'
+    },
+    {
+      authentication: '1',
+      wifi_name: 'smjp8505',
+      wifi_pwd: 'smjp8505'
+    }
+  ]
+
+  connectWifi(item:any) {
+    this.$router.push({ name: 'WifiHelp', query: {
+      name: item.wifi_name,
+      pass: item.wifi_pwd,
+      auth: item.authentication
+    }})
+  }
+}
+</script>
+<style lang="scss" scoped>
+  .list-item {
+    height: 1rem;
+    display: flex;
+    padding: 0 .3rem;
+    margin: .2rem auto;
+    flex-direction: row;
+    align-items: center;
+    overflow: hidden;
+    justify-content: space-between;
+    .wifiName {
+      color: #333;
+      font-size: .32rem;
+    }
+    .wifi-img {
+      width: .4rem;
+    }
+    &:hover{
+      background: #f1f1f1
+    }
+  }
+</style>

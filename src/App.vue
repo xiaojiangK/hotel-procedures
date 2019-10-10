@@ -30,7 +30,7 @@ body,html{
 .wrap{
   position: relative;
   box-sizing: border-box;
-  padding: 1rem 0 1.16rem;
+  padding: 1rem 0 0;
   .login-form{
     padding: 0 .6rem;
     li{

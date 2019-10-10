@@ -25,7 +25,6 @@
 </template>
 
 <script lang="ts">
-import { Toast } from 'vant';
 import services from '@/services';
 import Header from '@/components/Header.vue';
 import { Component, Vue } from 'vue-property-decorator';
@@ -48,15 +47,15 @@ export default class EditUser extends Vue {
     }
     const username = this.username
     if (!username) {
-      Toast.fail('User name is empty')
+      this.$toast.fail('User name is empty')
       return;
     }
     try {
       await services.api.changeInfo(username)
-      Toast.success('Modify success')
+      this.$toast.success('Modify success')
       this.$router.back()
     } catch(e) {
-      Toast.fail(e.message)
+      this.$toast.fail(e.message)
     }
   }
 }
