@@ -43,6 +43,7 @@
 </template>
 
 <script lang="ts">
+import { Toast } from 'vant';
 import VueClipboard from 'vue-clipboard2';
 import Header from '@/components/Header.vue';
 import { Component, Vue } from 'vue-property-decorator';
@@ -61,7 +62,7 @@ export default class WifiHelp extends Vue {
     auth: ''
   }
   onCopy() {
-    this.$toast.success('Copy Success')
+    Toast.success('Copy Success')
   }
   created() {
     this.wifi = this.$route.query

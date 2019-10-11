@@ -58,7 +58,7 @@
           </div>
           <div class="good-content-name">{{ currentGoods.goods_name }}</div>
           <div class="good-content-footer">
-            <div class="good-content-price">￥{{ currentGoods.price }}</div>
+            <div class="good-content-price">৳{{ currentGoods.price }}</div>
             <div>
               <div v-if="currentGoods.num < 1" @click="calculation('add', currentGoods)" class="good-join-car">Add cart</div>
               <div v-else class="stepper">
@@ -103,7 +103,7 @@
 
 <script lang="ts">
 import services from '@/services';
-import { Sidebar, SidebarItem } from 'vant';
+import { Toast, Sidebar, SidebarItem } from 'vant';
 import Header from '@/components/Header.vue';
 import { Component, Vue } from 'vue-property-decorator';
 
@@ -341,7 +341,7 @@ export default class HotelStore extends Vue {
         }
       })
       if (newData.length == 0) {
-        this.$toast('No more data')
+        Toast('No more data')
         return
       }
       this.goods = [
@@ -350,7 +350,7 @@ export default class HotelStore extends Vue {
       ]
       this.loadingShop()
     } catch(e) {
-      this.$toast.fail(e.message)
+      Toast.fail(e.message)
     }
   }
   // 获取分类
@@ -405,7 +405,7 @@ export default class HotelStore extends Vue {
         name: 'All'
       }, ...classify]
     } catch(e) {
-      this.$toast.fail(e.message)
+      Toast.fail(e.message)
     }
   }
   // 关闭商品详情
@@ -483,7 +483,7 @@ export default class HotelStore extends Vue {
       if (item.goods_id == goods.goods_id) {
         if (type == 'add') {
           item.num ++
-          this.$toast.success('goods add success')
+          Toast.success('goods add success')
         } else {
           if (item.num > 0) {
             item.num --
@@ -509,7 +509,7 @@ export default class HotelStore extends Vue {
   }
   goPay() {
     if(this.totalCount <= 0) {
-      this.$toast.fail('No merchandise selected')
+      Toast.fail('No merchandise selected')
     } else {
       this.$router.push('/marketPay')
     }
@@ -520,8 +520,9 @@ export default class HotelStore extends Vue {
     this.currentGoods = goods
   }
   handleScroll(e:any) {
-    const client = (this.$refs.wrap as any).offsetHeight
-    const current = (this.$refs.ul as any).offsetHeight
+    const refs = (this.$refs as any)
+    const client = refs.wrap.offsetHeight
+    const current = refs.ul.offsetHeight
     const scrollTop = e.target.scrollTop
     if (scrollTop >= current - client) {
       console.log(scrollTop)

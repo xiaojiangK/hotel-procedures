@@ -30,6 +30,7 @@
 </template>
 
 <script lang="ts">
+import { Toast } from 'vant';
 import services from '@/services';
 import Header from '@/components/Header.vue'
 import { setStorage, getStorage } from '@/utils/util';
@@ -48,19 +49,19 @@ export default class Login extends Vue {
     const username = this.username;
     const password = this.password;
     if(!username) {
-      this.$toast.fail('Account is empty')
+      Toast.fail('Account is empty')
       return
     } else if (!password) {
-      this.$toast.fail('Password is empty')
+      Toast.fail('Password is empty')
       return
     }
     try {
       const res = await services.api.login({ username, password })
-      this.$toast.success('Login success')
+      Toast.success('Login success')
       setStorage('token', res)
       this.$router.push('/')
     } catch(e) {
-      this.$toast.fail(e.message)
+      Toast.fail(e.message)
     }
   }
   created() {

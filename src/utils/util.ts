@@ -18,6 +18,14 @@ export function formatDate(time:any) {
   return `${date.getFullYear()}-${m < 10 ? '0'+m : m}-${d < 10 ? '0'+d : d}`;
 }
 
+// 月日
+export function formatMonth(time:any) {
+  const date = new Date(time);
+  const m = date.getMonth() + 1;
+  const d = date.getDate();
+  return `${m < 10 ? '0'+m : m}-${d < 10 ? '0'+d : d}`;
+}
+
 // 时间
 export function formatTime(time:any) {
   const date = new Date(time);

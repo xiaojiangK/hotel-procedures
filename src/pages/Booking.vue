@@ -15,7 +15,7 @@
           </van-swipe-item>
         </van-swipe>
         <div class="number">
-          <img src="@/assets/icon-photo.png" alt="">
+          <img src="@/assets/icon-camera.png" alt="">
           <span>61 sheets</span>
         </div>
       </div>
@@ -158,14 +158,14 @@
           </div>
         </van-tab>
         <van-tab title="Evaluation">
-          <div class="evaluation" v-if="comment.length">
+          <div class="evaluation" v-if="assessList.length">
             <div class="tabs">
-              <div :class="['item', commentIdx == 0 ? 'active' : '']" @click="chooseComment(0)">Total (2624)</div>
-              <div :class="['item', commentIdx == 1 ? 'active' : '']" @click="chooseComment(1)">Pictures (2624)</div>
+              <div :class="['item', commentIdx == 0 ? 'active' : '']" @click="chooseComment(0)">Total ({{assessCount.total}})</div>
+              <div :class="['item', commentIdx == 1 ? 'active' : '']" @click="chooseComment(1)">Pictures ({{assessCount.num}})</div>
             </div>
             <div class="comment">
               <ul>
-                <Comment v-for="(item, index) in comment" :key="index" :item="item"></Comment>
+                <Comment v-for="(item, index) in assessList" :key="index" :item="item"></Comment>
               </ul>
             </div>
           </div>
@@ -250,10 +250,11 @@
 
 <script lang="ts">
 import services from '@/services';
+import { formatDate } from '@/utils/util';
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
 import Comment from '@/components/Comment.vue';
-import { Swipe, SwipeItem, Tab, Tabs, DatetimePicker, Popup } from 'vant';
+import { Toast ,Swipe, SwipeItem, Tab, Tabs, DatetimePicker, Popup } from 'vant';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
@@ -272,6 +273,8 @@ import { Component, Vue } from 'vue-property-decorator';
 export default class Booking extends Vue {
   active:number = 0;
   index:number = -1;
+  page:number = 1;
+  type:number = 0;
   week:object = {
     start: '',
     end: ''
@@ -348,66 +351,87 @@ export default class Booking extends Vue {
       title: 'Wireless Internet'
     }
   ]
-  comment:any[] = [
-    {
-      logo: 'https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT',
-      name: 'xtp231200153',
-      room: 'Economy big bed room',
-      content: 'The hotel is clean and tidy, the service is warm and considerate, the important thing is here.Its convenient and convenient to have a parking space. Originally, there was no window.Households room, after coming, the shop said that the room was not tense.Its a window replacement for us, temporarily',
-      img: ['https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT','https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT','https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT','https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT'],
-      arrival_time: '2019-02',
-      time: '2019-02-15'
-    },
-    {
-      logo: 'https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT',
-      name: 'xtp231200153',
-      room: 'Economy big bed room',
-      content: 'The hotel is clean and tidy, the service is warm and considerate, the important thing is here.Its convenient and convenient to have a parking space. Originally, there was no window.Households room, after coming, the shop said that the room was not tense.Its a window replacement for us, temporarily',
-      img: ['https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT','https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT','https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT'],
-      arrival_time: '2019-02',
-      time: '2019-02-15'
-    },
-    {
-      logo: 'https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT',
-      name: 'xtp231200153',
-      room: 'Economy big bed room',
-      content: 'The hotel is clean and tidy, the service is warm and considerate, the important thing is here.Its convenient and convenient to have a parking space. Originally, there was no window.Households room, after coming, the shop said that the room was not tense.Its a window replacement for us, temporarily',
-      img: ['https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT','https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT'],
-      arrival_time: '2019-02',
-      time: '2019-02-15'
-    },
-    {
-      logo: 'https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT',
-      name: 'xtp231200153',
-      room: 'Economy big bed room',
-      content: 'The hotel is clean and tidy, the service is warm and considerate, the important thing is here.Its convenient and convenient to have a parking space. Originally, there was no window.Households room, after coming, the shop said that the room was not tense.Its a window replacement for us, temporarily',
-      img: ['https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT'],
-      arrival_time: '2019-02',
-      time: '2019-02-15'
-    },
-    {
-      logo: 'https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT',
-      name: 'xtp231200153',
-      room: 'Economy big bed room',
-      content: 'The hotel is clean and tidy, the service is warm and considerate, the important thing is here.Its convenient and convenient to have a parking space. Originally, there was no window.Households room, after coming, the shop said that the room was not tense.Its a window replacement for us, temporarily',
-      img: [],
-      arrival_time: '2019-02',
-      time: '2019-02-15'
-    },
-    {
-      logo: 'https://pbwci.qun.hk/FktB6V99Le5amfvl8wVrIr5LEPpT',
-      name: 'xtp231200153',
-      room: 'Economy big bed room',
-      content: 'The hotel is clean and tidy, the service is warm and considerate, the important thing is here.Its convenient and convenient to have a parking space. Originally, there was no window.Households room, after coming, the shop said that the room was not tense.Its a window replacement for us, temporarily',
-      img: [],
-      arrival_time: '2019-02',
-      time: '2019-02-15',
-      speaker: 'hotel reply',
-      reply: 'Location is not easy to find, the facade is too small. Front desk smallMy brother and his little sister are very patient and very patient',
-      reply_time: '2019-02-15'
-    }
-  ]
+  assessList:any[] = []
+  assessCount:object = {}
 
+  // 获取评论数量
+  async getAssessCount() {
+    try {
+      const res = await services.api.assessCount('user_id')
+      this.assessCount = res.data
+    } catch(e) {
+      Toast.fail(e.message)
+    }
+  }
+  // 获取评论列表
+  async getAssess() {
+    try {
+      // const res = await services.api.assessList(this.page, this.type)
+      const res = {
+        data: [
+          {
+            arrival_time: '1566748800',
+            content: '“奖惩并行才能最大激发公职人员的工作积极性和热情”“事事有法可依，越来越规范”“高素质的公职人员，必须有法规来约束”……近日，《中华人民共和国公职人员政务处分法（草案）》全文公布，面向社会征求意见。',
+            display: '1',
+            id: '84',
+            img: [{img_url: 'https://res.wx.qq.com/wxdoc/dist/assets/img/0.4cb08bb4.jpg'}],
+            img_type: '1',
+            logo: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqk7zaqpGsU3icq8sGG42QkT0XedHsQqBJPm0gibGQEXlN3A5JfAcXicnhf5rJJzWfuLqxoHFYt6zV0A/132',
+            name: '꧁꫞꯭陌꯭小꯭江꯭꫞꧂',
+            order_id: '805',
+            reply: '',
+            reply_time: '0',
+            room: '标准大床房',
+            room_id: '289',
+            score: '0',
+            seller_id: '0',
+            status: '1',
+            time: '1570766323',
+            uniacid: '4',
+            user_id: '4913'
+          },
+          {
+            arrival_time: '1566748800',
+            content: '“奖惩并行才能最大激发公职人员的工作积极性和热情”“事事有法可依，越来越规范”“高素质的公职人员，必须有法规来约束”……近日，《中华人民共和国公职人员政务处分法（草案）》全文公布，面向社会征求意见。',
+            display: '1',
+            id: '84',
+            img: [
+              {img_url: 'https://res.wx.qq.com/wxdoc/dist/assets/img/0.4cb08bb4.jpg'},
+              {img_url: 'https://res.wx.qq.com/wxdoc/dist/assets/img/0.4cb08bb4.jpg'},
+              {img_url: 'https://res.wx.qq.com/wxdoc/dist/assets/img/0.4cb08bb4.jpg'},
+              {img_url: 'https://res.wx.qq.com/wxdoc/dist/assets/img/0.4cb08bb4.jpg'}
+            ],
+            img_type: '1',
+            logo: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqk7zaqpGsU3icq8sGG42QkT0XedHsQqBJPm0gibGQEXlN3A5JfAcXicnhf5rJJzWfuLqxoHFYt6zV0A/132',
+            name: '꧁꫞꯭陌꯭小꯭江꯭꫞꧂',
+            order_id: '805',
+            reply: '嘻嘻，不错不错',
+            reply_time: '1570766323',
+            room: '标准大床房',
+            room_id: '289',
+            score: '0',
+            seller_id: '0',
+            status: '1',
+            time: '1570766323',
+            uniacid: '4',
+            user_id: '4913'
+          }
+        ]
+      }
+      this.assessList = res.data.map((item:any) => {
+        return {
+          ...item,
+          speaker: 'Hotel reply：',
+          time: formatDate(item.time * 1000),
+          reply_time: formatDate(item.reply_time * 1000),
+          arrival_time: formatDate(item.arrival_time * 1000),
+          img: item.img && item.img.map((i:any) => i.img_url)
+        }
+      })
+    } catch(e) {
+      Toast.fail(e.message)
+    }
+  }
   selectDate(e:number) {
     this.index = e
     this.visible = true
@@ -466,7 +490,7 @@ export default class Booking extends Vue {
     if (this.index == 0) {
       this.startNow = new Date(`${y}-${m}-${d}`)
       if (this.startNow >= this.endNow) {
-        this.$toast.fail('Start date greater than end date')
+        Toast.fail('Start date greater than end date')
         return
       }
       this.date = {
@@ -480,7 +504,7 @@ export default class Booking extends Vue {
     } else if (this.index == 1) {
       this.endNow = new Date(`${y}-${m}-${d}`)
       if (this.endNow <= this.startNow) {
-        this.$toast.fail('End date less than start date')
+        Toast.fail('End date less than start date')
         return
       }
       this.date = {
@@ -520,6 +544,8 @@ export default class Booking extends Vue {
     window.removeEventListener('scroll', this.handleScroll, true)
   }
   created() {
+    this.getAssess()
+    this.getAssessCount()
     const t = new Date()
     const t2 = new Date(Date.now() + 24*60*60*1000)
     const y = t.getFullYear()

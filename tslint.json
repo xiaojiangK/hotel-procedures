@@ -27,7 +27,7 @@
     "interface-over-type-literal": false,
     "comment-format": [true, "check-space"],
     "member-ordering": [true, { "order": "fields-first" }],
-    "max-line-length": [true, { "limit": 120, "ignore-pattern": "//" }],
+    "max-line-length": [true, { "limit": 250, "ignore-pattern": "//" }],
     "trailing-comma": [true, {
     "multiline": {
       "objects": "ignore",

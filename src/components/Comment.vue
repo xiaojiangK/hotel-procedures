@@ -14,7 +14,7 @@
       </div>
       <div class="date">{{item.arrival_time}} check in, {{item.time}} release</div>
       <div class="reply" v-if="item.reply">
-        <p><span>{{item.speaker}}:</span> {{item.reply}}</p>
+        <p><span>{{item.speaker}}</span> {{item.reply}}</p>
         <div class="date">{{item.reply_time}} Reply</div>
       </div>
     </div>

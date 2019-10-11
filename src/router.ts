@@ -116,6 +116,46 @@ export default new Router({
         title: 'OrderList'
       },
       component: (resolve) => require(['@/pages/OrderList.vue'], resolve)
+    },
+    {
+      path: '/HotelOrder',
+      name: 'HotelOrder',
+      meta: {
+        title: 'HotelOrder'
+      },
+      component: (resolve) => require(['@/pages/HotelOrder.vue'], resolve)
+    },
+    {
+      path: '/SubmitComment',
+      name: 'SubmitComment',
+      meta: {
+        title: 'SubmitComment'
+      },
+      component: (resolve) => require(['@/pages/SubmitComment.vue'], resolve)
+    },
+    {
+      path: '/Comment',
+      name: 'Comment',
+      meta: {
+        title: 'Comment'
+      },
+      component: (resolve) => require(['@/pages/Comment.vue'], resolve)
+    },
+    {
+      path: '/Achievement',
+      name: 'Achievement',
+      meta: {
+        title: 'Achievement'
+      },
+      component: (resolve) => require(['@/pages/Achievement.vue'], resolve)
+    },
+    {
+      path: '/InvitedMembers',
+      name: 'InvitedMembers',
+      meta: {
+        title: 'InvitedMembers'
+      },
+      component: (resolve) => require(['@/pages/InvitedMembers.vue'], resolve)
     }
   ]
 });

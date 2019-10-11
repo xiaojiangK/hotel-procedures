@@ -9,7 +9,7 @@
           </div>
           <div v-else ref="wrap">
             <div class="order" v-for="(item, index) in orderList" :key="index">
-              <OrderItem :item="item"></OrderItem>
+              <OrderItem :item="item" @update="update"></OrderItem>
             </div>
             <div class="no-order">no more，That's all...</div>
           </div>
@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { PullRefresh } from 'vant';
+import { Toast, PullRefresh } from 'vant';
 import services from '@/services';
 import { formatDate } from '@/utils/util'
 import Header from '@/components/Header.vue';
@@ -40,7 +40,7 @@ export default class OrderList extends Vue {
   onRefresh() {
     this.getOrder()
     this.loading = false
-    this.$toast.success('Refresh Success')
+    Toast.success('Refresh Success')
   }
   getOrder() {
     try {
@@ -94,7 +94,7 @@ export default class OrderList extends Vue {
           size: '1.8*2.0',
           breakfast: '1',
           windows: '1',
-          create_time: '1570705583',
+          create_time: '1570957400',
           flag: '0'
         },
         {
@@ -230,21 +230,21 @@ export default class OrderList extends Vue {
           flag: '1'
         }
       ]
-      const orderList = list.map(item => {
+      const orderList = list.map((item:any) => {
         // 大于下单时间半个小时，则取消订单
         if (item.status == '1') {
-          if (Date.now() - (item.create_time as any) * 1000 > (60 * 30 * 1000)) {
+          if (Date.now() - item.create_time * 1000 > (60 * 30 * 1000)) {
             item.status = '3'
             try {
               // services.api.cancelOrder(item.flag, item.order_id)
             } catch(e) {
-              this.$toast.fail(e.message)
+              Toast.fail(e.message)
             }
           }
         }
         let totalNum:any = 0;
-        if ((item as any).goods_info) {
-          for (const i of (item as any).goods_info) {
+        if (item.goods_info) {
+          for (const i of item.goods_info) {
             totalNum += Number.parseInt(i.number, 10)
           }
         } else {
@@ -253,18 +253,27 @@ export default class OrderList extends Vue {
         return {
           ...item,
           totalNum,
-          arrival_time: formatDate((item.arrival_time as any) * 1000),
-          departure_time: formatDate((item.departure_time as any) * 1000)
+          arrival_time: formatDate(item.arrival_time * 1000),
+          departure_time: formatDate(item.departure_time * 1000)
         }
       })
       this.orderList = orderList
     } catch(e) {
-      this.$toast(e.message)
+      Toast(e.message)
     }
   }
+  update(item:any) {
+    this.orderList = this.orderList.map(i => {
+      if (i.id == item.id) {
+        i.status = item.status
+      }
+      return i
+    })
+  }
   handleScroll(e:any) {
-    const client = (this.$refs.main as any).offsetHeight
-    const current = (this.$refs.wrap as any).offsetHeight
+    const refs = (this.$refs as any)
+    const client = refs.main.offsetHeight
+    const current = refs.wrap.offsetHeight
     const scrollTop = e.target.scrollTop
     if (scrollTop >= current - client) {
       console.log(scrollTop)

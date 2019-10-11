@@ -18,7 +18,7 @@ module.exports = {
     // proxy: {        //配置跨域处理 可以设置多个
     //   '/': {
     //     // ws: true,
-    //     target: 'https://zhonlb.com/',
+    //     target: 'https://j.qiuxinpay.cn/',
     //     changeOrigin: true,
     //     pathRewrite: {
     //       '^/': ''

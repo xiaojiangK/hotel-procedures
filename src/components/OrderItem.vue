@@ -19,7 +19,7 @@
           <span class="text">Breakfast coupon</span>
         </span>
       </div>
-      <div class="order-status" v-if="item.flag == '0'">
+      <div class="status" v-if="item.flag == '0'">
         <span v-if="item.status == '1'">non paid</span>
         <span v-if="item.status == '2'">have paid</span>
         <span v-if="item.status == '10'">no lived</span>
@@ -29,21 +29,21 @@
         <span v-if="item.status == '7'">refund</span>
         <span v-if="item.status == '12'">no confirm</span>
       </div>
-      <div class="order-status" v-if="item.flag == '1'">
+      <div class="status" v-if="item.flag == '1'">
         <span v-if="item.status == '1'">non paid</span>
         <span v-if="item.status == '2'">no shipped</span>
         <span v-if="item.status == '3'">canceled</span>
         <span v-if="item.status == '4'">completed</span>
         <span v-if="item.status == '7'">refund</span>
       </div>
-      <div class="order-status" v-if="item.flag == '2'">
+      <div class="status" v-if="item.flag == '2'">
         <span v-if="item.status == '1'">non paid</span>
         <span v-if="item.status == '2'">unused</span>
         <span v-if="item.status == '3'">canceled</span>
         <span v-if="item.status == '4'">used</span>
         <span v-if="item.status == '7'">refund</span>
       </div>
-      <div class="order-status" v-if="item.flag == '3'">
+      <div class="status" v-if="item.flag == '3'">
         <span v-if="item.status == '1'">non paid</span>
         <span v-if="item.status == '2'">unused</span>
         <span v-if="item.status == '3'">canceled</span>
@@ -69,25 +69,25 @@
         </div>
       </div>
     </div>
-    <div class="order-statistics">
-      <div class="statistics-right">
+    <div class="statistics">
+      <div class="right">
         <div>total of {{item.totalNum}} goods</div>
-        <div class="statistics-price">
+        <div class="price">
           <span v-if="item.status == 12">Payment on arrival</span>
           <span v-if="item.status != 12">Payment amount</span>
-          ：<span class="price-font">￥{{item.total_cost ? item.total_cost : item.price}}</span>
+          ：<span class="price-font">৳{{item.total_cost ? item.total_cost : item.price}}</span>
         </div>
       </div>
     </div>
     <div class="more-oprate">
       <div class="oprate-notice" v-if="item.flag == '0'">
         <img class="icon-notice" v-if="item.status == '1' || item.status == '2' || item.status == '10' || item.status == '4'" src="@/assets/icon-sum-detail.png"/>
-        <div class="notice-content" v-if="item.status == '1'">Remaining payment time <van-count-down format="mm:ss" :time="time" /></div>
-        <div class="notice-content" v-if="item.status == '2'">Waiting for hotel confirm</div>
-        <div class="notice-content" v-if="item.status == '10'">Hotel confirm, waiting check-in</div>
-        <div class="notice-content" v-if="item.status == '4'">Already lived，Welcome again!</div>
+        <div class="notice" v-if="item.status == '1'">time remaining <van-count-down format="mm:ss" @finish="update(item)" :time="time" /></div>
+        <div class="notice" v-if="item.status == '2'">Waiting for hotel confirm</div>
+        <div class="notice" v-if="item.status == '10'">Hotel confirm, waiting check-in</div>
+        <div class="notice" v-if="item.status == '4'">Already lived，Welcome again!</div>
       </div>
-      <div class="operate-right">
+      <div class="operate">
         <div v-if="item.status == '4' && item.flag == '0'">
           <div class="btn white" @click="goComment" v-if="!isAssess">To evaluate</div>
           <div class="btn" @click="viewComment" v-if="isAssess && !isReply">view evaluate</div>
@@ -102,30 +102,109 @@
 </template>
 
 <script lang="ts">
-import { CountDown  } from 'vant';
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Toast, CountDown  } from 'vant';
+import services from '@/services';
+import { Component, Vue, Prop, Emit } from 'vue-property-decorator';
 
 @Component({
   components: {
     [CountDown.name]: CountDown
   }
 })
-export default class Complete extends Vue {
-  @Prop() item!:object;
+export default class OrderItem extends Vue {
+  @Prop() item!:Query;
   time:any = null;
   isReply:boolean = false;
   isAssess:boolean = false;
 
-  goDetail() {}
-  goComment() {}
-  viewComment() {}
-  cancelOrder() {}
-  goReserve() {}
-  goPay() {}
-  created() {
-    // this.time = Date.now() - Number.parseInt((this.item.create_time as any) * 100, 10)
-    this.time = 0.5*60*60*1000
+  @Emit('update')
+  update(item:any) {
+    return {
+      ...item,
+      status: 3
+    }
   }
+  goDetail() {
+    const item = this.item
+    if (item.flag == '0') {
+      // 去房间订单详情
+      this.$router.push(`/HotelOrder?id=${item.id}&flag=${item.flag}`)
+    } else if (item.flag == '1') {
+      // 去超市订单详情
+      this.$router.push(`/MarketOrder?id=${item.id}&flag=${item.flag}`)
+    } else {
+      // 去早餐券、设施订单详情
+      this.$router.push(`/ServiceOrder?id=${item.id}&flag=${item.flag}&source=order`)
+    }
+  }
+  // 获取评论列表
+  async getAssess() {
+    try {
+      const res = await services.api.assessList(1, 0, this.item.id)
+      for (const i of res.data) {
+        if (i.reply) {
+          this.isReply = true
+        }
+      }
+      if (res.data.length > 0) {
+        this.isAssess = true
+      }
+    } catch(e) {
+      Toast.fail(e.message)
+    }
+  }
+  // 去评论
+  goComment() {
+    const item = this.item
+    this.$router.push(`/SubmitComment?roomId=${item.room_id}&orderId=${item.id}`)
+  }
+  // 查看评论
+  viewComment() {
+    this.$router.push(`/Comment?id=${this.item.id}`)
+  }
+  cancelOrder() {
+    this.$dialog.confirm({
+      title: 'prompt',
+      message: 'Are you sure to cancel this order'
+    }).then(async () => {
+      try {
+        const i = this.item
+        await services.api.cancelOrder(i.flag, i.id)
+        this.update(this.item)
+        Toast.success('Cancel Success')
+        this.$router.push('/PayComplete?type=1')
+      } catch(e) {
+        Toast.fail(e.message)
+      }
+    }).catch(() => {})
+  }
+  goReserve() {
+    const item = this.item
+    if (item.flag == '0') {
+      this.$router.push('/Booking')
+    } else if (item.flag == '1') {
+      this.$router.push('/HotelStore')
+    } else if (item.flag == '2') {
+      this.$router.push('/HotelFacility')
+    } else if (item.flag == '3') {
+      this.$router.push('/Breakfast')
+    }
+  }
+  goPay() {
+    // api
+  }
+  created() {
+    this.getAssess()
+    this.time = (60 * 30 * 1000) - (Date.now() - this.item.create_time * 1000)
+  }
+}
+
+// Query 参数
+interface Query {
+  id: string,
+  flag: string,
+  room_id: string,
+  create_time: number
 }
 </script>
 <style lang="scss" scoped>
@@ -152,7 +231,7 @@ export default class Complete extends Vue {
         vertical-align: middle
       }
     }
-    .order-status{
+    .status{
       font-size: .28rem;
       color: #666;
     }
@@ -179,7 +258,7 @@ export default class Complete extends Vue {
       font-size: .26rem
     }
   }
-  .order-statistics{
+  .statistics{
     display: flex;
     height: .9rem;
     color: #666;
@@ -187,11 +266,11 @@ export default class Complete extends Vue {
     font-size: .3rem;
     align-items: center;
     justify-content: flex-end;
-    .statistics-right{
+    .right{
       display: flex;
       justify-content: space-around;
     }
-    .statistics-price{
+    .price{
       margin: 0 0 0 .1rem;
     }
     .price-font{
@@ -209,20 +288,21 @@ export default class Complete extends Vue {
     .oprate-notice{
       display: flex;
       align-items: center;
+      .icon-notice{
+        width: .26rem;
+        height: .26rem;
+        vertical-align: middle;
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+        margin: 0 .16rem 0 0;
+      }
+      .notice, .van-count-down{
+        font-size: .28rem;
+        color: #FF6634;
+        display: inline-block
+      }
     }
-    .icon-notice{
-      width: .26rem;
-      height: .26rem;
-      vertical-align: middle;
-      -webkit-transform: rotate(180deg);
-      transform: rotate(180deg);
-      margin: 0 .16rem 0 0;
-    }
-    .notice-content{
-      font-size: .28rem;
-      color: #FF6634;
-    }
-    .operate-right{
+    .operate{
       display: flex;
       justify-content: flex-end;
       .btn{

@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
+    <Header white="true" isBack="0" title="Member center"></Header>
     <van-pull-refresh v-model="loading" @refresh="onRefresh">
-      <Header white="true" isBack="0" title="Member center"></Header>
       <div class="user">
         <div class="left">
           <img :src="[userInfo.img ? userInfo.img : '@/assets/avatar.png']" class="avater" alt="">
@@ -109,7 +109,7 @@
                     <div class='statistics-price'>
                       <span v-if="i.status == 12">到店实付</span>
                       <span v-if="i.status != 12">实付金额</span>
-                      ：<span class='price-font'>￥{{i.total_cost ? i.total_cost : i.price}}</span>
+                      ：<span class='price-font'>৳{{i.total_cost ? i.total_cost : i.price}}</span>
                     </div>
                   </div>
                 </div>
@@ -143,7 +143,7 @@
               </router-link>
             </li>
             <li v-if="userInfo.issale == '1'">
-              <router-link :to="'/achievement' + [userInfo.id]">
+              <router-link :to="'/Achievement' + [userInfo.id]">
                 <img src="@/assets/icon-lock.png" alt="">
                 <span>Performance data</span>
               </router-link>
@@ -161,7 +161,7 @@
 </template>
 
 <script lang="ts">
-import { PullRefresh } from 'vant';
+import { Toast, PullRefresh } from 'vant';
 import services from '@/services';
 import { formatDate, removeStorage } from '@/utils/util';
 import Header from '@/components/Header.vue';
@@ -208,7 +208,7 @@ export default class Member extends Vue {
   onRefresh() {
     this.getOrder()
     this.loading = false
-    this.$toast.success('Refresh Success')
+    Toast.success('Refresh Success')
   }
   getOrder() {
     try {
@@ -321,21 +321,21 @@ export default class Member extends Vue {
           flag: '1'
         }
       ]
-      const orderList = list.map(item => {
+      const orderList = list.map((item:any) => {
         // 大于下单时间半个小时，则取消订单
         if (item.status == '1') {
-          if (Date.now() - (item.create_time as any) * 1000 > (60 * 30 * 1000)) {
+          if (Date.now() - item.create_time * 1000 > (60 * 30 * 1000)) {
             item.status = '3'
             try {
               // services.api.cancelOrder(item.flag, item.order_id)
             } catch(e) {
-              this.$toast.fail(e.message)
+              Toast.fail(e.message)
             }
           }
         }
         let totalNum:any = 0;
-        if ((item as any).goods_info) {
-          for (const i of (item as any).goods_info) {
+        if (item.goods_info) {
+          for (const i of item.goods_info) {
             totalNum += Number.parseInt(i.number, 10)
           }
         } else {
@@ -344,13 +344,13 @@ export default class Member extends Vue {
         return {
           ...item,
           totalNum,
-          arrival_time: formatDate((item.arrival_time as any) * 1000),
-          departure_time: formatDate((item.departure_time as any) * 1000)
+          arrival_time: formatDate(item.arrival_time * 1000),
+          departure_time: formatDate(item.departure_time * 1000)
         }
       })
       this.orderList = orderList
     } catch(e) {
-      this.$toast(e.message)
+      Toast(e.message)
     }
   }
   logout() {
@@ -359,11 +359,11 @@ export default class Member extends Vue {
   }
   goDetail(e:any) {
     if (e.status == 0) {
-      this.$router.push(`/hotelOrder?id=${e.id}`)
+      this.$router.push(`/HotelOrder?id=${e.id}`)
     } else if (e.status == 1) {
-      this.$router.push(`/marketOrder?id=${e.id}`)
+      this.$router.push(`/MarketOrder?id=${e.id}`)
     } else {
-      this.$router.push(`/serviceOrder?id=${e.id}`)
+      this.$router.push(`/ServiceOrder?id=${e.id}`)
     }
   }
   created() {
@@ -374,7 +374,8 @@ export default class Member extends Vue {
 <style lang="scss" scoped>
   .wrap{
     background: #ff8234;
-    padding: 1rem 0 1.16rem
+    margin: 0 0 1.16rem;
+    padding: 1rem 0 0
   }
   .main{
     min-height: 8.68rem;

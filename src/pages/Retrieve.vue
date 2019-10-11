@@ -33,6 +33,7 @@
 </template>
 
 <script lang="ts">
+import { Toast } from 'vant';
 import services from '@/services';
 import Header from '@/components/Header.vue';
 import { Component, Vue } from 'vue-property-decorator';
@@ -53,14 +54,14 @@ export default class Register extends Vue {
   async getCode() {
     const username = this.username
     if(!username) {
-      this.$toast.fail('Account no empty')
+      Toast.fail('Account no empty')
       return
     }
     try {
       await services.api.getCode(username)
-      this.$toast.success('Send success')
+      Toast.success('Send success')
     } catch(e) {
-      this.$toast.fail(e.message)
+      Toast.fail(e.message)
     }
   }
   viewPass(i:number) {
@@ -76,24 +77,24 @@ export default class Register extends Vue {
     const password = this.password
     const newPassword = this.newPassword
     if(!username) {
-      this.$toast.fail('Phone is empty')
+      Toast.fail('Phone is empty')
       return
     } else if (!code) {
-      this.$toast.fail('Code is empty')
+      Toast.fail('Code is empty')
       return
     }  else if (!password || !newPassword) {
-      this.$toast.fail('Password is empty')
+      Toast.fail('Password is empty')
       return
     } else if (newPassword != password) {
-      this.$toast.fail('Inconsistent password')
+      Toast.fail('Inconsistent password')
       return
     }
     try {
       await services.api.retrieve({ code, username, password, newPassword })
-      this.$toast.success('Retrieve success')
+      Toast.success('Retrieve success')
       this.$router.back()
     } catch(e) {
-      this.$toast.fail(e.message)
+      Toast.fail(e.message)
     }
   }
 }
