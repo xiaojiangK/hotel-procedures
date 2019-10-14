@@ -26,7 +26,7 @@ import { Component, Vue } from 'vue-property-decorator';
 export default class CommentList extends Vue {
   comment:any[] = []
 
-  async getAssess(id) {
+  async getAssess(id:any) {
     try {
       // const res = await services.api.assessList(1, 0, id)
       const res = {

@@ -12,7 +12,12 @@
         multiple
       />
       <div class="anonymous" @click="anonymous">
-        <img class="icon-checkbox" :src="checked" /><span :class="[!isAnonymous ? 'no' : '']">匿名评价</span>
+        <template v-if="isAnonymous">
+          <img class="icon-checkbox" src="@/assets/icon-checkbox-checked.png" /><span>匿名评价</span>
+        </template>
+        <template v-else>
+          <img class="icon-checkbox" src="@/assets/icon-checkbox.png" /><span class="no">匿名评价</span>
+        </template>
       </div>
     </div>
     <div class="btn">
@@ -26,8 +31,6 @@
 import { Toast, Uploader } from 'vant';
 import services from '@/services';
 import Header from '@/components/Header.vue';
-import checked from '@/assets/icon-checkbox.png';
-import checked2 from '@/assets/icon-checkbox-checked.png';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
@@ -45,9 +48,6 @@ export default class SubmitComment extends Vue {
   roomId:any = '';
   orderId:any = ''
 
-  get checked() {
-    return this.isAnonymous ? checked2 : checked
-  }
   beforeRead(file:any) {
     if (file.type == 'image/jpeg' || file.type === 'image/png') {
       return true
@@ -60,7 +60,7 @@ export default class SubmitComment extends Vue {
     try {
       const res = await services.api.uploadFile(file.file)
       Toast.success('Upload success')
-      photo.push(res.data)
+      this.photo.push(res.data)
     } catch(e) {
       Toast.fail(e.message)
     }

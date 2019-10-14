@@ -98,7 +98,7 @@ export default class Achievement extends Vue {
   async created() {
     try {
       // const res = await services.api.performance('user_id')
-      const res = {
+      const res:any = {
         data: {
           code: 200,
           data: {

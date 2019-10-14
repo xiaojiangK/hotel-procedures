@@ -10,11 +10,11 @@
       <div class="map"></div>
       <div class="foot">
         <div class="left">
-          <p>Hotel name</p>
-          <span>Hotel location</span>
+          <p>{{data.name}}</p>
+          <span>{{data.city + (data.district=="市、县、区" ? "" : data.district) + data.address}}</span>
         </div>
         <div class="right">
-          <a href="tel:13800138000">
+          <a :href="'tel:' + [data.tel]">
             <img src="@/assets/icon-call.png" alt="">
           </a>
           <img src="@/assets/icon-navigation.png" alt="">
@@ -29,7 +29,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class HotelLocation extends Vue {
-  @Prop() item!:object;
+  @Prop() data!:object;
 }
 </script>
 <style lang="scss" scoped>

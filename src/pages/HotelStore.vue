@@ -6,28 +6,13 @@
         <van-sidebar-item v-for="(item, index) in classify" :key="index" :title="item.name" :info="item.info ? item.info : ''" @click="change(item)" />
       </van-sidebar>
       <div class="goods">
-        <ul ref="ul">
-          <div class="title">{{currentName}}</div>
-          <li v-for="(item, index) in goods" :key="index">
-            <div class="picture" @click="showGoods(item)">
-              <img :src="item.goods_img" alt="">
-            </div>
-            <div class="desc">
-              <div class="name" @click="showGoods(item)">{{item.goods_name}}</div>
-              <div class="bom">
-                <div class="price">৳{{item.price}}</div>
-                <div class="stepper">
-                  <div class="minus btn" v-if="item.num > 0" @click="calculation('minus', item)">-</div>
-                  <div class="num" v-if="item.num > 0">{{ item.num }}</div>
-                  <div :class="['add', 'btn', item.num > 0 ? 'selected' : '']" @click="calculation('add', item)">+</div>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
+        <div class="title">{{currentName}}</div>
+        <div ref="ul">
+          <Goods :goods="goods" :isStepper="1" @show-goods="showGoods" @calculation="calculation"></Goods>
+        </div>
       </div>
       <div class="footer">
-        <div v-if="totalCount > 0">
+        <template v-if="totalCount > 0">
           <div class="shop" @click="showShopcar">
             <div class="icon">{{totalCount}}</div>
             <img src="@/assets/icon-shop2.png" alt="">
@@ -37,8 +22,8 @@
             <span>Order online and deliver to room</span>
           </div>
           <div class="btn" @click="goPay">Place Order</div>
-        </div>
-        <div v-else>
+        </template>
+        <template v-else>
           <div class="shop">
             <img src="@/assets/icon-shop.png" alt="">
           </div>
@@ -46,7 +31,7 @@
             <span>Order online and deliver to room</span>
           </div>
           <div class="btn no" @click="goPay">Not yet added</div>
-        </div>
+        </template>
       </div>
 
       <!-- 商品详情 -->
@@ -60,11 +45,11 @@
           <div class="good-content-footer">
             <div class="good-content-price">৳{{ currentGoods.price }}</div>
             <div>
-              <div v-if="currentGoods.num < 1" @click="calculation('add', currentGoods)" class="good-join-car">Add cart</div>
+              <div v-if="currentGoods.num < 1" @click="calculation({type: 'add', item: currentGoods})" class="good-join-car">Add cart</div>
               <div v-else class="stepper">
-                <div class="minus btn" @click="calculation('minus', currentGoods)">-</div>
+                <div class="minus btn" @click="calculation({type: 'minus', item: currentGoods})">-</div>
                 <div class="num">{{ currentGoods.num }}</div>
-                <div class="add btn selected" @click="calculation('add', currentGoods)">+</div>
+                <div class="add btn selected" @click="calculation({type: 'add', item: currentGoods})">+</div>
               </div>
             </div>
 
@@ -89,9 +74,9 @@
               <div>{{ item.goods_name}}</div>
               <div>{{ item.price }}</div>
               <div class="stepper">
-                <div class="minus btn" @click="calculation('minus', item)">-</div>
+                <div class="minus btn" @click="calculation({type: 'minus', item: currentGoods})">-</div>
                 <div class="num">{{ item.num }}</div>
-                <div class="add btn selected" @click="calculation('add', item)">+</div>
+                <div class="add btn selected" @click="calculation({type: 'add', item: currentGoods})">+</div>
               </div>
             </div>
           </div>
@@ -103,12 +88,14 @@
 
 <script lang="ts">
 import services from '@/services';
-import { Toast, Sidebar, SidebarItem } from 'vant';
+import Goods from '@/components/Goods.vue';
 import Header from '@/components/Header.vue';
+import { Toast, Sidebar, SidebarItem } from 'vant';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
   components: {
+    Goods,
     Header,
     [Sidebar.name]: Sidebar,
     [SidebarItem.name]: SidebarItem
@@ -227,7 +214,7 @@ export default class HotelStore extends Vue {
           goods_id: '132',
           seller_id: '1',
           uniacid: '4',
-          goods_name: 'King Furong33',
+          goods_name: 'King Furong44',
           goods_img: 'https://static.hotel.showboom.cn/images/4/2019/06/JMRL7CQ6l56e268Z3u7olr8i626Re6.jpg',
           goods_subheading: 'cigarette',
           goods_is_open: '1',
@@ -254,7 +241,7 @@ export default class HotelStore extends Vue {
           goods_id: '128',
           seller_id: '1',
           uniacid: '4',
-          goods_name: 'King Furong44',
+          goods_name: 'King Furong55',
           goods_img: 'https://static.hotel.showboom.cn/images/4/2019/06/JMRL7CQ6l56e268Z3u7olr8i626Re6.jpg',
           goods_subheading: 'cigarette',
           goods_is_open: '1',
@@ -273,60 +260,6 @@ export default class HotelStore extends Vue {
               goods_id: '125',
               goods_specifications: '20 branch',
               goods_price: '34.00',
-              goods_stock: '100'
-            }
-          ]
-        },
-        {
-          goods_id: '129',
-          seller_id: '1',
-          uniacid: '4',
-          goods_name: 'King Furong55',
-          goods_img: 'https://static.hotel.showboom.cn/images/4/2019/06/JMRL7CQ6l56e268Z3u7olr8i626Re6.jpg',
-          goods_subheading: 'cigarette',
-          goods_is_open: '1',
-          goods_sort: '1',
-          goods_attribute: '1',
-          goods_addtime: '1569288703',
-          goods_details: '',
-          goods_unit: 'box',
-          goods_classify: '42',
-          goods_volume: '0',
-          cid: '45',
-          cname: 'Fruits',
-          specifications: [
-            {
-              id: '803',
-              goods_id: '125',
-              goods_specifications: '20 branch',
-              goods_price: '35.00',
-              goods_stock: '100'
-            }
-          ]
-        },
-        {
-          goods_id: '130',
-          seller_id: '1',
-          uniacid: '4',
-          goods_name: 'King Furong55',
-          goods_img: 'https://static.hotel.showboom.cn/images/4/2019/06/JMRL7CQ6l56e268Z3u7olr8i626Re6.jpg',
-          goods_subheading: 'cigarette',
-          goods_is_open: '1',
-          goods_sort: '1',
-          goods_attribute: '1',
-          goods_addtime: '1569288703',
-          goods_details: '',
-          goods_unit: 'box',
-          goods_classify: '42',
-          goods_volume: '0',
-          cid: '45',
-          cname: 'Fruits',
-          specifications: [
-            {
-              id: '803',
-              goods_id: '125',
-              goods_specifications: '20 branch',
-              goods_price: '35.00',
               goods_stock: '100'
             }
           ]
@@ -478,10 +411,10 @@ export default class HotelStore extends Vue {
     this.updateShop()
   }
   // 点击加减
-  calculation(type:string, goods:any) {
+  calculation(param:any) {
     this.goods = this.goods.map(item => {
-      if (item.goods_id == goods.goods_id) {
-        if (type == 'add') {
+      if (item.goods_id == param.item.goods_id) {
+        if (param.type == 'add') {
           item.num ++
           Toast.success('goods add success')
         } else {
@@ -493,8 +426,8 @@ export default class HotelStore extends Vue {
       return item
     })
     this.classify = this.classify.map(item => {
-      if (goods.cid == item.id) {
-        if (type == 'add') {
+      if (param.item.cid == item.id) {
+        if (param.type == 'add') {
           item.info += 1
         } else {
           if (item.info > 0) {
@@ -550,7 +483,6 @@ export default class HotelStore extends Vue {
     overflow-y: auto;
     background: #fafafa;
   }
-  // Stepper
   .stepper{
     display: flex;
     width: 1.5rem;
@@ -664,43 +596,8 @@ export default class HotelStore extends Vue {
     max-height: 100%;
     overflow-y: auto;
     width: calc(100% - 85px);
-    ul{
-      padding: 0 0 0 .32rem;
-      .title{
-        padding: .2rem 0 .46rem;
-      }
-    }
-    li{
-      margin: 0 0 .3rem;
-      padding: 0 0 .3rem;
-      border-bottom: .01rem solid #E0E0E0;
-      .picture{
-        display: table-cell;
-        padding: 0 .16rem 0 0;
-        vertical-align: middle;
-        img{
-          width: 1.32rem;
-        }
-      }
-      .desc{
-        width: 100%;
-        display: table-cell;
-        padding: 0 .24rem 0 0;
-        vertical-align: middle;
-        .name{
-          font-size: .32rem;
-          padding: 0 0 .46rem
-        }
-        .bom{
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          .price{
-            color: #E83A3D;
-            font-size: .36rem;
-          }
-        }
-      }
+    .title{
+      padding: .2rem .32rem .46rem;
     }
   }
   .footer{

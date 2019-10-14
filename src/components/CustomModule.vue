@@ -10,13 +10,13 @@
           <span>{{item.goods_subheading}}</span>
         </div>
         <div class="right around" v-if="around">
-          <a href="tel:13800138000">
+          <a :href="'tel:' + [item.tel]">
             <img src="@/assets/icon-call.png" alt="">
           </a>
         </div>
         <div class="right" v-else>
           <div class="price">৳{{item.price}}</div>
-          <div class="buy">Buy</div>
+          <div class="buy" @click="goBuy(item)">Buy</div>
         </div>
       </div>
     </div>
@@ -28,8 +28,22 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class Breakfast extends Vue {
-  @Prop() list!:any[];
+  list:any[] = [];
+  @Prop() data!:any[];
   @Prop() around!:boolean;
+
+  goBuy(item:any) {
+    localStorage.setItem('goods', JSON.stringify(item))
+    this.$router.push('/ServicePay')
+  }
+  created() {
+    this.list = this.data.map(item => {
+      return {
+        ...item,
+        price: item.specifications ? Number.parseFloat(item.specifications[0].goods_price) : ''
+      }
+    })
+  }
 }
 </script>
 <style lang="scss" scoped>

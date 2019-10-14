@@ -83,7 +83,7 @@
                       <p class="info">no breakfast Single bed no window</p>
                       <p class="price"><span>৳</span>799.00</p>
                     </div>
-                    <div class="right full">
+                    <div class="right full" @click="booking">
                       <div class="title">Full house</div>
                       <div class="sub">Full house</div>
                     </div>

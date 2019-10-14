@@ -156,6 +156,46 @@ export default new Router({
         title: 'InvitedMembers'
       },
       component: (resolve) => require(['@/pages/InvitedMembers.vue'], resolve)
+    },
+    {
+      path: '/BookingOrder',
+      name: 'BookingOrder',
+      meta: {
+        title: 'BookingOrder'
+      },
+      component: (resolve) => require(['@/pages/BookingOrder.vue'], resolve)
+    },
+    {
+      path: '/MarketPay',
+      name: 'MarketPay',
+      meta: {
+        title: 'MarketPay'
+      },
+      component: (resolve) => require(['@/pages/MarketPay.vue'], resolve)
+    },
+    {
+      path: '/MarketOrder',
+      name: 'MarketOrder',
+      meta: {
+        title: 'MarketOrder'
+      },
+      component: (resolve) => require(['@/pages/MarketOrder.vue'], resolve)
+    },
+    {
+      path: '/ServicePay',
+      name: 'ServicePay',
+      meta: {
+        title: 'ServicePay'
+      },
+      component: (resolve) => require(['@/pages/ServicePay.vue'], resolve)
+    },
+    {
+      path: '/ServiceOrder',
+      name: 'ServiceOrder',
+      meta: {
+        title: 'ServiceOrder'
+      },
+      component: (resolve) => require(['@/pages/ServiceOrder.vue'], resolve)
     }
   ]
 });

@@ -57,12 +57,7 @@ export default class Stepper extends Vue {
       height: .55rem;
       text-align: center;
       line-height: .55rem;
-    }
-    .normal{
-      color: black;
-    }
-    .disabled{
-      color: #ccc;
+      background: transparent
     }
   }
 </style>

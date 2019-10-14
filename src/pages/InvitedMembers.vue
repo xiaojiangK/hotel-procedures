@@ -16,6 +16,7 @@
 </template>
 
 <script lang="ts">
+import { Toast } from 'vant';
 import services from '@/services';
 import { ImagePreview } from 'vant';
 import Header from '@/components/Header.vue';
@@ -35,7 +36,7 @@ export default class InvitedMembers extends Vue {
   async created() {
     try {
       // const res = await services.api.inviteMember('user_id')
-      const res = {
+      const res:any = {
         data: {
           code: 200,
           data: {

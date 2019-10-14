@@ -1,26 +1,26 @@
 <template>
   <div class="item facility">
     <div class="head">
-      <div class="title">
-        <img src="@/assets/icon-facility-sm.png" alt="">
-        <span>Hotel facility</span>
-        <router-link to="/HotelFacility">
+      <router-link to="/HotelFacility">
+        <div class="title">
+          <img src="@/assets/icon-facility-sm.png" alt="">
+          <span>Hotel facility</span>
           <img src="@/assets/icon-next.png" class="next" alt="">
-        </router-link>
-      </div>
+        </div>
+      </router-link>
     </div>
     <div class="content">
       <div class="picture">
-        <img src="@/assets/banner.png" alt="">
+        <img :src="item.goods_img" alt="">
       </div>
       <div class="foot">
         <div class="left">
-          <p>Swimming pool in nanhai</p>
-          <span>Free trial for deluxe double room and above</span>
+          <p>{{item.goods_name}}</p>
+          <span>{{item.goods_subheading}}</span>
         </div>
         <div class="right">
-          <div class="price">৳68.00</div>
-          <router-link to="/HotelFacility" class="buy">Buy</router-link>
+          <div class="price">৳{{item.price}}</div>
+          <div @click="goBuy()" class="buy">Buy</div>
         </div>
       </div>
     </div>
@@ -32,7 +32,19 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class HotelFacility extends Vue {
-  @Prop() item!:object;
+  @Prop() data!:any;
+  item:object = {};
+
+  goBuy() {
+    localStorage.setItem('goods', JSON.stringify(this.item))
+    this.$router.push('/ServicePay')
+  }
+  created() {
+    this.item = {
+      ...this.data,
+      price: Number.parseFloat(this.data.specifications[0].goods_price)
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>

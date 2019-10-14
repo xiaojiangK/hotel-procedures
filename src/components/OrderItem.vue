@@ -134,7 +134,7 @@ export default class OrderItem extends Vue {
       this.$router.push(`/MarketOrder?id=${item.id}&flag=${item.flag}`)
     } else {
       // 去早餐券、设施订单详情
-      this.$router.push(`/ServiceOrder?id=${item.id}&flag=${item.flag}&source=order`)
+      this.$router.push(`/ServiceOrder?id=${item.id}&flag=${item.flag}`)
     }
   }
   // 获取评论列表
