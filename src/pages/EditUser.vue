@@ -52,7 +52,7 @@ export default class EditUser extends Vue {
       return;
     }
     try {
-      await services.api.changeInfo(username)
+      await services.api.ChangeInfo(username)
       Toast.success('Modify success')
       this.$router.back()
     } catch(e) {

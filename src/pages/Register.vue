@@ -51,7 +51,7 @@ export default class Register extends Vue {
       return
     }
     try {
-      await services.api.getCode(username)
+      await services.api.GetCode(username)
       Toast.success('Send success')
     } catch(e) {
       Toast.fail(e.message)
@@ -75,7 +75,7 @@ export default class Register extends Vue {
       return
     }
     try {
-      const res = await services.api.register({ code, username, password })
+      const res = await services.api.Register({ code, username, password })
       Toast.success('Register success')
       setStorage('token', res)
       this.$router.push('/')

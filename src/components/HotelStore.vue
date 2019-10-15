@@ -37,17 +37,15 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class HotelStore extends Vue {
-  @Prop() data!:any[];
-  list:any[] = [];
+  @Prop() data!:any[]
 
-  created() {
-    const list = this.data.map((item:any) => {
+  get list() {
+    return this.data.map((item:any) => {
       return {
         ...item,
         price: Number.parseFloat(item.specifications[0].goods_price)
       }
     })
-    this.list = list
   }
 }
 </script>

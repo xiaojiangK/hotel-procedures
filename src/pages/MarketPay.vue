@@ -14,8 +14,8 @@
         </div>
       </div>
       <div class="goods-title">
-        <div class="title-name">Commodity list</div>
-        <div class="goods-title-num">total <span>{{ allNum }}</span> goods</div>
+        <div class="name">Commodity list</div>
+        <div class="num">total <span>{{ allNum }}</span> goods</div>
       </div>
       <div class="goods-list">
         <Goods :goods="goods" currentNum="1" isCar="1"></Goods>
@@ -32,6 +32,7 @@
 <script lang="ts">
 import { Toast } from 'vant';
 import services from '@/services';
+import { getStorage } from '@/utils/util';
 import Goods from '@/components/Goods.vue';
 import Header from '@/components/Header.vue';
 import { Component, Vue } from 'vue-property-decorator';
@@ -100,10 +101,11 @@ export default class MarketPay extends Vue {
       return
     }
     // sessionStorage.removeItem('shopcarList')
+    this.$router.push('/Complete')
   }
   created() {
     this.getGoods()
-    this.tel = JSON.parse((localStorage.getItem('user') as any)).tel
+    this.tel = getStorage('user').tel
   }
 }
 </script>
@@ -149,12 +151,12 @@ export default class MarketPay extends Vue {
     .goods-title{
       display: flex;
       margin:.32rem 0 0;
-      .title-name{
+      .name{
         margin: 0 0 0 .24rem;
         font-size: .4rem;
         font-weight: bold;
       }
-      .goods-title-num{
+      .num{
         margin: .1rem 0 0 .2rem;
         font-size: .32rem;
         span{

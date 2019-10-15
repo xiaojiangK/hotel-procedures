@@ -58,7 +58,7 @@ export default class Register extends Vue {
       return
     }
     try {
-      await services.api.getCode(username)
+      await services.api.GetCode(username)
       Toast.success('Send success')
     } catch(e) {
       Toast.fail(e.message)
@@ -90,7 +90,7 @@ export default class Register extends Vue {
       return
     }
     try {
-      await services.api.retrieve({ code, username, password, newPassword })
+      await services.api.Retrieve({ code, username, password, newPassword })
       Toast.success('Retrieve success')
       this.$router.back()
     } catch(e) {

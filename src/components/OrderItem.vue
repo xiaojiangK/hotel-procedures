@@ -140,13 +140,13 @@ export default class OrderItem extends Vue {
   // 获取评论列表
   async getAssess() {
     try {
-      const res = await services.api.assessList(1, 0, this.item.id)
-      for (const i of res.data) {
+      const { data } = await services.api.AssessList(1, 0, this.item.id)
+      for (const i of data) {
         if (i.reply) {
           this.isReply = true
         }
       }
-      if (res.data.length > 0) {
+      if (data.length > 0) {
         this.isAssess = true
       }
     } catch(e) {
@@ -169,10 +169,10 @@ export default class OrderItem extends Vue {
     }).then(async () => {
       try {
         const i = this.item
-        await services.api.cancelOrder(i.flag, i.id)
+        await services.api.CancelOrder(i.flag, i.id)
         this.update(this.item)
         Toast.success('Cancel Success')
-        this.$router.push('/PayComplete?type=1')
+        this.$router.push('/Complete?type=1')
       } catch(e) {
         Toast.fail(e.message)
       }

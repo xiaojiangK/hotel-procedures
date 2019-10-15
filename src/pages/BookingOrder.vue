@@ -11,12 +11,12 @@
             {{room.breakfast == '0' ? 'no' : ''}}breakfast
           </div>
           <div class="duration">
-            <span class="date">{{room.start[1]}}month {{room.start[2]}}day</span>
-            <span class="status">{{room.startWeek}}check in</span>
+            <span class="date">{{room.start}}</span>
+            <span class="status">{{room.startWeek}} check in</span>
             <span class="divider">—</span>
-            <span class="date">{{room.end[1]}}month {{room.end[2]}}day</span>
-            <span class="status">{{room.endWeek}}departure</span>
-            <span class="sum">total{{room.days}}night</span>
+            <span class="date">{{room.end}}</span>
+            <span class="status">{{room.endWeek}} departure</span>
+            <span class="sum">total {{room.days}} night</span>
           </div>
         </div>
         <!-- room end -->
@@ -116,10 +116,11 @@
 </template>
 
 <script lang="ts">
-import { Toast, Picker, DatetimePicker } from 'vant';
 import services from '@/services';
 import Header from '@/components/Header.vue';
+import { Toast, Picker, DatetimePicker } from 'vant';
 import { Component, Vue } from 'vue-property-decorator';
+import { format, formatDate, getStorage } from '@/utils/util';
 
 @Component({
   components: {
@@ -161,26 +162,19 @@ export default class BookingOrder extends Vue {
   }
   async getRoomCost() {
     try {
-      const room = JSON.parse((localStorage.getItem('room') as any))
-      const user = JSON.parse((localStorage.getItem('user') as any))
+      const ret = getStorage('room')
+      const user = getStorage('user')
+      const room = {
+        ...ret,
+        start: format('date', ret.start[1], ret.start[2]),
+        end: format('date', ret.end[1], ret.end[2])
+      }
       const end = `${room.end[0]}-${room.end[1]}-${room.end[2]}`
       const start = `${room.start[0]}-${room.start[1]}-${room.start[2]}`
-      // const res = await services.api.getRoomCost(room.id, user.id, start, end)
-      const res = {
-        data: {
-          is_vip: 1,
-          key: '秀豹超级会员9.5折',
-          price_list: [
-            {dateday: '10月12日', mprice: '2.00', discount_price: 1.9}
-          ],
-          total_cost: 1.9,
-          value: 95
-        }
-      }
+      const { data }:any = await services.api.GetRoomCost(room.id, user.id, start, end)
       let rebate:any = 0;
       let totalPrice:any = 0;
-      const vipInfo = res.data;
-      const roomCost = vipInfo.price_list.map((item:any) => {
+      const roomCost = data.price_list.map((item:any) => {
         totalPrice += Math.ceil(item.mprice);
         return {
           ...item,
@@ -193,16 +187,16 @@ export default class BookingOrder extends Vue {
       } else {
         totalPrice = (totalPrice * num).toFixed(2);
       }
-      if (vipInfo.is_vip == 1) {
-        rebate = (totalPrice - vipInfo.total_cost).toFixed(2)
+      if (data.is_vip == 1) {
+        rebate = (totalPrice - data.total_cost).toFixed(2)
       }
       this.room = room
       this.rebate = rebate
-      this.vipInfo = vipInfo
+      this.vipInfo = data
       this.roomCost = roomCost
       this.price = Math.ceil(totalPrice);
       this.totalPrice = Math.ceil(totalPrice).toFixed(2)
-      this.totalCost = (vipInfo.total_cost).toFixed(2)
+      this.totalCost = (data.total_cost).toFixed(2)
     } catch(e) {
       Toast.fail(e.message)
     }
@@ -231,6 +225,7 @@ export default class BookingOrder extends Vue {
   }
   submit() {
     // api
+    this.$router.push('/Complete?type=10001')
   }
   created() {
     this.getRoomCost()

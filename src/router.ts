@@ -196,6 +196,14 @@ export default new Router({
         title: 'ServiceOrder'
       },
       component: (resolve) => require(['@/pages/ServiceOrder.vue'], resolve)
+    },
+    {
+      path: '/Complete',
+      name: 'Complete',
+      meta: {
+        title: 'Complete'
+      },
+      component: (resolve) => require(['@/pages/Complete.vue'], resolve)
     }
   ]
 });

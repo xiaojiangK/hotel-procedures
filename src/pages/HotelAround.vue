@@ -10,6 +10,7 @@
 <script lang="ts">
 import { Toast } from 'vant';
 import services from '@/services';
+import { getStorage } from '@/utils/util';
 import Header from '@/components/Header.vue';
 import CustomModule from '@/components/CustomModule.vue';
 import { Component, Vue } from 'vue-property-decorator';
@@ -25,11 +26,8 @@ export default class HotelAround extends Vue {
 
   async getList() {
     try {
-      let hotel:any = [];
-      if (sessionStorage.getItem('hotel')) {
-        hotel = JSON.parse((sessionStorage.getItem('hotel') as string))
-      }
-      // const res = await services.api.periphery(hotel.id)
+      const hotel = getStorage('hotel')
+      // const res = await services.api.Periphery(hotel.id)
       const res = {
         code: 200,
         data: [

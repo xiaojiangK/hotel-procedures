@@ -84,6 +84,7 @@
 <script lang="ts">
 import { Toast } from 'vant';
 import services from '@/services';
+import { getStorage } from '@/utils/util';
 import Header from '@/components/Header.vue';
 import { Component, Vue } from 'vue-property-decorator';
 
@@ -97,21 +98,12 @@ export default class Achievement extends Vue {
 
   async created() {
     try {
-      // const res = await services.api.performance('user_id')
-      const res:any = {
-        data: {
-          code: 200,
-          data: {
-            today: [200, 20, 2000],
-            month: [200, 20, 2000],
-            company: [20, 30],
-          }
-        }
-      }
-      if (res.data.code == 200) {
-          this.sale = res.data.data
+      const user = getStorage('user')
+      const { data } = await services.api.Performance(user.id)
+      if (data.code == 200) {
+          this.sale = data.data
       } else {
-        Toast.fail(res.data.msg)
+        Toast.fail(data.msg)
       }
     } catch(e) {
       Toast.fail(e.message)

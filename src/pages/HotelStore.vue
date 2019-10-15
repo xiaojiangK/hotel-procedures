@@ -38,14 +38,14 @@
       <div class="preview" v-if="isshowGoods">
         <div class="bg-black" @click="closeGoods"></div>
         <div class="good-content">
-          <div class="good-content-img">
+          <div class="img">
             <img :src="currentGoods.goods_img" mode="aspectFill"/>
           </div>
-          <div class="good-content-name">{{ currentGoods.goods_name }}</div>
-          <div class="good-content-footer">
-            <div class="good-content-price">৳{{ currentGoods.price }}</div>
+          <div class="name">{{ currentGoods.goods_name }}</div>
+          <div class="goods-footer">
+            <div class="price">৳{{ currentGoods.price }}</div>
             <div>
-              <div v-if="currentGoods.num < 1" @click="calculation({type: 'add', item: currentGoods})" class="good-join-car">Add cart</div>
+              <div v-if="currentGoods.num < 1" @click="calculation({type: 'add', item: currentGoods})" class="join-car">Add cart</div>
               <div v-else class="stepper">
                 <div class="minus btn" @click="calculation({type: 'minus', item: currentGoods})">-</div>
                 <div class="num">{{ currentGoods.num }}</div>
@@ -55,7 +55,7 @@
 
           </div>
         </div>
-        <div class="good-content-close" @click="closeGoods">✖</div>
+        <div class="close" @click="closeGoods">✖</div>
       </div>
 
       <!-- 购物车详情 -->
@@ -70,7 +70,7 @@
             </div>
           </div>
           <div class="shopcar-list">
-            <div class="shopcar-list-item" v-for="(item, index) in shopcarList" :key="index">
+            <div class="item" v-for="(item, index) in shopcarList" :key="index">
               <div>{{ item.goods_name}}</div>
               <div>{{ item.price }}</div>
               <div class="stepper">
@@ -88,6 +88,7 @@
 
 <script lang="ts">
 import services from '@/services';
+import { getStorage } from '@/utils/util';
 import Goods from '@/components/Goods.vue';
 import Header from '@/components/Header.vue';
 import { Toast, Sidebar, SidebarItem } from 'vant';
@@ -126,146 +127,11 @@ export default class HotelStore extends Vue {
     }
   }
   // 获取商品
-  getGoods(page = 1) {
+  async getGoods(page = 1) {
     try {
-      const list = [
-        {
-          goods_id: '125',
-          seller_id: '1',
-          uniacid: '4',
-          goods_name: 'King Furong',
-          goods_img: 'https://static.hotel.showboom.cn/images/4/2019/06/JMRL7CQ6l56e268Z3u7olr8i626Re6.jpg',
-          goods_subheading: 'cigarette',
-          goods_is_open: '1',
-          goods_sort: '1',
-          goods_attribute: '1',
-          goods_addtime: '1569288703',
-          goods_details: '',
-          goods_unit: 'box',
-          goods_classify: '42',
-          goods_volume: '0',
-          cid: '42',
-          cname: 'Fruits',
-          specifications: [
-            {
-              id: '803',
-              goods_id: '125',
-              goods_specifications: '20 branch',
-              goods_price: '30.00',
-              goods_stock: '100'
-            }
-          ]
-        },
-        {
-          goods_id: '126',
-          seller_id: '1',
-          uniacid: '4',
-          goods_name: 'King Furong22',
-          goods_img: 'https://static.hotel.showboom.cn/images/4/2019/06/JMRL7CQ6l56e268Z3u7olr8i626Re6.jpg',
-          goods_subheading: 'cigarette',
-          goods_is_open: '1',
-          goods_sort: '1',
-          goods_attribute: '1',
-          goods_addtime: '1569288703',
-          goods_details: '',
-          goods_unit: 'box',
-          goods_classify: '42',
-          goods_volume: '0',
-          cid: '42',
-          cname: 'Fruits',
-          specifications: [
-            {
-              id: '803',
-              goods_id: '125',
-              goods_specifications: '20 branch',
-              goods_price: '32.00',
-              goods_stock: '100'
-            }
-          ]
-        },
-        {
-          goods_id: '127',
-          seller_id: '1',
-          uniacid: '4',
-          goods_name: 'King Furong33',
-          goods_img: 'https://static.hotel.showboom.cn/images/4/2019/06/JMRL7CQ6l56e268Z3u7olr8i626Re6.jpg',
-          goods_subheading: 'cigarette',
-          goods_is_open: '1',
-          goods_sort: '1',
-          goods_attribute: '1',
-          goods_addtime: '1569288703',
-          goods_details: '',
-          goods_unit: 'box',
-          goods_classify: '42',
-          goods_volume: '0',
-          cid: '43',
-          cname: 'Fruits',
-          specifications: [
-            {
-              id: '803',
-              goods_id: '125',
-              goods_specifications: '20 branch',
-              goods_price: '33.00',
-              goods_stock: '100'
-            }
-          ]
-        },
-        {
-          goods_id: '132',
-          seller_id: '1',
-          uniacid: '4',
-          goods_name: 'King Furong44',
-          goods_img: 'https://static.hotel.showboom.cn/images/4/2019/06/JMRL7CQ6l56e268Z3u7olr8i626Re6.jpg',
-          goods_subheading: 'cigarette',
-          goods_is_open: '1',
-          goods_sort: '1',
-          goods_attribute: '1',
-          goods_addtime: '1569288703',
-          goods_details: '',
-          goods_unit: 'box',
-          goods_classify: '42',
-          goods_volume: '0',
-          cid: '43',
-          cname: 'Fruits',
-          specifications: [
-            {
-              id: '803',
-              goods_id: '125',
-              goods_specifications: '20 branch',
-              goods_price: '33.00',
-              goods_stock: '100'
-            }
-          ]
-        },
-        {
-          goods_id: '128',
-          seller_id: '1',
-          uniacid: '4',
-          goods_name: 'King Furong55',
-          goods_img: 'https://static.hotel.showboom.cn/images/4/2019/06/JMRL7CQ6l56e268Z3u7olr8i626Re6.jpg',
-          goods_subheading: 'cigarette',
-          goods_is_open: '1',
-          goods_sort: '1',
-          goods_attribute: '1',
-          goods_addtime: '1569288703',
-          goods_details: '',
-          goods_unit: 'box',
-          goods_classify: '42',
-          goods_volume: '0',
-          cid: '44',
-          cname: 'Fruits',
-          specifications: [
-            {
-              id: '803',
-              goods_id: '125',
-              goods_specifications: '20 branch',
-              goods_price: '34.00',
-              goods_stock: '100'
-            }
-          ]
-        }
-      ]
-      const newData = list.map(item => {
+      const hotel = getStorage('hotel')
+      const { data } = await services.api.Goods(hotel.id, this.classID)
+      const newData = data.map((item:any) => {
         const goodsPrice = Number.parseFloat(item.specifications[0].goods_price);
         return {
           ...item,
@@ -287,47 +153,10 @@ export default class HotelStore extends Vue {
     }
   }
   // 获取分类
-  getClass() {
+  async getClass() {
     try {
-      const list = [
-        {
-          addtime: '1566546656',
-          id: '42',
-          name: 'Snacks',
-          seller_id: '1',
-          sort: '1',
-          status: '1',
-          uniacid: '4'
-        },
-        {
-          addtime: '1566546656',
-          id: '43',
-          name: 'Fruits',
-          seller_id: '1',
-          sort: '1',
-          status: '1',
-          uniacid: '4'
-        },
-        {
-          addtime: '1566546656',
-          id: '44',
-          name: 'Fruits',
-          seller_id: '1',
-          sort: '1',
-          status: '1',
-          uniacid: '4'
-        },
-        {
-          addtime: '1566546656',
-          id: '45',
-          name: 'Fruits',
-          seller_id: '1',
-          sort: '1',
-          status: '1',
-          uniacid: '4'
-        }
-      ]
-      const classify = list.map(item => {
+      const { data } = await services.api.Classify()
+      const classify = data.map((item:any) => {
         return {
           ...item,
           info: 0
@@ -549,9 +378,6 @@ export default class HotelStore extends Vue {
       position: fixed;
       background: #fff;
     }
-    .fix-shopcar-bottom{
-      bottom: 1.56rem;
-    }
     .shopcar-title{
       display: flex;
       color: #666;
@@ -571,24 +397,26 @@ export default class HotelStore extends Vue {
       height: .29rem;
       margin-right: .08rem;
     }
-    .shopcar-list-item{
-      display: flex;
-      color: #666;
-      height: 1.18rem;
-      padding: 0 .24rem;
-      font-size: .32rem;
-      align-items: center;
-      border-bottom: .01rem solid #E0E0E0;
-      justify-content: space-between;
-    }
-    .shopcar-list-item>div{
-      width: 45%
-    }
-    .shopcar-list-item>div:nth-of-type(2){
-      width: 20%;
-    }
-    .shopcar-list-item>div.stepper{
-      width: 1.5rem;
+    .shopcar-list{
+      .item{
+        display: flex;
+        color: #666;
+        height: 1.18rem;
+        padding: 0 .24rem;
+        font-size: .32rem;
+        align-items: center;
+        border-bottom: .01rem solid #E0E0E0;
+        justify-content: space-between;
+        &>div{
+          width: 45%
+        }
+        &>div:nth-of-type(2){
+          width: 20%;
+        }
+        &>div.stepper{
+          width: 1.5rem;
+        }
+      }
     }
   }
   .goods{
@@ -697,21 +525,21 @@ export default class HotelStore extends Vue {
       z-index: $fixedIndex + 1;
       transform: translate3d(-3.25rem, -5rem, 0);
     }
-    .good-content-img{
+    .img{
       height: 6rem;
+      img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
     }
-    .good-content-img > img{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .good-content-name{
+    .name{
       height: 1rem;
       font-size: .32rem;
       text-indent: .28rem;
       line-height: 1rem;
     }
-    .good-content-footer{
+    .goods-footer{
       display: flex;
       width: 100%;
       height: 1.2rem;
@@ -719,13 +547,13 @@ export default class HotelStore extends Vue {
       align-items: center;
       background-color: #fafafa;
     }
-    .good-content-price{
+    .price{
       font-size: .48rem;
       font-weight: bold;
       color:#E83A3D;
       text-indent: .24rem;
     }
-    .good-join-car{
+    .join-car{
       width: 1.8rem;
       height: .6rem;
       border-radius: .6rem;
@@ -736,10 +564,10 @@ export default class HotelStore extends Vue {
       text-align: center;
       background-color: #E83A3D;
     }
-    .good-content-footer .stepper{
+    .goods-footer .stepper{
       margin: 0 .4rem 0 0;
     }
-    .good-content-close{
+    .close{
       top: 50%;
       left: 50%;
       width: .8rem;

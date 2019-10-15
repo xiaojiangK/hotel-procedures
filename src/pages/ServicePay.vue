@@ -48,6 +48,7 @@
 <script lang="ts">
 import { Toast } from 'vant';
 import services from '@/services';
+import { getStorage } from '@/utils/util';
 import Header from '@/components/Header.vue';
 import Stepper from '@/components/Stepper.vue';
 import { Component, Vue } from 'vue-property-decorator';
@@ -72,12 +73,10 @@ export default class ServicePay extends Vue {
   }
   pay() {
     // api
+    this.$router.push('/Complete')
   }
   getGoods() {
-    let goods:any = {};
-    if (localStorage.getItem('goods')) {
-      goods = JSON.parse((localStorage.getItem('goods') as string))
-    }
+    const goods = getStorage('goods')
     if (goods.goods_attribute == '3') {
       this.isBreakfast = true
     }
@@ -93,7 +92,7 @@ export default class ServicePay extends Vue {
   }
   created() {
     this.getGoods()
-    this.tel = JSON.parse((localStorage.getItem('user') as any)).tel
+    this.tel = getStorage('user').tel
   }
 }
 </script>

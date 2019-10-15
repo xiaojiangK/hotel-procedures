@@ -28,22 +28,23 @@
 </template>
 
 <script lang="ts">
+import { setStorage } from '@/utils/util';
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class HotelFacility extends Vue {
   @Prop() data!:any;
-  item:object = {};
 
-  goBuy() {
-    localStorage.setItem('goods', JSON.stringify(this.item))
-    this.$router.push('/ServicePay')
-  }
-  created() {
-    this.item = {
+  get item() {
+    const spec = this.data.specifications
+    return {
       ...this.data,
-      price: Number.parseFloat(this.data.specifications[0].goods_price)
+      price: Number.parseFloat(spec && spec[0].goods_price)
     }
+  }
+  goBuy() {
+    setStorage('goods', this.item)
+    this.$router.push('/ServicePay')
   }
 }
 </script>

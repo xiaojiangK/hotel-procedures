@@ -4,22 +4,16 @@
     <div class="main">
       <div class="swiper">
         <van-swipe :autoplay="3000" :show-indicators="false">
-          <van-swipe-item>
-            <img src="@/assets/banner.png" alt="">
-          </van-swipe-item>
-          <van-swipe-item>
-            <img src="@/assets/banner.png" alt="">
-          </van-swipe-item>
-          <van-swipe-item>
-            <img src="@/assets/banner.png" alt="">
+          <van-swipe-item v-for="(item, index) in swiper" :key="index">
+            <img :src="item" alt=""/>
           </van-swipe-item>
         </van-swipe>
         <div class="number">
           <img src="@/assets/icon-camera.png" alt="">
-          <span>61 sheets</span>
+          <span>{{swiper.length}} sheets</span>
         </div>
       </div>
-      <van-tabs v-model="active" color="#FF6342" title-active-color="#FF6342" swipeable animated>
+      <van-tabs v-model="active" @change="tabChange" color="#FF6342" title-active-color="#FF6342" swipeable animated>
         <van-tab title="Booking">
           <div class="room">
             <div class="select">
@@ -32,58 +26,36 @@
                 <span class="week">{{week.end}}</span>
               </div>
               <div class="item right">
-                <span>total {{total}} night</span>
+                <span>total {{days}} night</span>
                 <img src="@/assets/icon-right-red.png" alt="">
               </div>
             </div>
             <div class="list">
               <ul>
-                <li>
-                  <div class="picture" @click="openDetail">
-                    <img src="@/assets/good.png" alt="">
+                <li v-for="(item, index) in roomList" :key="index">
+                  <div class="picture" @click="openDetail(item)">
+                    <img :src="item.logo" alt="">
                     <div class="tag">details</div>
                   </div>
                   <div class="content">
                     <div class="left">
-                      <p class="title">Ordinary single room</p>
-                      <p class="info">no breakfast Single bed no window</p>
-                      <p class="price"><span>৳</span>148.00</p>
+                      <p class="title">{{item.name}}</p>
+                      <div class="info">
+                        <span :class="[item.breakfast == '0' ? '' : 'active']">{{item.breakfast == '0' ? 'No breakfast' : 'breakfast'}}</span>
+                        <span>{{item.size}}</span>
+                        <span>{{item.windows == '1' ? 'Have window' : 'No window'}}</span>
+                      </div>
+                      <p class="price" v-if="item.price"><span>৳</span>{{item.price}}</p>
                     </div>
-                    <div class="right" @click="booking">
+                    <div class="right" @click="booking(item)" v-if="item.min_num > 0">
                       <div class="title">Booking</div>
-                      <div class="sub">Only eight</div>
+                      <div class="sub">
+                        <span v-if="item.min_num == 0">Sold out</span>
+                        <span v-if="item.min_num > 10">Pay store</span>
+                        <span v-else>Only {{item.min_num}}</span>
+                      </div>
                     </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="picture" @click="openDetail">
-                    <img src="@/assets/good.png" alt="">
-                    <div class="tag">details</div>
-                  </div>
-                  <div class="content">
-                    <div class="left">
-                      <p class="title">Ordinary single room</p>
-                      <p class="info">no breakfast Single bed no window</p>
-                      <p class="price"><span>৳</span>148.00</p>
-                    </div>
-                    <div class="right" @click="booking">
-                      <div class="title">Booking</div>
-                      <div class="sub">Pay store</div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="picture" @click="openDetail">
-                    <img src="@/assets/good.png" alt="">
-                    <div class="tag">details</div>
-                  </div>
-                  <div class="content">
-                    <div class="left">
-                      <p class="title">Ordinary single room</p>
-                      <p class="info">no breakfast Single bed no window</p>
-                      <p class="price"><span>৳</span>799.00</p>
-                    </div>
-                    <div class="right full" @click="booking">
+                    <div class="right full" v-else>
                       <div class="title">Full house</div>
                       <div class="sub">Full house</div>
                     </div>
@@ -96,13 +68,13 @@
         <van-tab title="Facility">
           <div class="facility">
             <div class="hotel">
-              <p class="title">Empark Grand Hotel</p>  
-              <p class="sub">five-star</p>
+              <p class="title">{{hotel.name}}</p>  
+              <p class="sub">{{hotel.star}}</p>
             </div>
-            <div class="serve">
+            <div class="serve" v-if="hotel.service.length > 0 || hotel.facilities > 0">
               <p class="title">Available services</p>
               <ul>
-                <li v-for="(i, index) in serve" :key="index">
+                <li v-for="i in hotel.service" :key="i.id">
                   <img v-if="i.id == '101006'" src="@/assets/icon_parking.png" />
                   <img v-if="i.id == '101007'" src="@/assets/icon_card.png" />
                   <img v-if="i.id == '101038'" src="@/assets/icon_clock.png" />
@@ -132,36 +104,72 @@
                   <img v-if="i.id == '201112'" src="@/assets/icon_gym.png" />
                   <img v-if="i.id == '201113'" src="@/assets/icon_meetingroom.png" />
                   <img v-if="i.id == '201114'" src="@/assets/icon_restaurant.png" />
-                  <p>{{i.title}}</p>
+                  <p>{{i.val}}</p>
+                </li>
+                <li v-for="i in hotel.facilities" :key="i.id">
+                  <img v-if="i.id == '101009'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101011'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101013'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101014'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101015'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101016'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101017'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101018'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101019'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101020'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101021'" src="@/assets/icon_quilt.png"/>
+                  <img v-if="i.id == '101022'" src="@/assets/icon_shower.png"/>
+                  <img v-if="i.id == '101023'" src="@/assets/icon_spa.png"/>
+                  <img v-if="i.id == '101024'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101025'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101026'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101027'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101028'" src="@/assets/icon_gym.png"/>
+                  <img v-if="i.id == '101029'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101030'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101031'" src="@/assets/icon_meetingroom.png"/>
+                  <img v-if="i.id == '101032'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101033'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101034'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101035'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101036'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101037'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101092'" src="@/assets/icon_restaurant.png"/>
+                  <img v-if="i.id == '101093'" src="@/assets/icon_restaurant.png"/>
+                  <img v-if="i.id == '101094'" src="@/assets/icon_restaurant.png"/>
+                  <img v-if="i.id == '101095'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101096'" src="@/assets/icon_coffee.png"/>
+                  <img v-if="i.id == '101097'" src="@/assets/icon_swimming.png"/>
+                  <img v-if="i.id == '101098'" src="@/assets/icon_swimming.png"/>
+                  <img v-if="i.id == '101099'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101100'" src="@/assets/icon_bussiness.png"/>
+                  <img v-if="i.id == '101137'" src="@/assets/icon_others.png"/>
+                  <img v-if="i.id == '101138'" src="@/assets/icon_others.png"/>
+                  <p>{{i.val}}</p>
                 </li>
               </ul>
             </div>
             <div class="synopsis">
               <p class="title">Hotel introduction</p>
               <div class="attr">
-                <div class="item">Decorate time: 2017 year</div>
-                <div class="item">Opening time: 2012 year</div>
-                <div class="item">Floor height: 4 layer</div>
-                <div class="item">Total rooms: 80 rooms</div>
+                <div class="item" v-if="hotel.decorationDate">Decorate time: {{hotel.decorationDate}} year</div>
+                <div class="item" v-if="hotel.openDate">Opening time: {{hotel.openDate}} year</div>
+                <div class="item" v-if="hotel.floorNum">Floor height: {{hotel.floorNum}} layer</div>
+                <div class="item" v-if="hotel.roomNum">Total rooms: {{hotel.roomNum}} rooms</div>
               </div>
-              <div class="desc">Beijing century jin yuan hotel is located in the beautiful KunYu river between, Beijing west 4th ring road and west ring, not only to xiangshan, the Summer Palace and the zoo around, badachu and other tourist attractions, is adjacent to zhongguancun district, only with jin yuan era shopping center across the street, hotel total construction area of 186800 square meters, construction area of 42000 square meters underground are among those of leisure, shopping and entertainment facilities, entertainment facilities all of unparalleled; Room broadband Internet access, satellite TV, international and domestic direct telephone, independent shower room, etc. Chinese food, western food, coffee shop, Japanese food, bar, tea house will make you linger. It has 18 conference rooms of various sizes, and modern conference service facilities such as digital conference system, multi-language simultaneous interpretation system, video tracking, etc. The grand ballroom can accommodate 1000 people and the international conference hall can accommodate 200 people. It is an ideal place for holding various international conferences. It is also a good choice for your business trip. The underground swimming pool and gym will be closed due to the decoration of the city that never stays up. The specific opening time will be further notified.</div>
+              <div class="desc" v-html="hotel.introduction"></div>
             </div>
             <div class="policy">
               <p class="title">Hotel Policy</p>
-              <ul>
-                <li>· check-in time: after 14:00; check-out time: before 12:00</li>
-                <li>· non-cancelable after confirmation of the order. If you do not check in, the hotel will deduct the full room fee</li>
-                <li>· direct consumption, bring all check-in, the person's valid id card for check-in, check-in must be in accordance with one person one - card</li>
-                <li>· Deposit is required for accommodation, the amount of which is subject to the front desk</li>
-              </ul>
+              <div class="content" v-html="hotel.policy"></div>
             </div>
           </div>
         </van-tab>
         <van-tab title="Evaluation">
           <div class="evaluation" v-if="assessList.length">
             <div class="tabs">
-              <div :class="['item', commentIdx == 0 ? 'active' : '']" @click="chooseComment(0)">Total ({{assessCount.total}})</div>
-              <div :class="['item', commentIdx == 1 ? 'active' : '']" @click="chooseComment(1)">Pictures ({{assessCount.num}})</div>
+              <div :class="['item', type == 0 ? 'active' : '']" @click="chooseComment(0)">Total ({{assessCount.total}})</div>
+              <div :class="['item', type == 1 ? 'active' : '']" @click="chooseComment(1)">Pictures ({{assessCount.num}})</div>
             </div>
             <div class="comment">
               <ul>
@@ -199,47 +207,48 @@
         :style="{ height: '72%' }">
         <div class="details">
           <div class="head">
-            Standard twin room
+            {{detail.name}}
             <img src="@/assets/icon-close.png" @click="openDetail" alt="">
           </div>
           <div class="swiper">
-            <van-swipe :autoplay="3000" :show-indicators="false">
-              <van-swipe-item>
-                <img src="@/assets/banner.png" alt="">
-              </van-swipe-item>
-              <van-swipe-item>
-                <img src="@/assets/banner.png" alt="">
-              </van-swipe-item>
-              <van-swipe-item>
-                <img src="@/assets/banner.png" alt="">
+            <van-swipe :autoplay="3000" :show-indicators="false" @change="swipeChange">
+              <van-swipe-item v-for="(item, index) in detail.img" :key="index">
+                <img :src="item" alt="">
               </van-swipe-item>
             </van-swipe>
-            <div class="number">1 / 4</div>
+            <div class="number" v-if="detail.img">{{swipeIdx + 1}} / {{detail.img.length}}</div>
           </div>
           <div class="content">
             <div class="list">
               <ul>
-                <li><span>Internet:</span> WIFI</li>
-                <li><span>Bathroom:</span> independent</li>
-                <li><span>Window:</span> have</li>
-                <li><span>Live:</span> 2 people</li>
-                <li><span>Area:</span> 25㎡</li>
-                <li><span>Storey:</span> layer 2</li>
-                <li><span>BedType:</span>1.0×2.0 m 2 sheets</li>
-                <li><span>Breakfast:</span> No breakfast</li>
+                <li><span>Internet: </span>{{detail.wifi >= '1' ? 'WiFi' : 'No'}}</li>
+                <li>
+                  <span>Bathroom: </span>
+                  <template v-if="detail.bathroom >= '1'">Independent</template>
+                  <template v-if="detail.bathrooms >= '1'">Public</template>
+                  <template v-if="detail.bathroom < '1' && detail.bathrooms < '1'">No</template>
+                </li>
+                <li><span>Window: </span>{{detail.windows >= '1' ? 'Hava' : 'No'}}</li>
+                <li><span>Live: </span>{{detail.people >= '1' ? detail.people + ' people' : 'No'}}</li>
+                <li><span>Area: </span>{{detail.acreage >= '1' ? detail.acreage + '㎡' : 'No'}}</li>
+                <li><span>Storey: </span>{{detail.floor >= '1' ? detail.floor + ' layer' : 'No'}}</li>
+                <li>
+                  <span>BedType: </span>
+                  {{detail.bedtype >= '1' ? detail.bedtype : 'No'}}
+                  {{detail.size >= '1' ? detail.size + 'm' : 'No'}}
+                </li>
+                <li><span>Breakfast: </span>{{detail.breakfast >= '1' ? 'Hava' : 'No'}}breakfast</li>
+                <li><span>Air conditioner: </span>{{detail.air_conditioner >= '1' ? 'Have' : 'No'}}</li>
               </ul>
             </div>
             <div class="policy">
               <p class="title">Hotel Policy</p>
-              <ul>
-                <li>· Check-in time: after 14:00 departure time: before 12:00</li>
-                <li>· non-cancelable after confirmation of the order. If you do not check in, the hotel will deduct the full room fee</li>
-              </ul>
+              <div v-if="detail.policy" v-html="detail.policy"></div>
             </div>
           </div>
-          <div class="foot full">
-            <div class="item">৳148.00</div>
-            <div class="item" @click="booking">Booking</div>
+          <div :class="['foot', detail.min_num <= 0 ? 'full' : '']">
+            <div class="item">৳{{detail.price}}</div>
+            <div class="item" @click="booking(detail)">{{detail.min_num > 0 ? 'Booking' : 'Full room'}}</div>
           </div>
         </div>
       </van-popup>
@@ -250,10 +259,10 @@
 
 <script lang="ts">
 import services from '@/services';
-import { formatDate } from '@/utils/util';
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
 import Comment from '@/components/Comment.vue';
+import { formatDate, format, setStorage, getStorage } from '@/utils/util';
 import { Toast ,Swipe, SwipeItem, Tab, Tabs, DatetimePicker, Popup } from 'vant';
 import { Component, Vue } from 'vue-property-decorator';
 
@@ -275,90 +284,52 @@ export default class Booking extends Vue {
   index:number = -1;
   page:number = 1;
   type:number = 0;
-  week:object = {
+  userId:any = '';
+  week:any = {
     start: '',
     end: ''
   };
-  date:object = {
+  date:any = {
     start: '',
     end: ''
   };
-  startNow:any;     // 开始日期
-  endNow:any;       // 结束日期
-  total:number = 0;
+  start:any = {     // 开始日期
+    now: '',
+    time: ''
+  };
+  end:any = {     // 结束日期
+    now: '',
+    time: ''
+  };
+  hotel:any = {};
+  days:number = 0;
+  detail:any = {};
+  swiper:any[] = [];
+  swipeIdx:number = 0;
+  roomList:any[] = [];
   show:boolean = false;
-  commentIdx:number = 0;
   visible:boolean = false;
   current:any = new Date();
   minDate:any = new Date();
   maxDate:any = new Date(Date.now() + (24*60*60*1000) * (365 / 12 * 5));
-
-  // test
-  serve:any[] = [
-    {
-      id: '101006',
-      title: 'Wireless Internet'
-    },{
-      id: '101007',
-      title: 'Wireless Internet'
-    },{
-      id: '101038',
-      title: 'Wireless Internet'
-    },{
-      id: '101039',
-      title: 'Wireless Internet'
-    },{
-      id: '101040',
-      title: 'Wireless Internet'
-    },{
-      id: '101041',
-      title: 'Wireless Internet'
-    },{
-      id: '101042',
-      title: 'Wireless Internet'
-    },{
-      id: '101044',
-      title: 'Wireless Internet'
-    },{
-      id: '101044',
-      title: 'Wireless Internet'
-    },{
-      id: '101045',
-      title: 'Wireless Internet'
-    },{
-      id: '101045',
-      title: 'Wireless Internet'
-    },{
-      id: '101047',
-      title: 'Wireless Internet'
-    },{
-      id: '101048',
-      title: 'Wireless Internet'
-    },{
-      id: '101049',
-      title: 'Wireless Internet'
-    },{
-      id: '101050',
-      title: 'Wireless Internet'
-    },{
-      id: '101051',
-      title: 'Wireless Internet'
-    },{
-      id: '101052',
-      title: 'Wireless Internet'
-    },{
-      id: '101053',
-      title: 'Wireless Internet'
-    }
-  ]
   assessList:any[] = []
   assessCount:object = {}
 
+  swipeChange(index:any) {
+    this.swipeIdx = index
+  }
+  tabChange(index:any) {
+    if (index == 2) {
+      this.page = 1
+      this.getAssess()
+      this.getAssessCount()
+    }
+  }
   // 获取评论数量
   async getAssessCount() {
     try {
-      const res = await services.api.assessCount('user_id')
-      this.assessCount = res.data
+      const { data } = await services.api.AssessCount(this.userId)
+      this.assessCount = data
     } catch(e) {
       Toast.fail(e.message)
     }
@@ -366,59 +337,8 @@ export default class Booking extends Vue {
   // 获取评论列表
   async getAssess() {
     try {
-      // const res = await services.api.assessList(this.page, this.type)
-      const res = {
-        data: [
-          {
-            arrival_time: '1566748800',
-            content: '“奖惩并行才能最大激发公职人员的工作积极性和热情”“事事有法可依，越来越规范”“高素质的公职人员，必须有法规来约束”……近日，《中华人民共和国公职人员政务处分法（草案）》全文公布，面向社会征求意见。',
-            display: '1',
-            id: '84',
-            img: [{img_url: 'https://res.wx.qq.com/wxdoc/dist/assets/img/0.4cb08bb4.jpg'}],
-            img_type: '1',
-            logo: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqk7zaqpGsU3icq8sGG42QkT0XedHsQqBJPm0gibGQEXlN3A5JfAcXicnhf5rJJzWfuLqxoHFYt6zV0A/132',
-            name: '꧁꫞꯭陌꯭小꯭江꯭꫞꧂',
-            order_id: '805',
-            reply: '',
-            reply_time: '0',
-            room: '标准大床房',
-            room_id: '289',
-            score: '0',
-            seller_id: '0',
-            status: '1',
-            time: '1570766323',
-            uniacid: '4',
-            user_id: '4913'
-          },
-          {
-            arrival_time: '1566748800',
-            content: '“奖惩并行才能最大激发公职人员的工作积极性和热情”“事事有法可依，越来越规范”“高素质的公职人员，必须有法规来约束”……近日，《中华人民共和国公职人员政务处分法（草案）》全文公布，面向社会征求意见。',
-            display: '1',
-            id: '84',
-            img: [
-              {img_url: 'https://res.wx.qq.com/wxdoc/dist/assets/img/0.4cb08bb4.jpg'},
-              {img_url: 'https://res.wx.qq.com/wxdoc/dist/assets/img/0.4cb08bb4.jpg'},
-              {img_url: 'https://res.wx.qq.com/wxdoc/dist/assets/img/0.4cb08bb4.jpg'},
-              {img_url: 'https://res.wx.qq.com/wxdoc/dist/assets/img/0.4cb08bb4.jpg'}
-            ],
-            img_type: '1',
-            logo: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqk7zaqpGsU3icq8sGG42QkT0XedHsQqBJPm0gibGQEXlN3A5JfAcXicnhf5rJJzWfuLqxoHFYt6zV0A/132',
-            name: '꧁꫞꯭陌꯭小꯭江꯭꫞꧂',
-            order_id: '805',
-            reply: '嘻嘻，不错不错',
-            reply_time: '1570766323',
-            room: '标准大床房',
-            room_id: '289',
-            score: '0',
-            seller_id: '0',
-            status: '1',
-            time: '1570766323',
-            uniacid: '4',
-            user_id: '4913'
-          }
-        ]
-      }
-      this.assessList = res.data.map((item:any) => {
+      const { data } = await services.api.AssessList(this.page, this.type)
+      this.assessList = data.map((item:any) => {
         return {
           ...item,
           speaker: 'Hotel reply：',
@@ -432,54 +352,91 @@ export default class Booking extends Vue {
       Toast.fail(e.message)
     }
   }
+  async getRoomList() {
+    try {
+      const hotel = getStorage('hotel')
+      const { data } = await services.api.RoomList(this.start.time, this.end.time, hotel.id)
+      const swiper:any[] = [];
+      this.roomList = data.map((item:any) => {
+        if (item.state == '1') {
+          swiper.push(item.logo)
+        }
+        return {
+          ...item,
+          price: Math.ceil(item.min_price)
+        }
+      });
+      this.swiper = swiper
+    } catch(e) {
+      Toast.fail(e.message)
+    }
+  }
+  async openDetail(item:any = '') {
+    this.show = !this.show
+    if (item.id) {
+      try {
+        const { data } = await services.api.RoomDetails(item.id)
+        const facilities:any[] = []
+        if (data.facilities) {
+          for (const i of data.facilities) {
+              for (const j in i) {
+                if (j) {
+                    facilities.push({
+                      id: j,
+                      value: i[j]
+                    })
+                }
+            }
+          }
+        }
+        this.detail = {
+          ...data,
+          facilities,
+          min_num: item.min_num,
+          img: data.img ? data.img : []
+        }
+      } catch(e) {
+        Toast.fail(e.message)
+      }
+    }
+  }
+  getHotel() {
+    try {
+      const hotel = getStorage('hotel')
+      const service = [];
+      const facilities = [];
+      if (hotel.service) {
+        for (const i in hotel.service) {
+          if (i) {
+            service.push({
+              id: i,
+              val: hotel.service[i]
+            });
+          }
+        }
+      }
+      if (hotel.facilities) {
+        for (const i in hotel.facilities) {
+          if (i) {
+            facilities.push({
+              id: i,
+              val: hotel.facilities[i]
+            });
+          }
+        }
+      }
+      this.hotel = {
+        ...hotel,
+        service,
+        facilities
+      }
+    } catch(e) {
+      Toast.fail(e.message)
+    }
+  }
   selectDate(e:number) {
     this.index = e
     this.visible = true
-  }
-  format(type:string, n:number, d:number = 0) {
-    if (type == 'week') {
-      if (n == 0) {
-        return 'Sunday'
-      } else if (n == 1) {
-        return 'Monday'
-      } else if (n == 2) {
-        return 'Tuesday'
-      } else if (n == 3) {
-        return 'Wednesday'
-      } else if (n == 4) {
-        return 'Thursday'
-      } else if (n == 5) {
-        return 'Friday'
-      } else if (n == 6) {
-        return 'Saturday'
-      }
-    } else {
-      if (n == 1) {
-        return `January ${d}`
-      } else if (n == 2) {
-        return `February ${d}`
-      } else if (n == 3) {
-        return `March ${d}`
-      } else if (n == 4) {
-        return `April ${d}`
-      } else if (n == 5) {
-        return `May ${d}`
-      } else if (n == 6) {
-        return `June ${d}`
-      } else if (n == 7) {
-        return `July ${d}`
-      } else if (n == 8) {
-        return `August ${d}`
-      } else if (n == 9) {
-        return `September ${d}`
-      } else if (n == 10) {
-        return `October ${d}`
-      } else if (n == 11) {
-        return `November ${d}`
-      } else if (n == 12) {
-        return `December ${d}`
-      }
-    }
   }
   confirmDate(e:any) {
     const t = new Date(e)
@@ -488,46 +445,58 @@ export default class Booking extends Vue {
     const d = t.getDate()
     const w = t.getDay()
     if (this.index == 0) {
-      this.startNow = new Date(`${y}-${m}-${d}`)
-      if (this.startNow >= this.endNow) {
+      this.start.now = new Date(`${y}-${m}-${d}`)
+      this.start.time = `${y}-${m}-${d}`
+      if (this.start.now >= this.end.now) {
         Toast.fail('Start date greater than end date')
         return
       }
       this.date = {
         ...this.date,
-        start: this.format('date', m, d)
+        start: format('date', m, d)
       }
       this.week = {
         ...this.week,
-        start: this.format('week', w)
+        start: format('week', w)
       }
     } else if (this.index == 1) {
-      this.endNow = new Date(`${y}-${m}-${d}`)
-      if (this.endNow <= this.startNow) {
+      this.end.now = new Date(`${y}-${m}-${d}`)
+      this.end.time = `${y}-${m}-${d}`
+      if (this.end.now <= this.start.now) {
         Toast.fail('End date less than start date')
         return
       }
       this.date = {
         ...this.date,
-        end: this.format('date', m, d)
+        end: format('date', m, d)
       }
       this.week = {
         ...this.week,
-        end: this.format('week', w)
+        end: format('week', w)
       }
     }
     this.visible = false
-    this.total = Number.parseInt(`${(this.endNow - this.startNow) / (24*60*60*1000)}`, 10)
+    this.days = Number.parseInt(`${(this.end.now - this.start.now) / (24*60*60*1000)}`, 10)
   }
-  booking() {
+  booking(item:any) {
+    if (!item.min_num || item.min_num == '0') {
+      return;
+    }
+    const data = {
+      ...item,
+      days: this.days,
+      start: this.start.time.split('-'),
+      end: this.end.time.split('-'),
+      startWeek: this.week.start,
+      endWeek: this.week.end
+    }
+    setStorage('room', data)
     this.$router.push('/BookingOrder')
   }
-  openDetail() {
-    this.show = !this.show;
-  }
   chooseComment(e:number) {
-    this.commentIdx = e;
-    // api
+    this.type = e
+    this.page = 1
+    this.getAssess()
   }
   handleScroll(e:any) {
     if (this.active == 2) {
@@ -544,8 +513,6 @@ export default class Booking extends Vue {
     window.removeEventListener('scroll', this.handleScroll, true)
   }
   created() {
-    this.getAssess()
-    this.getAssessCount()
     const t = new Date()
     const t2 = new Date(Date.now() + 24*60*60*1000)
     const y = t.getFullYear()
@@ -554,17 +521,23 @@ export default class Booking extends Vue {
     const w = t.getDay()
     const w2 = t2.getDay()
     this.date = {
-      start: this.format('date', m, d),
-      end: this.format('date', m, d + 1)
+      start: format('date', m, d),
+      end: format('date', m, d + 1)
     }
     this.week = {
-      start: this.format('week', w),
-      end: this.format('week', w2)
+      start: format('week', w),
+      end: format('week', w2)
     }
-    this.total = 1
-    this.startNow = new Date(`${y}-${m}-${d}`)
-    this.endNow = new Date(`${y}-${m}-${d + 1}`)
+    this.days = 1
+    this.start.now = new Date(`${y}-${m}-${d}`)
+    this.end.now = new Date(`${y}-${m}-${d + 1}`)
+    this.start.time = `${y}-${m}-${d}`
+    this.end.time = `${y}-${m}-${d + 1}`
     window.addEventListener('scroll', this.handleScroll, true)
+    const user = getStorage('user')
+    this.userId = user.id
+    this.getRoomList()
+    this.getHotel()
   }
 }
 </script>
@@ -681,11 +654,6 @@ export default class Booking extends Vue {
           font-weight: bold;
           margin: 0 0 .28rem;
         }
-        li{
-          color:#666;
-          font-size: .24rem;
-          margin: 0 0 .16rem;
-        }
       }
     }
     .empty{
@@ -741,11 +709,14 @@ export default class Booking extends Vue {
       }
       .picture{
         width: 1.6rem;
+        height: 1.54rem;
         position: relative;
         display: table-cell;
         vertical-align: middle;
         img{
           width: 100%;
+          height: 100%;
+          object-fit: cover
         }
         .tag{
           left: 0;
@@ -879,13 +850,6 @@ export default class Booking extends Vue {
         text-indent: 2em;
         font-size: .24rem;
         line-height: .36rem
-      }
-    }
-    .policy{
-      li{
-        color: #666;
-        font-size: .24rem;
-        margin: 0 0 .16rem
       }
     }
   }

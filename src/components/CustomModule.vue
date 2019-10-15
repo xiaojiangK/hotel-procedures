@@ -24,20 +24,20 @@
 </template>
 
 <script lang="ts">
+import { setStorage } from '@/utils/util';
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class Breakfast extends Vue {
-  list:any[] = [];
   @Prop() data!:any[];
   @Prop() around!:boolean;
 
   goBuy(item:any) {
-    localStorage.setItem('goods', JSON.stringify(item))
+    setStorage('goods', item)
     this.$router.push('/ServicePay')
   }
-  created() {
-    this.list = this.data.map(item => {
+  get list() {
+    return this.data.map(item => {
       return {
         ...item,
         price: item.specifications ? Number.parseFloat(item.specifications[0].goods_price) : ''

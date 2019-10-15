@@ -58,7 +58,7 @@ export default class SubmitComment extends Vue {
   }
   async afterRead(file:any) {
     try {
-      const res = await services.api.uploadFile(file.file)
+      const res = await services.api.UploadFile(file.file)
       Toast.success('Upload success')
       this.photo.push(res.data)
     } catch(e) {
@@ -87,7 +87,7 @@ export default class SubmitComment extends Vue {
         content: this.content,
         user_id: !this.isAnonymous ? 'id' : ''
       }
-      await services.api.saveAssess(data)
+      await services.api.SaveAssess(data)
       Toast.success('Release success')
       this.$router.back()
     } catch(e) {

@@ -127,23 +127,25 @@
               </a>
             </li>
             <li v-if="isVerify == 200">
-              <img src="@/assets/icon-code.png" alt="">
-              <span>scan code consumption</span>
+              <a href="weixin://">
+                <img src="@/assets/icon-code.png" alt="">
+                <span>scan code consumption</span>
+              </a>
             </li>
             <li>
-              <router-link :to="'/Retrieve?id=' + [userInfo.id]">
+              <router-link to="/Retrieve">
                 <img src="@/assets/icon-lock.png" alt="">
                 <span>Retrieve password</span>
               </router-link>
             </li>
             <li v-if="userInfo.issale == '0' && userInfo.isclient == '1'">
-              <router-link :to="'/InvitedMembers' + [userInfo.id]">
+              <router-link to="/InvitedMembers">
                 <img src="@/assets/icon-lock.png" alt="">
                 <span>Invite company members</span>
               </router-link>
             </li>
             <li v-if="userInfo.issale == '1'">
-              <router-link :to="'/Achievement' + [userInfo.id]">
+              <router-link to="/Achievement">
                 <img src="@/assets/icon-lock.png" alt="">
                 <span>Performance data</span>
               </router-link>
@@ -327,7 +329,7 @@ export default class Member extends Vue {
           if (Date.now() - item.create_time * 1000 > (60 * 30 * 1000)) {
             item.status = '3'
             try {
-              // services.api.cancelOrder(item.flag, item.order_id)
+              // services.api.CancelOrder(item.flag, item.order_id)
             } catch(e) {
               Toast.fail(e.message)
             }
@@ -357,13 +359,13 @@ export default class Member extends Vue {
     removeStorage('token')
     this.$router.push('/Login')
   }
-  goDetail(e:any) {
-    if (e.status == 0) {
-      this.$router.push(`/HotelOrder?id=${e.id}`)
-    } else if (e.status == 1) {
-      this.$router.push(`/MarketOrder?id=${e.id}`)
+  goDetail(item:any) {
+    if (item.status == 0) {
+      this.$router.push(`/HotelOrder?id=${item.id}&flag=${item.flag}`)
+    } else if (item.status == 1) {
+      this.$router.push(`/MarketOrder?id=${item.id}&flag=${item.flag}`)
     } else {
-      this.$router.push(`/ServiceOrder?id=${e.id}`)
+      this.$router.push(`/ServiceOrder?id=${item.id}&flag=${item.flag}`)
     }
   }
   created() {

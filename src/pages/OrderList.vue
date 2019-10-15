@@ -4,8 +4,8 @@
       <Header title="My Order"></Header>
       <div class="main" ref="main">
           <div v-if="!orderList.length" class='complete'>
-            <img class='complete-img' src='@/assets/noInfo.png' />
-            <div class='complete-confirm'>No order information</div>
+            <img class='img' src='@/assets/noInfo.png' />
+            <div class='confirm'>No order information</div>
           </div>
           <div v-else ref="wrap">
             <div class="order" v-for="(item, index) in orderList" :key="index">
@@ -238,7 +238,7 @@ export default class OrderList extends Vue {
           if (Date.now() - item.create_time * 1000 > (60 * 30 * 1000)) {
             item.status = '3'
             try {
-              // services.api.cancelOrder(item.flag, item.order_id)
+              // services.api.CancelOrder(item.flag, item.order_id)
             } catch(e) {
               Toast.fail(e.message)
             }
@@ -302,15 +302,11 @@ export default class OrderList extends Vue {
     background: #f2f2f2;
     flex-direction: column;
     align-items: center;
-    .complete-img{
+    .img{
       width: 2.6rem;
       margin: 30% 0 0
     }
-    .complete-status{
-      margin: .36rem 0;
-      font-size: .46rem
-    }
-    .complete-confirm{
+    .confirm{
       margin: .5rem 0 0;
       font-size: .3rem;
       color: #666

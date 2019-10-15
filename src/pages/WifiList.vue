@@ -16,6 +16,7 @@
 
 <script lang="ts">
 import services from '@/services';
+import { getStorage } from '@/utils/util';
 import Header from '@/components/Header.vue';
 import { Component, Vue } from 'vue-property-decorator';
 
@@ -25,33 +26,7 @@ import { Component, Vue } from 'vue-property-decorator';
   }
 })
 export default class WifiList extends Vue {
-  list:any[] = [
-    {
-      authentication: '1',
-      wifi_name: 'smjp8501',
-      wifi_pwd: 'smjp8501'
-    },
-    {
-      authentication: '2',
-      wifi_name: 'smjp8502',
-      wifi_pwd: 'smjp8502'
-    },
-    {
-      authentication: '1',
-      wifi_name: 'smjp8503',
-      wifi_pwd: 'smjp8503'
-    },
-    {
-      authentication: '2',
-      wifi_name: 'smjp8504',
-      wifi_pwd: 'smjp8504'
-    },
-    {
-      authentication: '1',
-      wifi_name: 'smjp8505',
-      wifi_pwd: 'smjp8505'
-    }
-  ]
+  list:any[] = []
 
   connectWifi(item:any) {
     this.$router.push({ name: 'WifiHelp', query: {
@@ -59,6 +34,10 @@ export default class WifiList extends Vue {
       pass: item.wifi_pwd,
       auth: item.authentication
     }})
+  }
+  created() {
+    const hotel = getStorage('hotel')
+    this.list = hotel.wifiList
   }
 }
 </script>
