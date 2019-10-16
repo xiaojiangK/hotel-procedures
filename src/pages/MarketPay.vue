@@ -44,11 +44,11 @@ import { Component, Vue } from 'vue-property-decorator';
   }
 })
 export default class MarketPay extends Vue {
-  tel:string = '';
   goods:any[] = [];
   allNum:number = 0;
   allPrice:number = 0;
   roomNum:string = '';
+  tel:string = getStorage('user').tel;
 
   deleteGoods(id:string) {
     this.goods = this.goods.filter(item => item.goods_id != id)
@@ -105,7 +105,6 @@ export default class MarketPay extends Vue {
   }
   created() {
     this.getGoods()
-    this.tel = getStorage('user').tel
   }
 }
 </script>

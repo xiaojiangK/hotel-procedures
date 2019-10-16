@@ -284,7 +284,7 @@ export default class Booking extends Vue {
   index:number = -1;
   page:number = 1;
   type:number = 0;
-  userId:any = '';
+  userId:any = getStorage('user').id;
   week:any = {
     start: '',
     end: ''
@@ -335,9 +335,9 @@ export default class Booking extends Vue {
     }
   }
   // 获取评论列表
-  async getAssess() {
+  async getAssess(page:number = 1) {
     try {
-      const { data } = await services.api.AssessList(this.page, this.type)
+      const { data } = await services.api.AssessList(page, this.type)
       this.assessList = data.map((item:any) => {
         return {
           ...item,
@@ -354,8 +354,7 @@ export default class Booking extends Vue {
   }
   async getRoomList() {
     try {
-      const hotel = getStorage('hotel')
-      const { data } = await services.api.RoomList(this.start.time, this.end.time, hotel.id)
+      const { data } = await services.api.RoomList(this.start.time, this.end.time, this.hotel.id)
       const swiper:any[] = [];
       this.roomList = data.map((item:any) => {
         if (item.state == '1') {
@@ -504,7 +503,7 @@ export default class Booking extends Vue {
       const current = (this.$refs.wrap as any).offsetHeight
       const scrollTop = e.target.scrollTop
       if (scrollTop >= current - client) {
-        console.log(scrollTop)
+        this.getAssess(this.page++)
         // api
       }
     }
@@ -534,10 +533,8 @@ export default class Booking extends Vue {
     this.start.time = `${y}-${m}-${d}`
     this.end.time = `${y}-${m}-${d + 1}`
     window.addEventListener('scroll', this.handleScroll, true)
-    const user = getStorage('user')
-    this.userId = user.id
-    this.getRoomList()
     this.getHotel()
+    this.getRoomList()
   }
 }
 </script>

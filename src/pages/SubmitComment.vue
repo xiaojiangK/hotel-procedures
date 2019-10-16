@@ -28,8 +28,9 @@
 </template>
 
 <script lang="ts">
-import { Toast, Uploader } from 'vant';
 import services from '@/services';
+import { getStorage } from '@/utils/util';
+import { Toast, Uploader } from 'vant';
 import Header from '@/components/Header.vue';
 import { Component, Vue } from 'vue-property-decorator';
 
@@ -80,12 +81,13 @@ export default class SubmitComment extends Vue {
     }
     Toast.loading('loading...')
     try {
+      const { id } = getStorage('user')
       const data = {
         img: this.photo.join(','),
         order_id: this.orderId,
         room_id: this.roomId,
         content: this.content,
-        user_id: !this.isAnonymous ? 'id' : ''
+        user_id: !this.isAnonymous ? id : ''
       }
       await services.api.SaveAssess(data)
       Toast.success('Release success')

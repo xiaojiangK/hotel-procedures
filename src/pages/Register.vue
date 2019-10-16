@@ -77,7 +77,7 @@ export default class Register extends Vue {
     try {
       const res = await services.api.Register({ code, username, password })
       Toast.success('Register success')
-      setStorage('token', res)
+      setStorage('user', res.data)
       this.$router.push('/')
     } catch(e) {
       Toast.fail(e.message)

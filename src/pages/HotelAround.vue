@@ -26,28 +26,8 @@ export default class HotelAround extends Vue {
 
   async getList() {
     try {
-      const hotel = getStorage('hotel')
-      // const res = await services.api.Periphery(hotel.id)
-      const res = {
-        code: 200,
-        data: [
-          {
-            add_time: '1559109504',
-            coordinates: '37.858740,112.558280',
-            id: '7',
-            img: 'https://static.hotel.showboom.cn/images/4/2019/05/OBNY8B7l7lb4QNTb8TE2emC2p3bbss.jpg',
-            name: '老太原菜馆(南宫店)',
-            phone: '03514053388',
-            seller_id: '1',
-            site: '迎泽大街238号南宫东院科技大楼',
-            sort: '1',
-            state: '1',
-            subheading: '迎泽大街238号南宫东院科技大楼',
-            uniacid: '4'
-          }
-        ]
-      }
-      this.list = res.data.map(item => {
+      const { data } = await services.api.Periphery()
+      this.list = data.map((item:any) => {
         return {
           tel: item.phone,
           goods_img: item.img,

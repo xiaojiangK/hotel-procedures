@@ -26,8 +26,8 @@ export default class Breakfast extends Vue {
 
   async getList() {
     try {
-      const hotel = getStorage('hotel')
-      const { data } = await services.api.Breakfast(hotel.id)
+      const { id } = getStorage('hotel')
+      const { data } = await services.api.Breakfast(id)
       this.list = data
     } catch(e) {
       Toast.fail(e.message)

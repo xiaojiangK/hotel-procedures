@@ -9,7 +9,7 @@
     </div>
     <div class="content">
       <div class="desc">{{item.content}}</div>
-      <div class="photo" v-if="item.img.length" :class="'col-' + [item.img.length <= 3 ? item.img.length : (item.img.length === 4 ? 2 : 3)]">
+      <div class="photo" v-if="item.img" :class="'col-' + [item.img.length <= 3 ? item.img.length : (item.img.length === 4 ? 2 : 3)]">
         <img v-for="(i, index) in item.img" :key="index" :src="i" @click="preview(item.img)" alt=""/>
       </div>
       <div class="date">{{item.arrival_time}} check in, {{item.time}} release</div>

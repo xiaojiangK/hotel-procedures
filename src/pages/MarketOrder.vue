@@ -27,7 +27,7 @@
       </div>
       <div class="goods-title">
         <div class="title-name">Commodity list</div>
-        <div class="num">total <span>{{ goodsNum }}</span> goods</div>
+        <div class="num">total <span>{{ order.num }}</span> goods</div>
       </div>
       <div class='goods-list'>
         <Goods :goods="order.goods_info" currentNum="1" isCar="1"></Goods>
@@ -53,7 +53,6 @@ export default class MarketOrder extends Vue {
   id:any = 0;
   flag:any = 0;
   order:any = {};
-  goodsNum:number = 0;
 
   async getOrder() {
     try {
@@ -70,9 +69,9 @@ export default class MarketOrder extends Vue {
         })
         num += Number(i.number)
       })
-      this.goodsNum = num
       this.order = {
         ...data,
+        num,
         goods_info: goods
       }
     } catch(e) {

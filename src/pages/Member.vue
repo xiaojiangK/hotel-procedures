@@ -121,7 +121,7 @@
         <div class="menu">
           <ul>
             <li>
-              <a href="tel:13800138000">
+              <a :href="'tel:' + [tel]">
                 <img src="@/assets/icon-tel.png" alt="">
                 <span>Hotel customer phone</span>
               </a>
@@ -163,12 +163,12 @@
 </template>
 
 <script lang="ts">
-import { Toast, PullRefresh } from 'vant';
 import services from '@/services';
-import { formatDate, removeStorage } from '@/utils/util';
+import { Toast, PullRefresh } from 'vant';
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
 import { Component, Vue } from 'vue-property-decorator';
+import { formatDate, getStorage, removeStorage } from '@/utils/util';
 
 @Component({
   components: {
@@ -181,155 +181,39 @@ export default class Member extends Vue {
   orderList: any[] = [];
   loading:boolean = false;
   isVerify:number = 0;
-  userInfo:object = {
-    add_member: '0',
-    balance: '0.00',
-    bind_tel_at: '2019-09-17 16:38:10',
-    commission: '0.00',
-    company_id: '1',
-    created_at: '2019-07-13 10:09:33',
-    discount: null,
-    dj_money: '0.00',
-    id: '4913',
-    img: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqk7zaqpGsU3icq8sGG42QkT0XedHsQqBJPm0gibGQEXlN3A5JfAcXicnhf5rJJzWfuLqxoHFYt6zV0A/132',
-    join_time: '1562983773',
-    level_id: '0',
-    level_name: null,
-    name: '꧁꫞꯭陌꯭小꯭江꯭꫞꧂',
-    number: '',
-    openid: 'oGEXb4ntomSDY3K8o8KoSSUsBE6M',
-    sale_id: '1',
-    score: '0',
-    tel: '13288474512',
-    type: '1',
-    uniacid: '4',
-    unionid: 'opzxIv67nO5k87E-ZwzNFWowOOb8',
-    zs_name: '',
-  }
+  userInfo:object = {}
+  tel:any = getStorage('hotel').tel
 
   onRefresh() {
+    this.getUser()
     this.getOrder()
-    this.loading = false
     Toast.success('Refresh Success')
   }
-  getOrder() {
+  async getUser() {
     try {
-      const list = [
-        {
-          id: '805',
-          seller_id: '1',
-          room_id: '289',
-          user_id: '4913',
-          coupons_id: null,
-          order_no: '201908261135336712',
-          seller_name: '圣美精品酒店2',
-          seller_address: '山西省太原市迎泽区柳巷南路86号',
-          coordinates: '37.864933,112.567528',
-          arrival_time: '1566748800',
-          departure_time: '1566835200',
-          dd_time: '14:00',
-          price: '1.00',
-          num: '2',
-          days: '1',
-          goods_info: [{
-            goods_addtime: '1569288703',
-            goods_attribute: '1',
-            goods_classify: '42',
-            goods_details: '',
-            goods_id: '125',
-            goods_img: 'https://static.hotel.showboom.cn/images/4/2019/06/JMRL7CQ6l56e268Z3u7olr8i626Re6.jpg',
-            goods_is_open: '1',
-            goods_name: '芙蓉王',
-            goods_price: '3000',
-            goods_sort: '1',
-            goods_specifications: '20支',
-            goods_stock: '100',
-            goods_subheading: '香烟',
-            goods_unit: '盒',
-            goods_volume: '0',
-            goodsorder_id: '771',
-            id: '803',
-            img: 'https://static.hotel.showboom.cn/images/4/2019/06/JMRL7CQ6l56e268Z3u7olr8i626Re6.jpg?x-oss-process=image/resize,m_mfit,h_300,w_400',
-            name: '芙蓉王',
-            number: '2',
-            price: '30.00',
-            seller_id: '1',
-            spec_id: '803',
-            total_price: '60.00',
-            type: '1',
-            uniacid: '4'
-          },{
-            goods_addtime: '1569288703',
-            goods_attribute: '1',
-            goods_classify: '42',
-            goods_details: '',
-            goods_id: '125',
-            goods_img: 'https://static.hotel.showboom.cn/images/4/2019/06/JMRL7CQ6l56e268Z3u7olr8i626Re6.jpg',
-            goods_is_open: '1',
-            goods_name: '芙蓉王',
-            goods_price: '3000',
-            goods_sort: '1',
-            goods_specifications: '20支',
-            goods_stock: '100',
-            goods_subheading: '香烟',
-            goods_unit: '盒',
-            goods_volume: '0',
-            goodsorder_id: '771',
-            id: '803',
-            img: 'https://static.hotel.showboom.cn/images/4/2019/06/JMRL7CQ6l56e268Z3u7olr8i626Re6.jpg?x-oss-process=image/resize,m_mfit,h_300,w_400',
-            name: '芙蓉王',
-            number: '2',
-            price: '30.00',
-            seller_id: '1',
-            spec_id: '803',
-            total_price: '60.00',
-            type: '1',
-            uniacid: '4'
-          }],
-          room_type: '标准大床房',
-          room_logo: 'https://static.hotel.showboom.cn/images/4/2019/06/Zw088xeJASJESbHcXw9E0AXXeC6xe3.jpg',
-          bed_type: null,
-          name: 'admin',
-          tel: '13231231231',
-          status: '1',
-          out_trade_no: '14330091021566790533',
-          dis_cost: '0.95',
-          yj_cost: null,
-          yhq_cost: null,
-          yyzk_cost: null,
-          total_cost: '0.95',
-          is_delete: '0',
-          time: '1566790533',
-          uniacid: '4',
-          ytyj_cost: null,
-          hb_cost: null,
-          hb_id: null,
-          from_id: null,
-          classify: '1',
-          type: '0',
-          code: null,
-          jj_time: '0',
-          voice: '1',
-          qr_fromid: '',
-          pay_time: '1566790533',
-          sale_id: '0',
-          company_id: '0',
-          is_commission: '2',
-          vip_coupon: '0.95',
-          size: '1.8*2.0',
-          breakfast: '1',
-          windows: '1',
-          create_time: '1576790533',
-          flag: '1'
-        }
-      ]
-      const orderList = list.map((item:any) => {
+      const { data } = await services.api.getUser()
+      const ret = await services.api.Write_off(data.uniacid)
+      this.userInfo = data
+      if (ret.data.code == 200) {
+        this.isVerify = 200
+      }
+    } catch(e) {
+      Toast.fail(e.message)
+    }
+  }
+  async getOrder() {
+    try {
+      const { uniacid, id } = getStorage('user')
+      const { data } = await services.api.MyOrder(uniacid, id)
+      this.orderList = data.map((item:any) => {
         // 大于下单时间半个小时，则取消订单
         if (item.status == '1') {
           if (Date.now() - item.create_time * 1000 > (60 * 30 * 1000)) {
             item.status = '3'
             try {
-              // services.api.CancelOrder(item.flag, item.order_id)
+              (async () => {
+                await services.api.CancelOrder(item.flag, item.id)
+              })()
             } catch(e) {
               Toast.fail(e.message)
             }
@@ -350,13 +234,14 @@ export default class Member extends Vue {
           departure_time: formatDate(item.departure_time * 1000)
         }
       })
-      this.orderList = orderList
     } catch(e) {
       Toast(e.message)
+    } finally {
+      this.loading = false
     }
   }
   logout() {
-    removeStorage('token')
+    removeStorage('user')
     this.$router.push('/Login')
   }
   goDetail(item:any) {
@@ -369,6 +254,7 @@ export default class Member extends Vue {
     }
   }
   created() {
+    this.getUser()
     this.getOrder()
   }
 }
@@ -394,6 +280,7 @@ export default class Member extends Vue {
       justify-content: center;
       .avater{
         width: 1.2rem;
+        height: 1.2rem;
         display: table-cell;
         background: #fff;
         border-radius: 50%;

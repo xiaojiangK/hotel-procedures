@@ -35,8 +35,8 @@ export default class InvitedMembers extends Vue {
   }
   async created() {
     try {
-      const user = getStorage('user')
-      const { data } = await services.api.InviteMember(user.id)
+      const { id } = getStorage('user')
+      const { data } = await services.api.InviteMember(id)
       if (data.code == 200) {
         this.url = data.data.result
       } else {

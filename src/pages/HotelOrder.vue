@@ -129,9 +129,9 @@ import { Component, Vue } from 'vue-property-decorator';
 })
 export default class HotelOrder extends Vue {
   item:any = {};
+  id:any = 0;
   flag:any = 0;
   time:any = null;
-  orderId:any = 0;
   rebate:any = 0;
   vipInfo:object = {};
   totalPrice:any = 0;
@@ -151,7 +151,7 @@ export default class HotelOrder extends Vue {
   }
   // 查看评论
   viewComment() {
-    this.$router.push(`/Comment?id=${this.orderId}`)
+    this.$router.push(`/Comment?id=${this.id}`)
   }
   goReserve() {
     this.$router.push('/Booking')
@@ -181,7 +181,7 @@ export default class HotelOrder extends Vue {
       message: 'Are you sure to cancel this order'
     }).then(async () => {
       try {
-        await services.api.CancelOrder(this.flag, this.orderId)
+        await services.api.CancelOrder(this.flag, this.id)
         this.item.status = 3
         Toast.success('Cancel Success')
         this.$router.push('/Complete?type=1')
@@ -192,7 +192,7 @@ export default class HotelOrder extends Vue {
   }
   async getData() {
     try {
-      const { data }:any = await services.api.HotelOrder(this.flag, this.orderId)
+      const { data }:any = await services.api.HotelOrder(this.flag, this.id)
       const detail = {
         ...data,
         create_time: data.time,
@@ -230,7 +230,7 @@ export default class HotelOrder extends Vue {
   created() {
     const quert = this.$route.query
     this.flag = quert.flag
-    this.orderId = quert.id
+    this.id = quert.id
     this.getData()
     this.getAssess()
     this.time = (60 * 30 * 1000) - (Date.now() - this.item.create_time * 1000)

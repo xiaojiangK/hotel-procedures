@@ -58,15 +58,10 @@ export default class Login extends Vue {
     try {
       const res = await services.api.Login({ username, password })
       Toast.success('Login success')
-      setStorage('token', res)
+      setStorage('user', res.data)
       this.$router.push('/')
     } catch(e) {
       Toast.fail(e.message)
-    }
-  }
-  created() {
-    if (getStorage('Admin-Token')) {
-      this.$router.push('/')
     }
   }
 }

@@ -63,9 +63,9 @@ export default class ServicePay extends Vue {
   code:number = 1;
   goods:any = {};
   money:number = 0;
-  tel:string = '';
   totalPrice:number = 0;
   isBreakfast:boolean = false;
+  tel:string = getStorage('user').tel;
 
   change(e:any) {
     this.code = e
@@ -92,7 +92,6 @@ export default class ServicePay extends Vue {
   }
   created() {
     this.getGoods()
-    this.tel = getStorage('user').tel
   }
 }
 </script>

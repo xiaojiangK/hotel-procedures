@@ -72,9 +72,7 @@
       <!-- sum bar start -->
       <div class="sum-bar">
         <div class="number">
-          <template v-if="payInstore == 1">store payment</template>
-          <template v-if="payOnline == 1">payment amount</template>
-        ：<span>{{totalCost}}</span>
+          store payment：<span>{{totalCost}}</span>
         </div>
         <div class="detail" @click="toggleDetail">
           <img src="@/assets/icon-sum-detail.png"/>
@@ -151,8 +149,6 @@ export default class BookingOrder extends Vue {
   uniacid:string = '';
   vipInfo:any = {};
   rebate:any = 0;
-  payInstore:number = 1;
-  payOnline:number = 2;
 
   roomPicker() {
    this.isRoomNumber = !this.isRoomNumber
@@ -163,7 +159,7 @@ export default class BookingOrder extends Vue {
   async getRoomCost() {
     try {
       const ret = getStorage('room')
-      const user = getStorage('user')
+      const { id } = getStorage('user')
       const room = {
         ...ret,
         start: format('date', ret.start[1], ret.start[2]),
@@ -171,7 +167,7 @@ export default class BookingOrder extends Vue {
       }
       const end = `${room.end[0]}-${room.end[1]}-${room.end[2]}`
       const start = `${room.start[0]}-${room.start[1]}-${room.start[2]}`
-      const { data }:any = await services.api.GetRoomCost(room.id, user.id, start, end)
+      const { data }:any = await services.api.GetRoomCost(room.id, id, start, end)
       let rebate:any = 0;
       let totalPrice:any = 0;
       const roomCost = data.price_list.map((item:any) => {

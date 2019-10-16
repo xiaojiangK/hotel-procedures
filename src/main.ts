@@ -6,8 +6,9 @@ import vueAxios from 'vue-axios';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import 'vant/lib/index.less';
+import { getStorage } from './utils/util'
 
-Vue.use(vueAxios, axios);
+Vue.use(vueAxios, axios)
 
 axios.interceptors.response.use(
   response => {
@@ -29,6 +30,13 @@ axios.interceptors.response.use(
 router.beforeEach((to, form, next) => {
   if (to.meta.title) {
     document.title = to.meta.title
+    if (getStorage('user')) {
+      if (to.name == 'Login') {
+        router.push('/')
+      }
+    } else {
+      router.push('/Login')
+    }
   }
   NProgress.start()
   next()

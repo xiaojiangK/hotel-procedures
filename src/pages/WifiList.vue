@@ -26,7 +26,7 @@ import { Component, Vue } from 'vue-property-decorator';
   }
 })
 export default class WifiList extends Vue {
-  list:any[] = []
+  list:any[] = getStorage('hotel').wifiList
 
   connectWifi(item:any) {
     this.$router.push({ name: 'WifiHelp', query: {
@@ -34,10 +34,6 @@ export default class WifiList extends Vue {
       pass: item.wifi_pwd,
       auth: item.authentication
     }})
-  }
-  created() {
-    const hotel = getStorage('hotel')
-    this.list = hotel.wifiList
   }
 }
 </script>

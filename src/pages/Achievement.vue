@@ -10,22 +10,16 @@
         </div>
         <div class="list">
           <div class="item total">
-            <template v-if="sale.today[0]">
-              <div class="num">{{sale.today[0]}}</div>
-              <div class="text">All orders</div>
-            </template>
+            <div class="num">{{sale.today && sale.today[0]}}</div>
+            <div class="text">All orders</div>
           </div>
           <div class="item money">
-            <template v-if="sale.today[1]">
-              <div class="num">{{sale.today[1]}}</div>
-              <div class="text">Effective order</div>
-            </template>
+            <div class="num">{{sale.today && sale.today[1]}}</div>
+            <div class="text">Effective order</div>
           </div>
           <div class="item gold">
-            <template v-if="sale.today[2]">
-              <div class="num">{{sale.today[2]}}</div>
-              <div class="text">payment amount</div>
-            </template>
+            <div class="num">{{sale.today && sale.today[2]}}</div>
+            <div class="text">payment amount</div>
           </div>
         </div>
       </div>
@@ -37,22 +31,16 @@
         </div>
         <div class="list">
           <div class="item total">
-            <template v-if="sale.month[0]">
-              <div class="num">{{sale.month[0]}}</div>
-              <div class="text">All orders</div>
-            </template>
+            <div class="num">{{sale.month && sale.month[0]}}</div>
+            <div class="text">All orders</div>
           </div>
           <div class="item money">
-            <template v-if="sale.month[1]">
-              <div class="num">{{sale.month[1]}}</div>
-              <div class="text">Effective order</div>
-            </template>
+            <div class="num">{{sale.month && sale.month[1]}}</div>
+            <div class="text">Effective order</div>
           </div>
           <div class="item gold">
-            <template v-if="sale.month[2]">
-              <div class="num">{{sale.month[2]}}</div>
-              <div class="text">payment amount</div>
-            </template>
+            <div class="num">{{sale.month && sale.month[2]}}</div>
+            <div class="text">payment amount</div>
           </div>
         </div>
       </div>
@@ -64,16 +52,12 @@
         </div>
         <div class="list">
             <div class="item customer">
-              <template v-if="sale.company[0]">
-                <div class="num">{{sale.company[0]}}</div>
-                <div class="text">Company customers</div>
-              </template>
+              <div class="num">{{sale.company && sale.company[0]}}</div>
+              <div class="text">Company customers</div>
             </div>
             <div class="item members">
-              <template v-if="sale.company[1]">
-                <div class="num">{{sale.company[1]}}</div>
-                <div class="text">company members</div>
-              </template>
+              <div class="num">{{sale.company && sale.company[1]}}</div>
+              <div class="text">company members</div>
             </div>
         </div>
       </div>
@@ -96,18 +80,21 @@ import { Component, Vue } from 'vue-property-decorator';
 export default class Achievement extends Vue {
   sale:any = {}
 
-  async created() {
+  async getSale() {
     try {
-      const user = getStorage('user')
-      const { data } = await services.api.Performance(user.id)
+      const { id } = getStorage('user')
+      const { data } = await services.api.Performance(id)
       if (data.code == 200) {
-          this.sale = data.data
+        this.sale = data.data
       } else {
         Toast.fail(data.msg)
       }
     } catch(e) {
       Toast.fail(e.message)
     }
+  }
+  created() {
+    this.getSale()
   }
 }
 </script>

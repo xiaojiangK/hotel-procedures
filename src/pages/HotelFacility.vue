@@ -26,8 +26,8 @@ export default class HotelFacility extends Vue {
 
   async getList() {
     try {
-      const hotel = getStorage('hotel')
-      const { data } = await services.api.Volume(hotel.id)
+      const { id } = getStorage('hotel')
+      const { data } = await services.api.Volume(id)
       this.list = data
     } catch(e) {
       Toast.fail(e.message)

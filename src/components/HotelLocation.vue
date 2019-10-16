@@ -7,7 +7,9 @@
       </div>
     </div>
     <div class="content">
-      <div class="map"></div>
+      <div class="map">
+        <baidu-map class="map" :scroll-wheel-zoom="true" :center="center" :zoom="zoom" @ready="handler" ak="oEluIhstituvn89W8hisePyemr29HPjr"></baidu-map>
+      </div>
       <div class="foot">
         <div class="left">
           <p>{{data.name}}</p>
@@ -25,11 +27,28 @@
 </template>
 
 <script lang="ts">
+import { getStorage } from '@/utils/util';
+import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-@Component({})
+@Component({
+  components:{
+    BaiduMap
+  }
+})
 export default class HotelLocation extends Vue {
-  @Prop() data!:object;
+  @Prop() data!:object
+  center:any = {
+    lng: 0,
+    lat: 0
+  }
+  zoom:number = 18
+
+  handler() {
+    const { coordinates } = getStorage('hotel')
+    this.center.lng = coordinates[0]
+    this.center.lat = coordinates[1]
+  }
 }
 </script>
 <style lang="scss" scoped>

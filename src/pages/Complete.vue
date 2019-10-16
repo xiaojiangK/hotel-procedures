@@ -39,7 +39,7 @@ import { Component, Vue } from 'vue-property-decorator';
 })
 export default class CompletePage extends Vue {
   type:string = '';
-  tel:string = '';
+  tel:string = getStorage('hotel').tel;
   msg:any = {
     msgTitle: '',
     link: '',
@@ -48,8 +48,6 @@ export default class CompletePage extends Vue {
 
   created() {
     const opt = this.$route.query
-    const hotel = getStorage('hotel')
-    this.tel = hotel.tel
     if (opt.type) {
       if (opt.type == '1') {
         this.msg = {

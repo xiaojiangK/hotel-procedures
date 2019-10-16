@@ -129,8 +129,8 @@ export default class HotelStore extends Vue {
   // 获取商品
   async getGoods(page = 1) {
     try {
-      const hotel = getStorage('hotel')
-      const { data } = await services.api.Goods(hotel.id, this.classID)
+      const { id } = getStorage('hotel')
+      const { data } = await services.api.Goods(id, this.classID)
       const newData = data.map((item:any) => {
         const goodsPrice = Number.parseFloat(item.specifications[0].goods_price);
         return {
@@ -287,7 +287,6 @@ export default class HotelStore extends Vue {
     const current = refs.ul.offsetHeight
     const scrollTop = e.target.scrollTop
     if (scrollTop >= current - client) {
-      console.log(scrollTop)
       this.getGoods(this.page++)
       // api
     }

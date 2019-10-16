@@ -393,8 +393,7 @@ export default class Index extends Vue {
         border: .01rem solid #e1e1e1;
       }
       .map{
-        height: 1.65rem;
-        background: #efefef;
+        height: 2.5rem;
       }
       .foot{
         padding: .2rem .4rem .3rem;
