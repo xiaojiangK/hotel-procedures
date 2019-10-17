@@ -4,7 +4,7 @@
     <van-pull-refresh v-model="loading" @refresh="onRefresh">
       <div class="user">
         <div class="left">
-          <img :src="[userInfo.img ? userInfo.img : '@/assets/avatar.png']" class="avater" alt="">
+          <img :src="userInfo.img" class="avater" alt="">
           <div class="name">
             <p>{{userInfo.name ? userInfo.name : 'User name'}}</p>
             <div class="tags">
@@ -212,7 +212,7 @@ export default class Member extends Vue {
             item.status = '3'
             try {
               (async () => {
-                await services.api.CancelOrder(item.flag, item.id)
+                // await services.api.CancelOrder(item.flag, item.id)
               })()
             } catch(e) {
               Toast.fail(e.message)
@@ -245,9 +245,9 @@ export default class Member extends Vue {
     this.$router.push('/Login')
   }
   goDetail(item:any) {
-    if (item.status == 0) {
+    if (item.flag == 0) {
       this.$router.push(`/HotelOrder?id=${item.id}&flag=${item.flag}`)
-    } else if (item.status == 1) {
+    } else if (item.flag == 1) {
       this.$router.push(`/MarketOrder?id=${item.id}&flag=${item.flag}`)
     } else {
       this.$router.push(`/ServiceOrder?id=${item.id}&flag=${item.flag}`)

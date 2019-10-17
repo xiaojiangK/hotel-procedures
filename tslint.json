@@ -37,6 +37,7 @@
       },
       "esSpecCompliant": true
     }],
+    "forin": false,
     "no-any": false,
     "no-empty": false,
     "no-console": false,

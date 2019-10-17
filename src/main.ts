@@ -29,20 +29,21 @@ axios.interceptors.response.use(
 
 router.beforeEach((to, form, next) => {
   if (to.meta.title) {
-    document.title = to.meta.title
-    if (!getStorage('user')) {
+    NProgress.start()
+    if (getStorage('user')) {
       next()
     } else {
-      if (to.name === 'Login') {
-        next('/')
+      if (to.name == 'Login') {
+        next()
+      } else {
+        next('/Login')
       }
     }
   }
-  NProgress.start()
-  next()
 })
 
-router.afterEach(res => {
+router.afterEach(to => {
+  document.title = to.meta.title
   NProgress.done()
 })
 

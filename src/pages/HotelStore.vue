@@ -132,11 +132,11 @@ export default class HotelStore extends Vue {
       const { id } = getStorage('hotel')
       const { data } = await services.api.Goods(id, this.classID)
       const newData = data.map((item:any) => {
-        const goodsPrice = Number.parseFloat(item.specifications[0].goods_price);
+        const price = Number.parseFloat(item.specifications[0].goods_price);
         return {
           ...item,
           num: 0,
-          price: Number.isInteger(goodsPrice) ? Number.parseInt(goodsPrice.toString(), 10) : goodsPrice.toFixed(2)
+          price: Number.isInteger(price) ? Number.parseInt(price.toString(), 10) : price.toFixed(2)
         }
       })
       if (newData.length == 0) {

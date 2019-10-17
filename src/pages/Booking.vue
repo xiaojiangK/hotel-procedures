@@ -378,13 +378,11 @@ export default class Booking extends Vue {
         const facilities:any[] = []
         if (data.facilities) {
           for (const i of data.facilities) {
-              for (const j in i) {
-                if (j) {
-                    facilities.push({
-                      id: j,
-                      value: i[j]
-                    })
-                }
+            for (const j in i) {
+              facilities.push({
+                id: j,
+                value: i[j]
+              })
             }
           }
         }
@@ -406,22 +404,18 @@ export default class Booking extends Vue {
       const facilities = [];
       if (hotel.service) {
         for (const i in hotel.service) {
-          if (i) {
-            service.push({
-              id: i,
-              val: hotel.service[i]
-            });
-          }
+          service.push({
+            id: i,
+            val: hotel.service[i]
+          });
         }
       }
       if (hotel.facilities) {
         for (const i in hotel.facilities) {
-          if (i) {
-            facilities.push({
-              id: i,
-              val: hotel.facilities[i]
-            });
-          }
+          facilities.push({
+            id: i,
+            val: hotel.facilities[i]
+          });
         }
       }
       this.hotel = {

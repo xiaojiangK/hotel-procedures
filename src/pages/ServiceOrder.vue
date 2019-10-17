@@ -4,11 +4,11 @@
     <div class="main">  
       <div class="facility">
         <div class="banner">
-          <img :src="order.goods.img" />
+          <img :src="order.img" />
         </div>
       </div>
       <div class="order-item">
-        <div class="order-meg">{{order.goods.name}}</div>
+        <div class="order-meg">{{order.name}}</div>
         <div class="order-rg">
           <label class="order-sign">৳</label> <span class="order-nub">{{order.price}}</span>
         </div> 
@@ -16,7 +16,7 @@
       <div class="order-item">
         <div class="order-meg">Use number</div>
         <div class="order-rg">
-          <span class="order-nub red-nub">{{order.goods.number}}</span>
+          <span class="order-nub red-nub">{{order.number}}</span>
         </div> 
       </div>
       <div class="order-item">
@@ -90,7 +90,7 @@ export default class ServiceOrder extends Vue {
       const price = Number.parseFloat(goods.price)
       this.order = {
         ...data,
-        goods,
+        ...goods,
         finish_time: formatDateTime(data.finish_time * 1000),
         price: Number.isInteger(price) ? Number.parseInt(`${price}`, 10) : price.toFixed(2)
       }

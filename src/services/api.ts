@@ -306,7 +306,7 @@ export async function ServiceOrder(id:any, flag:any) {
       room_num: '',
       seller_id: '1',
       send_time: null,
-      status: '2',
+      status: '3',
       tel: '13288474510',
       type: '3',
       uniacid: '4',
