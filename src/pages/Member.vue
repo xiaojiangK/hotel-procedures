@@ -209,9 +209,9 @@ export default class Member extends Vue {
         // 大于下单时间半个小时，则取消订单
         if (item.status == '1') {
           if (Date.now() - item.create_time * 1000 > (60 * 30 * 1000)) {
-            item.status = '3'
             try {
               (async () => {
+                item.status = '3'
                 // await services.api.CancelOrder(item.flag, item.id)
               })()
             } catch(e) {

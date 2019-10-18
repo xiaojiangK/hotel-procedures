@@ -105,7 +105,7 @@ import { Component, Vue } from 'vue-property-decorator';
 export default class HotelStore extends Vue {
   activeKey:number = 0;
   classify:any[] = [];
-  classID:string = '';
+  classId:string = '';
   goods:any[] = [];
   page:number = 122;
   currentName:string = 'All'
@@ -119,9 +119,9 @@ export default class HotelStore extends Vue {
   // 分类切换
   change(item:any) {
     // api
-    if (item.id != this.classID) {
+    if (item.id != this.classId) {
       this.goods = []
-      this.classID = item.id
+      this.classId = item.id
       this.currentName = item.name
       this.getGoods(this.page = 1)
     }
@@ -130,7 +130,7 @@ export default class HotelStore extends Vue {
   async getGoods(page = 1) {
     try {
       const { id } = getStorage('hotel')
-      const { data } = await services.api.Goods(id, this.classID)
+      const { data } = await services.api.Goods(id, this.classId)
       const newData = data.map((item:any) => {
         const price = Number.parseFloat(item.specifications[0].goods_price);
         return {

@@ -15,7 +15,6 @@
 </template>
 
 <script lang="ts">
-import services from '@/services';
 import { getStorage } from '@/utils/util';
 import Header from '@/components/Header.vue';
 import { Component, Vue } from 'vue-property-decorator';

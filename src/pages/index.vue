@@ -397,8 +397,10 @@ export default class Index extends Vue {
       }
       .foot{
         padding: .2rem .4rem .3rem;
-        img:first-child{
-          margin: 0
+        a:first-child{
+          img{
+            margin: 0
+          }
         }
         .left{
           width: 71%;

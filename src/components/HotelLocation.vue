@@ -19,7 +19,9 @@
           <a :href="'tel:' + [data.tel]">
             <img src="@/assets/icon-call.png" alt="">
           </a>
-          <img src="@/assets/icon-navigation.png" alt="">
+          <a :href="MapUrl" target="_blank">
+            <img src="@/assets/icon-navigation.png" alt="">
+          </a>
         </div>
       </div>
     </div>
@@ -43,9 +45,14 @@ export default class HotelLocation extends Vue {
     lat: 0
   }
   zoom:number = 18
+  address:string = ''
 
+  get MapUrl() {
+    return `http://api.map.baidu.com/geocoder?address=${this.address}&output=html&src=webapp.baidu.openAPIdemo`
+  }
   handler() {
-    const { coordinates } = getStorage('hotel')
+    const { address, coordinates } = getStorage('hotel')
+    this.address = address
     this.center.lng = coordinates[0]
     this.center.lat = coordinates[1]
   }

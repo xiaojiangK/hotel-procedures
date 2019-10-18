@@ -57,7 +57,7 @@
             </div>
             <div class="item members">
               <div class="num">{{sale.company && sale.company[1]}}</div>
-              <div class="text">company members</div>
+              <div class="text">Company members</div>
             </div>
         </div>
       </div>
