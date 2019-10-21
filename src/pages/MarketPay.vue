@@ -75,7 +75,7 @@ export default class MarketPay extends Vue {
     this.getGoods()
   }
   getGoods() {
-    let goods:any = [];
+    let goods:any = []
     if (sessionStorage.getItem('shopcarList')) {
       goods = JSON.parse((sessionStorage.getItem('shopcarList') as string))
     }

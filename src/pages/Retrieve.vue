@@ -35,6 +35,7 @@
 <script lang="ts">
 import { Toast } from 'vant';
 import services from '@/services';
+import { getStorage } from '@/utils/util';
 import Header from '@/components/Header.vue';
 import { Component, Vue } from 'vue-property-decorator';
 
@@ -90,7 +91,8 @@ export default class Register extends Vue {
       return
     }
     try {
-      await services.api.Retrieve({ code, username, password, newPassword })
+      const { id } = getStorage('hotel')
+      await services.api.Retrieve({ id, code, username, password, newPassword })
       Toast.success('Retrieve success')
       this.$router.back()
     } catch(e) {

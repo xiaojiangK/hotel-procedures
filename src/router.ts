@@ -204,6 +204,10 @@ export default new Router({
         title: 'Complete'
       },
       component: (resolve) => require(['@/pages/Complete.vue'], resolve)
+    },
+    {
+      path: '*',
+      redirect: '/'
     }
   ]
 });

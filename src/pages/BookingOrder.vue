@@ -168,20 +168,20 @@ export default class BookingOrder extends Vue {
       const end = `${room.end[0]}-${room.end[1]}-${room.end[2]}`
       const start = `${room.start[0]}-${room.start[1]}-${room.start[2]}`
       const { data }:any = await services.api.GetRoomCost(room.id, id, start, end)
-      let rebate:any = 0;
-      let totalPrice:any = 0;
+      let rebate:any = 0
+      let totalPrice:any = 0
       const roomCost = data.price_list.map((item:any) => {
-        totalPrice += Math.ceil(item.mprice);
+        totalPrice += Math.ceil(item.mprice)
         return {
           ...item,
           mprice: Math.ceil(item.mprice).toFixed(2)
         };
       });
-      const num = this.roomNumber;
+      const num = this.roomNumber
       if (Number.isInteger(totalPrice * num)) {
-        totalPrice = totalPrice * num;
+        totalPrice = totalPrice * num
       } else {
-        totalPrice = (totalPrice * num).toFixed(2);
+        totalPrice = (totalPrice * num).toFixed(2)
       }
       if (data.is_vip == 1) {
         rebate = (totalPrice - data.total_cost).toFixed(2)
@@ -190,7 +190,7 @@ export default class BookingOrder extends Vue {
       this.rebate = rebate
       this.vipInfo = data
       this.roomCost = roomCost
-      this.price = Math.ceil(totalPrice);
+      this.price = Math.ceil(totalPrice)
       this.totalPrice = Math.ceil(totalPrice).toFixed(2)
       this.totalCost = (data.total_cost).toFixed(2)
     } catch(e) {
@@ -202,15 +202,15 @@ export default class BookingOrder extends Vue {
   }
   roomNumberChange(e:any) {
     const num = e.getValues()[0]
-    let totalPrice:any = 0;
-    let rebate:any = 0;
+    let totalPrice:any = 0
+    let rebate:any = 0
     if (Number.isInteger(this.price * num)) {
-      totalPrice = this.price * num;
+      totalPrice = this.price * num
     } else {
-      totalPrice = (this.price * num).toFixed(2);
+      totalPrice = (this.price * num).toFixed(2)
     }
     // 获取会员折扣
-    const data = this.vipInfo;
+    const data = this.vipInfo
     if (data.is_vip == 1) {
       rebate = (totalPrice - (data.total_cost * num)).toFixed(2)
     }
