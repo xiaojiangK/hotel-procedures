@@ -6,12 +6,9 @@
         <div class="left">
           <van-uploader
             :before-read="beforeRead"
-            :after-read="afterRead"
             v-model="photoList"
             :max-count="1"
           />
-          <img :src="photo" v-if="photo" alt="">
-          <img src="@/assets/avatar.png" v-else alt="">
         </div>
         <div class="right" @click="edit">
           <img src="@/assets/icon-edit2.png" alt="">
@@ -34,6 +31,7 @@
 <script lang="ts">
 import services from '@/services';
 import { Toast, Uploader } from 'vant';
+import { getStorage } from '@/utils/util';
 import Header from '@/components/Header.vue';
 import { Component, Vue } from 'vue-property-decorator';
 
@@ -46,27 +44,28 @@ import { Component, Vue } from 'vue-property-decorator';
 export default class EditUser extends Vue {
   isEdit:boolean = false;
   username:string = '';
-  photoList:any[] = [];
+  photoList:any[] = [
+    { url: getStorage('user').img }
+  ];
   photo:any = '';
 
   edit() {
     this.isEdit = !this.isEdit
   }
-  beforeRead(file:any) {
+  async beforeRead(file:any) {
     if (file.type == 'image/jpeg' || file.type === 'image/png') {
-      return true
+      try {
+        const res = await services.api.UploadFile(file)
+        Toast.success('Upload success')
+        this.photo = res.data
+        return true
+      } catch(e) {
+        Toast.fail(e.message)
+        return false
+      }
     } else {
       Toast.fail('Please upload picture format file')
       return false
-    }
-  }
-  async afterRead(file:any) {
-    try {
-      const res = await services.api.UploadFile(file.file)
-      Toast.success('Upload success')
-      this.photo = res.data
-    } catch(e) {
-      Toast.fail(e.message)
     }
   }
   async save() {
@@ -108,17 +107,17 @@ export default class EditUser extends Vue {
         height: .8rem;
         position: relative;
         .van-uploader{
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 99;
-          opacity: 0;
-          position: absolute;
-        }
-        img{
           width: .8rem;
-          display: block;
+          height: .8rem;
+          /deep/div{
+            margin: 0;
+            width: .8rem;
+            height: .8rem;
+          }
+          img{
+            width: .8rem;
+            display: block;
+          }
         }
       }
       .right{

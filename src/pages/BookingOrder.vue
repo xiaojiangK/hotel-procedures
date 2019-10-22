@@ -118,7 +118,7 @@ import services from '@/services';
 import Header from '@/components/Header.vue';
 import { Toast, Picker, DatetimePicker } from 'vant';
 import { Component, Vue } from 'vue-property-decorator';
-import { format, formatDate, getStorage } from '@/utils/util';
+import { format, getStorage } from '@/utils/util';
 
 @Component({
   components: {

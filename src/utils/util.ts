@@ -29,15 +29,6 @@ export function formatMonth(time:any) {
   return `${m < 10 ? '0'+m : m}-${d < 10 ? '0'+d : d}`;
 }
 
-// 时间
-export function formatTime(time:any) {
-  const date = new Date(time);
-  const h = date.getHours();
-  const n = date.getMinutes();
-  const s = date.getSeconds();
-  return `${h < 10 ? '0'+h : h}:${n < 10 ? '0'+n : n}:${s < 10 ? '0'+s : s}`;
-}
-
 // 日期时间
 export function formatDateTime(time:any) {
   const date = new Date(time);
