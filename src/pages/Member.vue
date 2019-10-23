@@ -38,23 +38,23 @@
             <div v-for="(i, index) in orderList" :key="index">
               <div class='item' v-if="index == 0">
                 <div class='order-header'>
-                  <div class='order-title' v-if="i.flag == '0'">
+                  <div class='title' v-if="i.flag == '0'">
                     <img src='@/assets/icon-order.png'/>
                     <span>{{i.room_type}}</span>
                   </div>
-                  <div class='order-title' v-if="i.flag == '1'">
+                  <div class='title' v-if="i.flag == '1'">
                     <img src='@/assets/index-super-sm.png'/>
                     <span>Hotel store</span>
                   </div>
-                  <div class='order-title' v-if="i.flag == '2'">
+                  <div class='title' v-if="i.flag == '2'">
                     <img src='@/assets/icon-hotel.png'/>
                     <span>Hotel facility</span>
                   </div>
-                  <div class='order-title' v-if="i.flag == '3'">
+                  <div class='title' v-if="i.flag == '3'">
                     <img src='@/assets/icon-breakfast.png'/>
                     <span>Breakfast coupon</span>
                   </div>
-                  <div class="order-status" v-if="i.flag == '0'">
+                  <div class="status" v-if="i.flag == '0'">
                     <span v-if="i.status == '1'">non paid</span>
                     <span v-if="i.status == '2'">have paid</span>
                     <span v-if="i.status == '10'">no lived</span>
@@ -64,21 +64,21 @@
                     <span v-if="i.status == '7'">refund</span>
                     <span v-if="i.status == '12'">no confirm</span>
                   </div>
-                  <div class="order-status" v-if="i.flag == '1'">
+                  <div class="status" v-if="i.flag == '1'">
                     <span v-if="i.status == '1'">non paid</span>
                     <span v-if="i.status == '2'">no shipped</span>
                     <span v-if="i.status == '3'">canceled</span>
                     <span v-if="i.status == '4'">completed</span>
                     <span v-if="i.status == '7'">refund</span>
                   </div>
-                  <div class="order-status" v-if="i.flag == '2'">
+                  <div class="status" v-if="i.flag == '2'">
                     <span v-if="i.status == '1'">non paid</span>
                     <span v-if="i.status == '2'">unused</span>
                     <span v-if="i.status == '3'">canceled</span>
                     <span v-if="i.status == '4'">used</span>
                     <span v-if="i.status == '7'">refund</span>
                   </div>
-                  <div class="order-status" v-if="i.flag == '3'">
+                  <div class="status" v-if="i.flag == '3'">
                     <span v-if="i.status == '1'">non paid</span>
                     <span v-if="i.status == '2'">unused</span>
                     <span v-if="i.status == '3'">canceled</span>
@@ -90,8 +90,8 @@
                 <div class='order-content' v-if="i.flag == '0'" @click="goDetail(i)">
                   <img class='order-img' :src='i.room_logo'/>
                   <div>
-                    <div><span v-if="i.size">{{i.size}}</span>  {{i.windows == '1' ? '有' : '无'}}窗  {{i.breakfast == '0' ? '不' : ''}}含早</div>
-                    <div class="sub">{{i.arrival_time}} 至 {{i.departure_time}} {{i.days}}晚/{{i.num}}间</div>
+                    <div><span v-if="i.size">{{i.size}}</span>  {{i.windows == '1' ? 'Hava' : 'no'}} window  {{i.breakfast == '0' ? 'no ' : ''}}breakfast</div>
+                    <div class="sub">{{i.arrival_time}} - {{i.departure_time}} {{i.days}}night/{{i.num}}room</div>
                   </div>
                 </div>
                 <div class='order-content' v-else @click="goDetail(i)">
@@ -104,11 +104,10 @@
                   </div>
                 </div>
                 <div class='order-statistics'>
-                  <div class='statistics-right'>
-                    <div>共{{i.totalNum}}件商品</div>
-                    <div class='statistics-price'>
-                      <span v-if="i.status == 12">到店实付</span>
-                      <span v-if="i.status != 12">实付金额</span>
+                  <div class='right'>
+                    <div>total {{i.totalNum}} goods</div>
+                    <div class='price'>
+                      <span>store payment</span>
                       ：<span class='price-font'>৳{{i.total_cost ? i.total_cost : i.price}}</span>
                     </div>
                   </div>
@@ -379,7 +378,7 @@ export default class Member extends Vue {
         justify-content: space-between;
         align-items: center;
         padding: .2rem;
-        .order-title{
+        .title{
           display: flex;
           align-items: center;
           font-size: .28rem;
@@ -394,7 +393,7 @@ export default class Member extends Vue {
             vertical-align: middle
           }
         }
-        .order-status{
+        .status{
           font-size: .28rem;
           color: #666;
         }
@@ -408,7 +407,7 @@ export default class Member extends Vue {
         overflow-x: auto;
         background-color: #fafafa;
         -webkit-overflow-scrolling: touch;
-        .order-content .sub{
+        .sub{
           font-size: .26rem;
           color: #666;
         }
@@ -424,12 +423,13 @@ export default class Member extends Vue {
         padding: .2rem;
         font-size: .3rem;
         color: #666;
-        .statistics-right{
+        .right{
           display: flex;
+          align-items: center;
           justify-content: space-around;
         }
-        .statistics-price{
-          margin: 0 0 0.1rem;
+        .price{
+          margin: 0 0 0 .1rem;
         }
         .price-font{
           color: #333;

@@ -2,7 +2,7 @@
   <div class="wrap">
     <Header title="Evaluation"></Header>
     <div class="main">
-      <textarea class="text" placeholder="写出您真实的想法…" :maxlength="countLimit" v-model="content"></textarea>
+      <textarea class="text" placeholder="Write your real thoughts…" :maxlength="countLimit" v-model="content"></textarea>
       <div class="count">{{content.length}}/{{countLimit}}</div>
       <van-uploader
         :before-read="beforeRead"
@@ -13,16 +13,16 @@
       />
       <div class="anonymous" @click="anonymous">
         <template v-if="isAnonymous">
-          <img class="icon-checkbox" src="@/assets/icon-checkbox-checked.png" /><span>匿名评价</span>
+          <img class="icon-checkbox" src="@/assets/icon-checkbox-checked.png" /><span>Anonymous evaluation</span>
         </template>
         <template v-else>
-          <img class="icon-checkbox" src="@/assets/icon-checkbox.png" /><span class="no">匿名评价</span>
+          <img class="icon-checkbox" src="@/assets/icon-checkbox.png" /><span class="no">Anonymous evaluation</span>
         </template>
       </div>
     </div>
     <div class="btn">
-      <span @click="cancel">取消</span>
-      <span @click="submit">发布</span>
+      <span @click="cancel">Cancel</span>
+      <span @click="submit">Submit</span>
     </div>
   </div>
 </template>

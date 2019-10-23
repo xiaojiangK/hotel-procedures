@@ -3,7 +3,7 @@
     <img src="@/assets/complete.png"/>
     <div class="complete-status">{{param.msgTitle}}</div>
     <div class="complete-confirm">{{param.msgContent}}</div>
-    <router-link :to="param.link" class="complete-btn">查看订单</router-link>
+    <router-link :to="param.link" class="complete-btn">View order</router-link>
   </div>
 </template>
 
